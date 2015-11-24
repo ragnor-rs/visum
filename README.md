@@ -1,4 +1,4 @@
-Android reactive MVP stack
+Visum - Android reactive MVP stack
 
 The library encourages developers to use Android Clean MVP architecture pattern (http://fernandocejas.com/2015/07/18/architecting-android-the-evolution/).
 

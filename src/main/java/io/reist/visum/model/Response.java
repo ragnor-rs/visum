@@ -9,20 +9,19 @@ import io.reist.visum.Error;
  */
 public class Response<T> {
 
-    @SerializedName("data")
-    private T data;
+    @SerializedName("result")
+    private T result;
 
-    private io.reist.visum.Error error;
+    private Error error;
+
+    public Response() {}
 
     public Response(T t) {
-        data = t;
+        result = t;
     }
 
-    public Response() {
-    }
-
-    public void setError(Error error) {
-        this.error = error;
+    public Response(Error e) {
+        error = e;
     }
 
     public boolean isSuccessful() {
@@ -33,8 +32,8 @@ public class Response<T> {
         return error;
     }
 
-    public T getData() {
-        return data;
+    public T getResult() {
+        return result;
     }
 
 }

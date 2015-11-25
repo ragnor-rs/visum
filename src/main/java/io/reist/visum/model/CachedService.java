@@ -75,7 +75,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
     }
 
     @Override
-    public Observable<Integer> delete(Long id) {
+    public Observable<Response<Integer>> delete(Long id) {
         return Observable.concat(local.delete(id), remote.delete(id));
     }
 
@@ -95,7 +95,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
 
         @Override
         public Boolean call(Response<List<T>> response) {
-            return response.getData() != null && !response.getData().isEmpty() || !response.isSuccessful();
+            return response.getResult() != null && !response.getResult().isEmpty() || !response.isSuccessful();
         }
 
     }
@@ -104,7 +104,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
 
         @Override
         public Boolean call(Response<T> response) {
-            return response.getData() != null || !response.isSuccessful();
+            return response.getResult() != null || !response.isSuccessful();
         }
 
     }
@@ -130,13 +130,9 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
         @Override
         public Observable<Response<T>> call(Observable<Response<T>> observable) {
             return observable
-                    .doOnNext(r -> service.saveSync(r.getData()))
+                    .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext((t) -> {
-                        Response<T> responseWithError = new Response<>();
-                        responseWithError.setError(new io.reist.visum.Error(t));
-                        return Observable.just(responseWithError);
-                    });
+                    .onErrorResumeNext(t -> Observable.just(new Response<>(new Error(t))));
         }
     }
 
@@ -154,13 +150,9 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
         @Override
         public Observable<Response<List<T>>> call(Observable<Response<List<T>>> observable) {
             return observable
-                    .doOnNext(r -> service.saveSync(r.getData()))
+                    .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext((t) -> {
-                        Response<List<T>> responseWithError = new Response<>();
-                        responseWithError.setError(new Error(t));
-                        return Observable.just(responseWithError);
-                    });
+                    .onErrorResumeNext(t -> Observable.just(new Response<>(new Error(t))));
         }
 
     }

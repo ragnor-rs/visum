@@ -17,7 +17,7 @@ public interface BaseService<T> {
 
     Observable<Response<T>> save(T t);
 
-    Observable<Integer> delete(Long id);
+    Observable<Response<Integer>> delete(Long id);
 
     Response<List<T>> saveSync(List<T> list);
 

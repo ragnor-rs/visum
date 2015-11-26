@@ -7,14 +7,13 @@ import java.lang.*;
 /**
  * Created by Reist on 23.11.15.
  */
-public class ErrorImpl implements Error
+public class VisumError implements Error
 {
-    public ErrorImpl() {
+    public VisumError() {
     }
 
-    public ErrorImpl(Error error) {
-        message = error.getMessage();
-        throwable = error.getThrowable();
+    public VisumError(Throwable t) {
+        throwable = t;
     }
 
     private String message;

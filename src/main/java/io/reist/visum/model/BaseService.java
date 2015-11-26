@@ -2,7 +2,6 @@ package io.reist.visum.model;
 
 import java.util.List;
 
-import io.reist.visum.Visum;
 import rx.Observable;
 
 /**
@@ -23,7 +22,5 @@ public interface BaseService<T> {
     Response<List<T>> saveSync(List<T> list);
 
     Response<T> saveSync(T t);
-
-    Visum visum();
 
 }

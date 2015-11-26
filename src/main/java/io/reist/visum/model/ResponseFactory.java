@@ -5,8 +5,8 @@ package io.reist.visum.model;
  */
 public class ResponseFactory {
 
-    Class<? extends Response> mResponseClass = ResponseImpl.class;
-    Class<? extends Error> mErrorClass = ErrorImpl.class;
+    Class<? extends Response> mResponseClass = VisumResponse.class;
+    Class<? extends Error> mErrorClass = VisumError.class;
 
     public ResponseFactory(Class<? extends Response> responseClass, Class<? extends Error> errorClass) {
         mResponseClass = responseClass;

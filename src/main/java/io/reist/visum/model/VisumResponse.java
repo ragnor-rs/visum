@@ -7,17 +7,17 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by defuera on 09/11/2015.
  */
-public class ResponseImpl<T> implements Response<T>
+public class VisumResponse<T> implements Response<T>
 {
     private T mResult;
     private Error mError;
 
-    public ResponseImpl() {
+    public VisumResponse(T result) {
+        mResult = result;
     }
 
-    public ResponseImpl(Response<T> response) {
-        mResult = response.getResult();
-        mError = response.getError();
+    public VisumResponse(Error error) {
+        mError = error;
     }
 
     @Override

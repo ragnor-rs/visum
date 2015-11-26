@@ -10,6 +10,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
+import io.reist.visum.Visum;
 import io.reist.visum.model.AbstractBaseService;
 import io.reist.visum.model.Response;
 import rx.Observable;
@@ -21,7 +22,8 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
 
     protected final StorIOSQLite storIoSqLite;
 
-    public StorIoService(StorIOSQLite storIoSqLite) {
+    public StorIoService(Visum visum, StorIOSQLite storIoSqLite) {
+        super(visum);
         this.storIoSqLite = storIoSqLite;
     }
 
@@ -61,8 +63,7 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
                 .prepare()
                 .executeAsBlocking();
 
-        return new Response<>(list);
-
+        return visum.responseFactory().newResultResponse(list);
     }
 
     @Override
@@ -73,8 +74,7 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
                 .prepare()
                 .executeAsBlocking();
 
-        return new Response<>(t);
-
+        return visum.responseFactory().newResultResponse(t);
     }
 
 }

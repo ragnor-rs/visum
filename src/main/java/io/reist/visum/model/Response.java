@@ -1,40 +1,22 @@
 package io.reist.visum.model;
 
-import com.google.gson.annotations.SerializedName;
-
-import io.reist.visum.Error;
+import android.support.annotation.Nullable;
 
 /**
- * Created by defuera on 09/11/2015.
+ * Created by m039 on 11/26/15.
  */
-public class Response<T> {
+public interface Response<R> {
 
-    @SerializedName("result")
-    private T result;
+    @Nullable
+    R getResult();
 
-    private Error error;
+    void setResult(R result);
 
-    public Response() {}
+    @Nullable
+    Error getError();
 
-    public Response(T t) {
-        result = t;
-    }
+    void setError(Error error);
 
-    public Response(Error e) {
-        error = e;
-    }
-
-    public boolean isSuccessful() {
-        return error == null;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public T getResult() {
-        return result;
-    }
+    boolean isSuccessful();
 
 }
-

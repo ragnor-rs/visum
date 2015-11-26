@@ -10,12 +10,8 @@ public interface Response<R> {
     @Nullable
     R getResult();
 
-    void setResult(R result);
-
     @Nullable
     Error getError();
-
-    void setError(Error error);
 
     boolean isSuccessful();
 

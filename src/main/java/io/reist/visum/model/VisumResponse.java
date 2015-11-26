@@ -25,16 +25,6 @@ public class VisumResponse<T> implements Response<T>
         return mError == null;
     }
 
-    @Override
-    public void setError(Error error) {
-        this.mError = error;
-    }
-
-    @Override
-    public void setResult(T result) {
-        this.mResult = result;
-    }
-
     @Nullable
     @Override
     public Error getError() {

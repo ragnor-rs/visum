@@ -18,11 +18,22 @@ public abstract class BasePresenter<V extends BaseView> {
     private V view;
 
     public final void setView(V view) {
-        this.view = view;
         if (view == null) {
-            subscriptions.unsubscribe();
-            onViewDetached();
+            if (subscriptions != null) {
+                subscriptions.unsubscribe();
+            }
+
+            if (this.view != null) {
+                onViewDetached();
+            }
+
+            this.view = null;
         } else {
+            if (this.view != null) {
+                setView(null);
+            }
+
+            this.view = view;
             subscriptions = new CompositeSubscription();
             onViewAttached();
         }

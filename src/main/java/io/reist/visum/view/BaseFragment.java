@@ -148,7 +148,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     protected abstract void inject(Object from);
 
-    protected abstract P getPresenter();
+    public abstract P getPresenter();
 
     protected FragmentController getFragmentController() {
         Object a = getActivity();

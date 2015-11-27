@@ -9,24 +9,16 @@ import java.lang.*;
  */
 public class VisumError implements Error
 {
-    public VisumError() {
-    }
-
-    public VisumError(Throwable t) {
-        throwable = t;
-    }
 
     private String message;
     private Throwable throwable;
 
-    @Override
-    public void setMessage(String message) {
+    public VisumError(String message) {
         this.message = message;
     }
 
-    @Override
-    public void setThrowable(Throwable throwable) {
-        this.throwable = throwable;
+    public VisumError(Throwable t) {
+        throwable = t;
     }
 
     @Nullable

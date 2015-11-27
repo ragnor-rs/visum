@@ -13,8 +13,4 @@ public interface Error {
     @Nullable
     Throwable getThrowable();
 
-    void setMessage(String message);
-
-    void setThrowable(Throwable throwable);
-
 }

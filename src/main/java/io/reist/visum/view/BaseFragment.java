@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
-import io.reist.visum.BaseApplication;
 import io.reist.visum.ComponentCache;
+import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.presenter.BasePresenter;
 
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
@@ -102,7 +102,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     private ComponentCache getComponentCache() {
-        BaseApplication application = (BaseApplication) getActivity().getApplication();
+        ComponentCacheProvider application = (ComponentCacheProvider) getActivity().getApplication();
         return application.getComponentCache();
     }
 

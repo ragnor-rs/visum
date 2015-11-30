@@ -18,17 +18,28 @@ public abstract class BasePresenter<V extends BaseView> {
     private V view;
 
     public final void setView(V view) {
-        this.view = view;
         if (view == null) {
-            subscriptions.unsubscribe();
-            onViewDetached();
+            if (subscriptions != null) {
+                subscriptions.unsubscribe();
+            }
+
+            if (this.view != null) {
+                onViewDetached();
+            }
+
+            this.view = null;
         } else {
+            if (this.view != null) {
+                setView(null);
+            }
+
+            this.view = view;
             subscriptions = new CompositeSubscription();
             onViewAttached();
         }
     }
 
-    protected final <T> void subscribe(Observable<T> observable, Observer<T> observer) {
+    protected final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
         subscriptions.add(
                 observable
                         .subscribeOn(Schedulers.io())

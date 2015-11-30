@@ -12,12 +12,14 @@ import rx.Observable;
 public abstract class AbstractBaseService<T> implements BaseService<T> {
 
     @RxLogObservable
-    public Observable<Response<List<T>>> save(List<T> list) {
+    @Override
+    public Observable<? extends Response<List<T>>> save(List<T> list) {
         return Observable.just(saveSync(list));
     }
 
     @RxLogObservable
-    public Observable<Response<T>> save(T t) {
+    @Override
+    public Observable<? extends Response<T>> save(T t) {
         return Observable.just(saveSync(t));
     }
 

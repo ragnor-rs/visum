@@ -9,15 +9,15 @@ import rx.Observable;
  */
 public interface BaseService<T> {
 
-    Observable<Response<List<T>>> list();
+    Observable<? extends Response<List<T>>> list();
 
-    Observable<Response<T>> byId(Long id); //cur this is not true. Api will not wrap simple model into a wrapper
+    Observable<? extends Response<T>> byId(Long id); //cur this is not true. Api will not wrap simple model into a wrapper
 
-    Observable<Response<List<T>>> save(List<T> list);
+    Observable<? extends Response<List<T>>> save(List<T> list);
 
-    Observable<Response<T>> save(T t);
+    Observable<? extends Response<T>> save(T t);
 
-    Observable<Response<Integer>> delete(Long id);
+    Observable<? extends Response<Integer>> delete(Long id);
 
     Response<List<T>> saveSync(List<T> list);
 

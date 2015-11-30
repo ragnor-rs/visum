@@ -39,7 +39,7 @@ public abstract class BasePresenter<V extends BaseView> {
         }
     }
 
-    protected final <T> void subscribe(Observable<T> observable, Observer<T> observer) {
+    protected final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
         subscriptions.add(
                 observable
                         .subscribeOn(Schedulers.io())

@@ -4,7 +4,6 @@ import com.fernandocejas.frodo.annotation.RxLogObservable;
 
 import java.util.List;
 
-import io.reist.visum.Error;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -132,7 +131,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
             return observable
                     .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext(t -> Observable.just(new Response<>(new Error(t))));
+                    .onErrorResumeNext(t -> Observable.just(new BaseResponse<T>(new BaseError(t))));
         }
     }
 
@@ -152,7 +151,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
             return observable
                     .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext(t -> Observable.just(new Response<>(new Error(t))));
+                    .onErrorResumeNext(t -> Observable.just(new BaseResponse<>(new BaseError(t))));
         }
 
     }

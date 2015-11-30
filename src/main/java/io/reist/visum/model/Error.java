@@ -5,14 +5,12 @@ import android.support.annotation.Nullable;
 /**
  * Created by m039 on 11/26/15.
  */
-public interface Response<R> {
+public interface Error {
 
     @Nullable
-    R getResult();
+    String getMessage();
 
     @Nullable
-    Error getError();
-
-    boolean isSuccessful();
+    Throwable getThrowable();
 
 }

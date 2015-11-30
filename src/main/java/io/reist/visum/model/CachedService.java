@@ -131,7 +131,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
             return observable
                     .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext(t -> Observable.just(new VisumResponse<T>(new VisumError(t))));
+                    .onErrorResumeNext(t -> Observable.just(new BaseResponse<T>(new VisumError(t))));
         }
     }
 
@@ -151,7 +151,7 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
             return observable
                     .doOnNext(r -> service.saveSync(r.getResult()))
                     .filter(r -> !r.isSuccessful())
-                    .onErrorResumeNext(t -> Observable.just(new VisumResponse<>(new VisumError(t))));
+                    .onErrorResumeNext(t -> Observable.just(new BaseResponse<>(new VisumError(t))));
         }
 
     }

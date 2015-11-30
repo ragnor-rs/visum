@@ -2,21 +2,19 @@ package io.reist.visum.model;
 
 import android.support.annotation.Nullable;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by defuera on 09/11/2015.
  */
-public class VisumResponse<T> implements Response<T>
-{
+public class BaseResponse<T> implements Response<T> {
+
     private T mResult;
     private Error mError;
 
-    public VisumResponse(T result) {
+    public BaseResponse(T result) {
         mResult = result;
     }
 
-    public VisumResponse(Error error) {
+    public BaseResponse(Error error) {
         mError = error;
     }
 
@@ -38,4 +36,3 @@ public class VisumResponse<T> implements Response<T>
     }
 
 }
-

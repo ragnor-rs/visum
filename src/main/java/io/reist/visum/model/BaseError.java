@@ -2,22 +2,19 @@ package io.reist.visum.model;
 
 import android.support.annotation.Nullable;
 
-import java.lang.*;
-
 /**
  * Created by Reist on 23.11.15.
  */
-public class VisumError implements Error
-{
+public class BaseError implements Error {
 
     private String message;
     private Throwable throwable;
 
-    public VisumError(String message) {
+    public BaseError(String message) {
         this.message = message;
     }
 
-    public VisumError(Throwable t) {
+    public BaseError(Throwable t) {
         throwable = t;
     }
 
@@ -32,4 +29,5 @@ public class VisumError implements Error
     public Throwable getThrowable() {
         return throwable;
     }
+
 }

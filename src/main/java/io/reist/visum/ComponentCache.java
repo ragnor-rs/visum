@@ -11,17 +11,11 @@ import io.reist.visum.view.BaseView;
  * thereby providing custom scopes for yor view.
  * In other words this is scope manager for your views.
  */
-public class ComponentCache {
+public abstract class ComponentCache {
 
     private final AtomicLong idSequence = new AtomicLong();
 
     private final Map<Long, Object> componentMap = new HashMap<>();
-
-    private final BaseApplication baseApplication;
-
-    public ComponentCache(BaseApplication baseApplication) {
-        this.baseApplication = baseApplication;
-    }
 
     /**
      * Retrieves component from cache for given view or
@@ -40,13 +34,18 @@ public class ComponentCache {
         Object component = componentMap.get(componentId);
 
         if (component == null) {
-            component = baseApplication.buildComponentFor(view);
+            component = buildComponentFor(view.getClass());
             componentMap.put(componentId, component);
         }
 
         return component;
 
     }
+
+    /**
+     * Util method for creating new view component, every Component should be registered here
+     */
+    protected abstract Object buildComponentFor(Class<? extends BaseView> viewClass);
 
     /**
      * Destroys component for the given view.

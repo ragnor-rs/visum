@@ -98,7 +98,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     @Override
     public final Object getComponent() {
-        return getComponentCache().getComponentFor(this);
+        if (getComponentCache() != null) {
+            return getComponentCache().getComponentFor(this);
+        } else {
+            return null;
+        }
     }
 
     private ComponentCache getComponentCache() {

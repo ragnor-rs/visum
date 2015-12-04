@@ -55,7 +55,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        layoutResId = getArguments().getInt(ARG_LAYOUT_RES_ID);
+        layoutResId = inflateLayout();
 
         componentId = savedInstanceState == null ? null : savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
         stateSaved = false;
@@ -128,6 +128,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             ButterKnife.bind(getPresenter(), view);
             getPresenter().setView(this);
         }
+
+        ready();
     }
 
     @Override
@@ -150,9 +152,20 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     /// --- ///
 
+    /**
+     * requests layout to inflate
+     */
+    protected abstract int inflateLayout();
+
     protected abstract void inject(Object from);
 
     public abstract P getPresenter();
+
+    /**
+     * this is called once view is inflated and ready
+     * Put your initialization code here instead of in onViewCreated()
+     */
+    protected abstract void ready();
 
     protected FragmentController getFragmentController() {
         Object a = getActivity();

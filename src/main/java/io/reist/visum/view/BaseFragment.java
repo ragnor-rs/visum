@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,27 +17,9 @@ import io.reist.visum.presenter.BasePresenter;
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
-    private static final String ARG_LAYOUT_RES_ID = "ARG_LAYOUT_RES_ID";
-
-    @SuppressWarnings("TryWithIdenticalCatches")
-    @NonNull
-    public static <T extends BaseFragment> T newInstance(Class<T> clazz, @LayoutRes int layoutResId) {
-        try {
-            T f = clazz.newInstance();
-
-            Bundle args = new Bundle();
-            args.putInt(ARG_LAYOUT_RES_ID, layoutResId);
-            f.setArguments(args);
-
-            return f;
-        } catch (java.lang.InstantiationException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
-    }
 
     public interface FragmentController {
+
         /**
          * @param fragment - fragment to display
          * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a back stack.
@@ -51,11 +32,13 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     private boolean stateSaved;
     private int layoutResId;
 
+    public BaseFragment(@LayoutRes int layoutResId) {
+        this.layoutResId = layoutResId;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        layoutResId = inflateLayout();
 
         componentId = savedInstanceState == null ? null : savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
         stateSaved = false;
@@ -151,11 +134,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     /// --- ///
-
-    /**
-     * requests layout to inflate
-     */
-    protected abstract int inflateLayout();
 
     protected abstract void inject(Object from);
 

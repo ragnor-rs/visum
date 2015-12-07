@@ -15,3 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontshrink
+-keepattributes Signature
+-dontnote android.net.http.**
+-dontnote org.apache.http.**
+-dontnote com.google.vending.licensing.**
+-dontnote com.android.vending.licensing.**
+-dontnote android.support.v7.widget.Toolbar

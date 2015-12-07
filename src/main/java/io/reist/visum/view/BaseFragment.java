@@ -55,11 +55,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     /// --- ///
 
     @Override
-    public Bundle extras() {
-        return getArguments();
-    }
-
-    @Override
     public Context context() {
         return getActivity();
     }

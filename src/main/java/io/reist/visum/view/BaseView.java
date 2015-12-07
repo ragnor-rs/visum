@@ -8,8 +8,6 @@ import android.os.Bundle;
  */
 public interface BaseView {
 
-    Bundle extras();
-
     Context context();
 
     Long getComponentId();

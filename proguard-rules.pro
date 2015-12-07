@@ -21,3 +21,4 @@
 -dontnote org.apache.http.**
 -dontnote com.google.vending.licensing.**
 -dontnote com.android.vending.licensing.**
+-dontnote android.support.v7.widget.Toolbar

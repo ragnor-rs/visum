@@ -106,10 +106,10 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         if (presenter != null) {
             ButterKnife.bind(presenter, view);
         }
-        ready();
         if (presenter != null) {
             presenter.setView(this);
         }
+        ready();
     }
 
     @Override

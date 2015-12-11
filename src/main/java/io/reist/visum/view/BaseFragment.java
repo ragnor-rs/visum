@@ -104,9 +104,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         super.onViewCreated(view, savedInstanceState);
         final P presenter = getPresenter();
         if (presenter != null) {
-            ButterKnife.bind(presenter, view);
-        }
-        if (presenter != null) {
             presenter.setView(this);
         }
         ready();

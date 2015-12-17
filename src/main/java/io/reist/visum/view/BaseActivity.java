@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.Nullable;
-
 import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.R;
@@ -61,7 +60,7 @@ public class BaseActivity extends AppCompatActivity
     }
 
     @Nullable
-    private static Fragment findTopmostFragment(FragmentManager fragmentManager) {
+    protected static Fragment findTopmostFragment(FragmentManager fragmentManager) {
         int backStackEntryCount = fragmentManager.getBackStackEntryCount();
 
         Fragment topmostFragment;

@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.annotation.Nullable;
-
 import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.R;
@@ -41,29 +40,28 @@ public class BaseActivity extends AppCompatActivity
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        if (what != null) {
+        if (what != null && !popBackStackInclusive) {
             if (remove) {
-                transaction.remove(what);
+                transaction = transaction.remove(what);
             } else {
-                transaction.hide(what);
+                transaction = transaction.hide(what);
             }
         }
 
         String fragmentName = with.getName();
 
         if (with.isAdded()) {
-            transaction.show(with);
+            transaction = transaction.show(with);
         } else {
-            transaction.add(R.id.fragment_container, with, fragmentName);
+            transaction = transaction.add(R.id.fragment_container, with, fragmentName);
         }
 
-        transaction.show(with).addToBackStack(fragmentName).commit();
+        transaction.addToBackStack(fragmentName).commit();
     }
 
     @Nullable
-    private static Fragment findTopmostFragment(FragmentManager fragmentManager) {
+    protected static Fragment findTopmostFragment(FragmentManager fragmentManager) {
         int backStackEntryCount = fragmentManager.getBackStackEntryCount();
-
         Fragment topmostFragment;
         if (backStackEntryCount > 0) {
             String fragmentName = fragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();

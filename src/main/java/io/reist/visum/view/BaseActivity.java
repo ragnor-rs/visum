@@ -44,6 +44,10 @@ public class BaseActivity extends AppCompatActivity
         showFragment(fragment, remove, false);
     }
 
+    /**
+     * @see BaseActivity#showFragment
+     * @param popBackStackInclusive all entries up to but not including that entry will be removed
+     */
     protected void showFragment(BaseFragment fragment, boolean remove, boolean popBackStackInclusive) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment topmostFragment = findTopmostFragment(fragmentManager);

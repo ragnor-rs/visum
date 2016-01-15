@@ -31,8 +31,8 @@ import io.reist.visum.R;
 /**
  * Created by m039 on 11/13/15.
  */
-public class BaseActivity extends AppCompatActivity
-        implements BaseFragment.FragmentController {
+public class VisumActivity extends AppCompatActivity
+        implements VisumFragment.FragmentController {
 
     /**
      * @param fragment - fragment to display
@@ -40,15 +40,15 @@ public class BaseActivity extends AppCompatActivity
      *                 false to stay in a back stack
      */
     @Override
-    public void showFragment(BaseFragment fragment, boolean remove) {
+    public void showFragment(VisumFragment fragment, boolean remove) {
         showFragment(fragment, remove, false);
     }
 
     /**
-     * @see BaseActivity#showFragment
+     * @see VisumActivity#showFragment
      * @param popBackStackInclusive all entries up to but not including that entry will be removed
      */
-    protected void showFragment(BaseFragment fragment, boolean remove, boolean popBackStackInclusive) {
+    protected void showFragment(VisumFragment fragment, boolean remove, boolean popBackStackInclusive) {
         FragmentManager fragmentManager = getFragmentManager();
         Fragment topmostFragment = findTopmostFragment(fragmentManager);
         if (topmostFragment != null && fragment.getName().equals(topmostFragment.getTag())) {
@@ -57,7 +57,7 @@ public class BaseActivity extends AppCompatActivity
         replace(fragmentManager, topmostFragment, fragment, remove, popBackStackInclusive);
     }
 
-    private static void replace(FragmentManager fragmentManager, Fragment what, BaseFragment with, boolean remove, boolean popBackStackInclusive) {
+    private static void replace(FragmentManager fragmentManager, Fragment what, VisumFragment with, boolean remove, boolean popBackStackInclusive) {
         if (popBackStackInclusive && fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStackImmediate(fragmentManager.getBackStackEntryAt(0).getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }

@@ -26,7 +26,7 @@ import android.os.Bundle;
 /**
  * Created by Reist on 10/15/15.
  */
-public interface BaseView {
+public interface VisumView {
 
     Context context();
 

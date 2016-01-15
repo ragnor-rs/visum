@@ -22,7 +22,7 @@ package io.reist.visum.presenter;
 
 import android.content.Context;
 
-import io.reist.visum.view.BaseView;
+import io.reist.visum.view.VisumView;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -32,7 +32,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by Reist on 10/15/15.
  */
-public abstract class BasePresenter<V extends BaseView> {
+public abstract class VisumPresenter<V extends VisumView> {
 
     private CompositeSubscription subscriptions;
     private V view;

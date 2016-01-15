@@ -32,9 +32,9 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
-import io.reist.visum.presenter.BasePresenter;
+import io.reist.visum.presenter.VisumPresenter;
 
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
+public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 
@@ -45,14 +45,14 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
          * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a back stack.
          *                 false to stay in a back stack
          */
-        void showFragment(BaseFragment fragment, boolean remove);
+        void showFragment(VisumFragment fragment, boolean remove);
     }
 
     private Long componentId;
     private boolean stateSaved;
     private int layoutResId;
 
-    public BaseFragment(@LayoutRes int layoutResId) {
+    public VisumFragment(@LayoutRes int layoutResId) {
         this.layoutResId = layoutResId;
     }
 

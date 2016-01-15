@@ -26,11 +26,11 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class BaseModule {
+public class VisumModule {
 
     protected final Context context;
 
-    public BaseModule(Context context) {
+    public VisumModule(Context context) {
         this.context = context;
     }
 

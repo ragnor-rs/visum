@@ -22,7 +22,6 @@ package io.reist.visum.model.local;
 
 import android.support.annotation.NonNull;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
 import com.pushtorefresh.storio.sqlite.operations.put.PreparedPut;
@@ -56,7 +55,6 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
         return storIoSqLite.put();
     }
 
-    @RxLogObservable
     @NonNull
     protected final Observable<T> unique(Class<T> entityClass, String tableName, Long id) {
         return preparedGetBuilder(entityClass)

@@ -8,7 +8,6 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.2.2'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath 'com.android.tools.build:gradle:1.5.0'
-        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.1"
     }
     configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 }
@@ -20,7 +19,6 @@ repositories {
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.fernandocejas.frodo'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {

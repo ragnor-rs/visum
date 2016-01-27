@@ -20,8 +20,6 @@
 
 package io.reist.visum.model;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
-
 import java.util.List;
 
 import rx.Observable;
@@ -46,7 +44,6 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
      * Remote service can end up with error (f.e. network error), which will be emitted wrapped in Response.Error
      * On success remote service saves data to local service, which should emit updated data immediately
      */
-    @RxLogObservable
     @Override
     public final Observable<Response<List<T>>> list() {
         return Observable.merge(
@@ -58,7 +55,6 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
     /**
      * @see CachedService#list()
      */
-    @RxLogObservable
     @Override
     public final Observable<Response<T>> byId(Long id) {
         return Observable.merge(
@@ -73,7 +69,6 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
      * @param list - to save
      * @return num of updated items
      */
-    @RxLogObservable
     @Override
     public final Observable<Response<List<T>>> save(List<T> list) { //cur we are getting num of updated items, but what about rest response?
         return Observable.concat(local.save(list), remote.save(list));
@@ -85,7 +80,6 @@ public abstract class CachedService<T> extends AbstractBaseService<T> {
      * @param t - object to save
      * @return boolean - whether data saved successfully
      */
-    @RxLogObservable
     @Override
     public final Observable<Response<T>> save(T t) {
         return Observable.concat(

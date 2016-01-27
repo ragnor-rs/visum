@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 /**
  * Created by defuera on 09/11/2015.
  */
-public class BaseResponse<T> implements Response<T> {
+public class BaseResponse<T> implements VisumResponse<T> {
 
     private T mResult;
     private VisumError mError;

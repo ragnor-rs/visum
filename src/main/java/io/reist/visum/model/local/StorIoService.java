@@ -29,15 +29,15 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
-import io.reist.visum.model.AbstractBaseService;
 import io.reist.visum.model.BaseResponse;
-import io.reist.visum.model.Response;
+import io.reist.visum.model.BaseService;
+import io.reist.visum.model.VisumResponse;
 import rx.Observable;
 
 /**
  * Created by Reist on 10/23/15.
  */
-public abstract class StorIoService<T> extends AbstractBaseService<T> {
+public abstract class StorIoService<T> extends BaseService<T> {
 
     protected final StorIOSQLite storIoSqLite;
 
@@ -73,7 +73,7 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
     }
 
     @Override
-    public final Response<List<T>> saveSync(List<T> list) {
+    public final VisumResponse<List<T>> saveSync(List<T> list) {
 
         preparedPutBuilder()
                 .objects(list)
@@ -84,7 +84,7 @@ public abstract class StorIoService<T> extends AbstractBaseService<T> {
     }
 
     @Override
-    public final Response<T> saveSync(T t) {
+    public final VisumResponse<T> saveSync(T t) {
 
         preparedPutBuilder()
                 .object(t)

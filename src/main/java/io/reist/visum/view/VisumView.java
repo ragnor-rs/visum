@@ -24,6 +24,7 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by Reist on 10/15/15.
+ * Class representing View interface and enforces user create DaggerComponent
  */
 public interface VisumView<P extends VisumPresenter> {
 

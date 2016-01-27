@@ -33,6 +33,10 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.presenter.VisumPresenter;
 
+/**
+ * Base class for android Fragments to
+ * @param <P> - subclass of VisumPresenter
+ */
 public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P> {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";

@@ -31,7 +31,8 @@ public interface BaseService<T> {
 
     Observable<? extends Response<List<T>>> list();
 
-    Observable<? extends Response<T>> byId(Long id); //cur this is not true. Api will not wrap simple model into a wrapper
+    // todo cur this is not true. Api will not wrap simple model into a wrapper
+    Observable<? extends Response<T>> byId(Long id);
 
     Observable<? extends Response<List<T>>> save(List<T> list);
 

@@ -14,6 +14,8 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by defuera on 26/01/2016.
+ * Base class for FrameLayout providing visum mvp inteface
+ * @param <P> - subclass of VisumPresenter
  */
 public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout implements VisumView<P> { //todo it's a lot like VisumFragment, should we DRY?
 

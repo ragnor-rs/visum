@@ -34,7 +34,7 @@ import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Base class for android Fragments to
+ * Base class for Fragments providing visum mvp inteface
  * @param <P> - subclass of VisumPresenter
  */
 public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P> {

@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 /**
  * Created by m039 on 11/26/15.
  */
-public interface Error {
+public interface VisumError {
 
     @Nullable
     String getMessage();

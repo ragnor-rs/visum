@@ -31,7 +31,7 @@ public interface Response<R> {
     R getResult();
 
     @Nullable
-    Error getError();
+    VisumError getError();
 
     boolean isSuccessful();
 

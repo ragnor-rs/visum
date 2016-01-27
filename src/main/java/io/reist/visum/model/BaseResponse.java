@@ -28,13 +28,13 @@ import android.support.annotation.Nullable;
 public class BaseResponse<T> implements Response<T> {
 
     private T mResult;
-    private Error mError;
+    private VisumError mError;
 
     public BaseResponse(T result) {
         mResult = result;
     }
 
-    public BaseResponse(Error error) {
+    public BaseResponse(VisumError error) {
         mError = error;
     }
 
@@ -45,7 +45,7 @@ public class BaseResponse<T> implements Response<T> {
 
     @Nullable
     @Override
-    public Error getError() {
+    public VisumError getError() {
         return mError;
     }
 

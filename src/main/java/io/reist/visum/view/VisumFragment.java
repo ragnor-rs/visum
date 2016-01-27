@@ -21,7 +21,6 @@
 package io.reist.visum.view;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -34,7 +33,7 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.presenter.VisumPresenter;
 
-public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView {
+public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P> {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 
@@ -73,11 +72,6 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
     }
 
     /// --- ///
-
-    @Override
-    public Context context() {
-        return getActivity();
-    }
 
     @Override
     public final Long getComponentId() {
@@ -146,18 +140,6 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         if (getPresenter() != null)
             getPresenter().setView(null);
     }
-
-    /// --- ///
-
-    protected abstract void inject(Object from);
-
-    public abstract P getPresenter();
-
-    /**
-     * this is called once view is inflated and ready
-     * Put your initialization code here instead of in onViewCreated()
-     */
-    protected abstract void ready();
 
     protected FragmentController getFragmentController() {
         Object a = getActivity();

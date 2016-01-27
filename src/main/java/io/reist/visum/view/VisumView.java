@@ -20,20 +20,27 @@
 
 package io.reist.visum.view;
 
-import android.content.Context;
-import android.os.Bundle;
+import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by Reist on 10/15/15.
  */
-public interface VisumView {
-
-    Context context();
+public interface VisumView<P extends VisumPresenter> {
 
     Long getComponentId();
 
     void setComponentId(Long componentId);
 
     Object getComponent();
+
+    void inject(Object from);
+
+    P getPresenter();
+
+    /**
+     * this is called once view is inflated and ready
+     * Put your initialization code here instead of in onViewCreated()
+     */
+    void ready();
 
 }

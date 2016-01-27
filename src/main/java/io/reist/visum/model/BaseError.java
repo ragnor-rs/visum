@@ -25,7 +25,7 @@ import android.support.annotation.Nullable;
 /**
  * Created by Reist on 23.11.15.
  */
-public class BaseError implements Error {
+public class BaseError implements VisumError {
 
     private String message;
     private Throwable throwable;

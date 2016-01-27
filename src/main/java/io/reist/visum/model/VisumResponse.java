@@ -18,25 +18,21 @@
  * along with Visum.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.reist.visum;
+package io.reist.visum.model;
 
-import android.content.Context;
+import android.support.annotation.Nullable;
 
-import dagger.Module;
-import dagger.Provides;
+/**
+ * Created by m039 on 11/26/15.
+ */
+public interface VisumResponse<R> {
 
-@Module
-public class VisumModule {
+    @Nullable
+    R getResult();
 
-    protected final Context context;
+    @Nullable
+    VisumError getError();
 
-    public VisumModule(Context context) {
-        this.context = context;
-    }
-
-    @Provides
-    Context context() {
-        return context;
-    }
+    boolean isSuccessful();
 
 }

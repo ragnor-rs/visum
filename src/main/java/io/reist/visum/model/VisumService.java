@@ -20,17 +20,28 @@
 
 package io.reist.visum.model;
 
-import android.support.annotation.Nullable;
+import java.util.List;
+
+import rx.Observable;
 
 /**
- * Created by m039 on 11/26/15.
+ * Created by Reist on 12/2/15.
  */
-public interface Error {
+public interface VisumService<T> {
 
-    @Nullable
-    String getMessage();
+    Observable<? extends VisumResponse<List<T>>> list();
 
-    @Nullable
-    Throwable getThrowable();
+    // todo cur this is not true. Api will not wrap simple model into a wrapper
+    Observable<? extends VisumResponse<T>> byId(Long id);
+
+    Observable<? extends VisumResponse<List<T>>> save(List<T> list);
+
+    Observable<? extends VisumResponse<T>> save(T t);
+
+    Observable<? extends VisumResponse<Integer>> delete(Long id);
+
+    VisumResponse<List<T>> saveSync(List<T> list);
+
+    VisumResponse<T> saveSync(T t);
 
 }

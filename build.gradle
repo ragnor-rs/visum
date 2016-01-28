@@ -49,21 +49,24 @@ android {
     }
 }
 
+def supportVersion = '23.1.1'
+def retrofitVersion = '2.0.0-beta3'
+
 dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:support-annotations:23.1.1'
+    compile "com.android.support:appcompat-v7:$supportVersion"
+    compile "com.android.support:design:$supportVersion"
+    compile "com.android.support:support-annotations:$supportVersion"
 
     // UI
     compile 'com.jakewharton:butterknife:7.0.1'
 
     // Network layer
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
 
     // Database layer
     compile 'com.pushtorefresh.storio:sqlite:1.5.0'

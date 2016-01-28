@@ -49,7 +49,7 @@ public abstract class CachedService<T> extends BaseService<T> {
         return Observable.merge(
                 local.list(),
                 remote.list().compose(new SaveAndEmitErrorsListTransformer<>(local)))
-                .filter(new FilterListResponse<>());
+                .filter(new ListResponseFilter<>());
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class CachedService<T> extends BaseService<T> {
         return Observable.merge(
                 local.byId(id),
                 remote.byId(id).compose(new SaveAndEmitErrorsTransformer<>(local)))
-                .filter(new FilterResponse<>());
+                .filter(new ResponseFilter<>());
     }
 
     /**
@@ -104,7 +104,7 @@ public abstract class CachedService<T> extends BaseService<T> {
 
     // ----
 
-    public static class FilterListResponse<T> implements Func1<VisumResponse<List<T>>, Boolean> {
+    public static class ListResponseFilter<T> implements Func1<VisumResponse<List<T>>, Boolean> {
 
         @Override
         public Boolean call(VisumResponse<List<T>> response) {
@@ -113,7 +113,7 @@ public abstract class CachedService<T> extends BaseService<T> {
 
     }
 
-    public static class FilterResponse<T> implements Func1<VisumResponse<T>, Boolean> {
+    public static class ResponseFilter<T> implements Func1<VisumResponse<T>, Boolean> {
 
         @Override
         public Boolean call(VisumResponse<T> response) {

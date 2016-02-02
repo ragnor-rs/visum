@@ -21,7 +21,6 @@
 package io.reist.visum.view;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
@@ -103,8 +102,8 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
 
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
         stateSaved = true;
 

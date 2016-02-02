@@ -41,16 +41,6 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 
-    public interface FragmentController {
-
-        /**
-         * @param fragment - fragment to display
-         * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a back stack.
-         *                 false to stay in a back stack
-         */
-        void showFragment(VisumFragment fragment, boolean remove);
-    }
-
     private Long componentId;
     private boolean stateSaved;
     private int layoutResId;
@@ -143,15 +133,6 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         }
         if (getPresenter() != null)
             getPresenter().setView(null);
-    }
-
-    protected FragmentController getFragmentController() {
-        Object a = getActivity();
-        if (a instanceof FragmentController) {
-            return (FragmentController) a;
-        } else {
-            throw new IllegalArgumentException("Can't find " + FragmentController.class.getSimpleName());
-        }
     }
 
 }

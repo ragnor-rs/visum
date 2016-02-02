@@ -81,7 +81,7 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
     @Override
     public void setComponentId(Long componentId) {
-        this.componentId = componentId; //todo save with instance state
+        this.componentId = componentId;
     }
 
     @Override

@@ -20,79 +20,108 @@
 
 package io.reist.visum.view;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
-import io.reist.visum.R;
+import butterknife.ButterKnife;
+import io.reist.visum.ComponentCache;
+import io.reist.visum.ComponentCacheProvider;
+import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Created by m039 on 11/13/15.
+ * Created by Defuera on 29/01/16.
  */
-public class VisumActivity extends AppCompatActivity
-        implements VisumFragment.FragmentController {
+public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatActivity implements VisumView<P> {
 
-    /**
-     * @param fragment - fragment to display
-     * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a back stack.
-     *                 false to stay in a back stack
-     */
+    private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
+
+    private Long componentId;
+    private boolean stateSaved;
+
+    @SuppressWarnings("unchecked")
     @Override
-    public void showFragment(VisumFragment fragment, boolean remove) {
-        showFragment(fragment, remove, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        inject(getComponent());
+
+        setContentView(getLayoutRes());
+        ButterKnife.bind(this);
+
+        final P presenter = getPresenter();
+        if (presenter != null) {
+            presenter.setView(this);
+        }
+
+        ready();
     }
 
-    /**
-     * @see VisumActivity#showFragment
-     * @param popBackStackInclusive all entries up to but not including that entry will be removed
-     */
-    protected void showFragment(VisumFragment fragment, boolean remove, boolean popBackStackInclusive) {
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment topmostFragment = findTopmostFragment(fragmentManager);
-        if (topmostFragment != null && fragment.getName().equals(topmostFragment.getTag())) {
-            return;
+    @LayoutRes
+    protected abstract int getLayoutRes();
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (!stateSaved) {
+            getComponentCache().invalidateComponentFor(this);
         }
-        replace(fragmentManager, topmostFragment, fragment, remove, popBackStackInclusive);
+        if (getPresenter() != null)
+            getPresenter().setView(null);
     }
 
-    private static void replace(FragmentManager fragmentManager, Fragment what, VisumFragment with, boolean remove, boolean popBackStackInclusive) {
-        if (popBackStackInclusive && fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStackImmediate(fragmentManager.getBackStackEntryAt(0).getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
+    private ComponentCache getComponentCache() {
+        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
+        return application.getComponentCache();
+    }
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
+    //region VisumView
 
-        if (what != null && !popBackStackInclusive) {
-            if (remove) {
-                transaction = transaction.remove(what);
-            } else {
-                transaction = transaction.hide(what);
-            }
-        }
+    @Override
+    public Long getComponentId() {
+        return componentId;
+    }
 
-        String fragmentName = with.getName();
+    @Override
+    public void setComponentId(Long componentId) {
+        this.componentId = componentId;
+    }
 
-        if (with.isAdded()) {
-            transaction = transaction.show(with);
+    @Override
+    public Object getComponent() {
+        if (getComponentCache() != null) {
+            return getComponentCache().getComponentFor(this);
         } else {
-            transaction = transaction.add(R.id.fragment_container, with, fragmentName);
+            return null;
         }
-
-        transaction.addToBackStack(fragmentName).commit();
     }
 
-    @Nullable
-    protected static Fragment findTopmostFragment(FragmentManager fragmentManager) {
-        int backStackEntryCount = fragmentManager.getBackStackEntryCount();
-        Fragment topmostFragment;
-        if (backStackEntryCount > 0) {
-            String fragmentName = fragmentManager.getBackStackEntryAt(backStackEntryCount - 1).getName();
-            topmostFragment = fragmentManager.findFragmentByTag(fragmentName);
-        } else {
-            topmostFragment = null;
-        }
-        return topmostFragment;
+    //endregion
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        stateSaved = true;
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
     }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            componentId = savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
+        }
+
+        stateSaved = false;
+    }
+
+
 }

@@ -12,7 +12,7 @@ import io.reist.visum.R;
  * Created by defuera on 29/01/2016.
  * This Activity helps you handle your fragments
  */
-public class VisumBaseActivity extends AppCompatActivity implements VisumFragment.FragmentController{
+public class VisumFragmentActivity extends AppCompatActivity implements VisumFragment.FragmentController{
 
     /**
      * @param fragment - fragment to display
@@ -26,7 +26,7 @@ public class VisumBaseActivity extends AppCompatActivity implements VisumFragmen
 
     /**
      * @param popBackStackInclusive all entries up to but not including that entry will be removed
-     * @see VisumBaseActivity#showFragment
+     * @see VisumFragmentActivity#showFragment
      */
     protected void showFragment(VisumFragment fragment, boolean remove, boolean popBackStackInclusive) {
         FragmentManager fragmentManager = getFragmentManager();

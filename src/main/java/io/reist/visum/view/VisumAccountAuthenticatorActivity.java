@@ -13,7 +13,7 @@ import io.reist.visum.presenter.VisumPresenter;
 /**
  * Created by defuera on 01/02/2016.
  */
-public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends AccountAuthenticatorActivity implements VisumView<P> { //cur move to visum?
+public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends AccountAuthenticatorActivity implements VisumView<P> {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 

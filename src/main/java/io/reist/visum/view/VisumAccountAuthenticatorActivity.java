@@ -12,6 +12,8 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by defuera on 01/02/2016.
+ * If you need implement AccountAuthenticatorActivity and still want to get Visum benefits,
+ * here you go.
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends AccountAuthenticatorActivity implements VisumView<P> {
 

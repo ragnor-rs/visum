@@ -15,7 +15,9 @@ import io.reist.visum.presenter.VisumPresenter;
  * If you need implement AccountAuthenticatorActivity and still want to get Visum benefits,
  * here you go.
  */
-public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends AccountAuthenticatorActivity implements VisumView<P> {
+public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
+        extends AccountAuthenticatorActivity
+        implements VisumView<P>,VisumDI  {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 

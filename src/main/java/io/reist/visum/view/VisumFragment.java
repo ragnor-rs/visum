@@ -37,7 +37,7 @@ import io.reist.visum.presenter.VisumPresenter;
  * Base class for Fragments providing visum mvp inteface
  * @param <P> - subclass of VisumPresenter
  */
-public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P> {
+public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P>, VisumDI {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 

@@ -17,7 +17,7 @@ import io.reist.visum.presenter.VisumPresenter;
  * Base class for FrameLayout providing visum mvp inteface
  * @param <P> - subclass of VisumPresenter
  */
-public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout implements VisumView<P> { //todo it's a lot like VisumFragment, should we DRY?
+public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout implements VisumView<P>, VisumDI  {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 

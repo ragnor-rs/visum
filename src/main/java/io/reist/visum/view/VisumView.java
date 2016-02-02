@@ -28,14 +28,6 @@ import io.reist.visum.presenter.VisumPresenter;
  */
 public interface VisumView<P extends VisumPresenter> {
 
-    Long getComponentId();
-
-    void setComponentId(Long componentId);
-
-    Object getComponent();
-
-    void inject(Object from);
-
     P getPresenter();
 
     /**

@@ -32,7 +32,7 @@ import io.reist.visum.presenter.VisumPresenter;
 /**
  * Created by Defuera on 29/01/16.
  */
-public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatActivity implements VisumView<P> {
+public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatActivity implements VisumView<P>, VisumDI {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 
@@ -122,6 +122,5 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
 
         stateSaved = false;
     }
-
 
 }

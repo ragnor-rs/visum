@@ -49,12 +49,7 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         setContentView(getLayoutRes());
         ButterKnife.bind(this);
 
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-
-        ready();
+        attachPresenter();
     }
 
     @LayoutRes
@@ -68,16 +63,16 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         if (!stateSaved) {
             getComponentCache().invalidateComponentFor(this);
         }
-        if (getPresenter() != null)
-            getPresenter().setView(null);
+        detachPresenter();
     }
+
 
     private ComponentCache getComponentCache() {
         ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
         return application.getComponentCache();
     }
 
-    //region VisumView
+    //region VisumClient
 
     @Override
     public Long getComponentId() {
@@ -96,6 +91,26 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         } else {
             return null;
         }
+    }
+
+    //endregion
+
+    //region VisumView
+
+    @SuppressWarnings("unchecked") //todo setView should be checked call
+    @Override
+    public void attachPresenter() {
+        final P presenter = getPresenter();
+        if (presenter != null) {
+            presenter.setView(this);
+        }
+    }
+
+    @SuppressWarnings("unchecked") //todo setView should be type safe call
+    @Override
+    public void detachPresenter() {
+        if (getPresenter() != null)
+            getPresenter().setView(null);
     }
 
     //endregion

@@ -24,16 +24,14 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by Reist on 10/15/15.
- * Class representing View interface and enforces user create DaggerComponent
+ * Interface that enforces you to handle presenter lifecycle for your View (it terms of MVP)
  */
 public interface VisumView<P extends VisumPresenter> {
 
     P getPresenter();
 
-    /**
-     * this is called once view is inflated and ready
-     * Put your initialization code here instead of in onViewCreated()
-     */
-    void ready();
+    void attachPresenter();
+
+    void detachPresenter();
 
 }

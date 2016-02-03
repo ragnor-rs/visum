@@ -17,7 +17,7 @@ import io.reist.visum.presenter.VisumPresenter;
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
         extends AccountAuthenticatorActivity
-        implements VisumView<P>,VisumClient {
+        implements VisumView<P>, VisumClient {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 
@@ -33,13 +33,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
 
         setContentView(getLayoutRes());
         ButterKnife.bind(this);
-
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-
-        ready();
+        attachPresenter();
     }
 
     @LayoutRes
@@ -53,14 +47,34 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
         if (!stateSaved) {
             getComponentCache().invalidateComponentFor(this);
         }
-        if (getPresenter() != null)
-            getPresenter().setView(null);
+        detachPresenter();
     }
 
     private ComponentCache getComponentCache() {
         ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
         return application.getComponentCache();
     }
+
+
+    //region VisumView
+
+    @SuppressWarnings("unchecked") //todo setView should be checked call
+    @Override
+    public void attachPresenter() {
+        final P presenter = getPresenter();
+        if (presenter != null) {
+            presenter.setView(this);
+        }
+    }
+
+    @SuppressWarnings("unchecked") //todo setView should be type safe call
+    @Override
+    public void detachPresenter() {
+        if (getPresenter() != null)
+            getPresenter().setView(null);
+    }
+
+    //endregion
 
     //region VisumView
 

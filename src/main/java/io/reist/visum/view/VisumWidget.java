@@ -46,13 +46,7 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
         inflate(getContext(), layoutRes, this);
         ButterKnife.bind(this);
-
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-
-        ready();
+        attachPresenter();
     }
 
     @SuppressWarnings("unchecked")
@@ -63,16 +57,35 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
         if (!stateSaved) {
             getComponentCache().invalidateComponentFor(this);
         }
+        detachPresenter();
+    }
+
+    //region VisumView
+
+    @SuppressWarnings("unchecked") //todo setView should be checked call
+    @Override
+    public void attachPresenter() {
+        final P presenter = getPresenter();
+        if (presenter != null) {
+            presenter.setView(this);
+        }
+    }
+
+    @SuppressWarnings("unchecked") //todo setView should be type safe call
+    @Override
+    public void detachPresenter() {
         if (getPresenter() != null)
             getPresenter().setView(null);
     }
+
+    //endregion
 
     private ComponentCache getComponentCache() {
         ComponentCacheProvider application = (ComponentCacheProvider) getContext().getApplicationContext();
         return application.getComponentCache();
     }
 
-    //region VisumView
+    //region VisumClient
 
     @Override
     public Long getComponentId() {

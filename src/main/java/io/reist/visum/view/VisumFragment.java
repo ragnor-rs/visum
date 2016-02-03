@@ -106,15 +106,10 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         return view;
     }
 
-    @SuppressWarnings("unchecked") //todo setView should be checked call
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-        ready();
+        attachPresenter();
     }
 
     @Override
@@ -124,15 +119,32 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         stateSaved = true;
     }
 
-    @SuppressWarnings("unchecked") //todo setView should be type safe call
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (!stateSaved) {
             getComponentCache().invalidateComponentFor(this);
         }
+        detachPresenter();
+    }
+
+    //region VisumView
+
+    @SuppressWarnings("unchecked") //todo setView should be checked call
+    @Override
+    public void attachPresenter() {
+        final P presenter = getPresenter();
+        if (presenter != null) {
+            presenter.setView(this);
+        }
+    }
+
+    @SuppressWarnings("unchecked") //todo setView should be type safe call
+    @Override
+    public void detachPresenter() {
         if (getPresenter() != null)
             getPresenter().setView(null);
     }
 
+    //endregion
 }

@@ -2,8 +2,9 @@ package io.reist.visum.view;
 
 /**
  * Created by defuera on 02/02/2016.
+ * VisumClient is an entity which uses servises
  */
-public interface VisumDI {
+public interface VisumClient {
 
     Long getComponentId();
 

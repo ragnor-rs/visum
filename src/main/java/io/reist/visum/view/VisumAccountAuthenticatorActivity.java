@@ -17,7 +17,7 @@ import io.reist.visum.presenter.VisumPresenter;
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
         extends AccountAuthenticatorActivity
-        implements VisumView<P>,VisumDI  {
+        implements VisumView<P>,VisumClient {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
 

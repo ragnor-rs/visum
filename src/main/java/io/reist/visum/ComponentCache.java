@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import io.reist.visum.view.VisumDI;
+import io.reist.visum.view.VisumClient;
 
 /**
  * ComponentCache let you to create and destroy components manually
@@ -42,7 +42,7 @@ public abstract class ComponentCache {
      * creates a new component
      * @param view - VisumView with provides an identifier to retrieve component from cache
      */
-    public Object getComponentFor(VisumDI view) {
+    public Object getComponentFor(VisumClient view) {
 
         Long componentId = view.getComponentId();
 
@@ -65,13 +65,13 @@ public abstract class ComponentCache {
     /**
      * Util method for creating new view component, every Component should be registered here
      */
-    protected abstract Object buildComponentFor(Class<? extends VisumDI> viewClass);
+    protected abstract Object buildComponentFor(Class<? extends VisumClient> viewClass);
 
     /**
      * Destroys component for the given view.
      * If there's no component for the view nothing will happen.
      */
-    public void invalidateComponentFor(VisumDI view) {
+    public void invalidateComponentFor(VisumClient view) {
         Long componentId = view.getComponentId();
         if (componentId == null) {
             return;

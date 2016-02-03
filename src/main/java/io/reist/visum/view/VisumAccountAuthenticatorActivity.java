@@ -76,7 +76,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
 
     //endregion
 
-    //region VisumView
+    //region VisumClient
 
     @Override
     public Long getComponentId() {

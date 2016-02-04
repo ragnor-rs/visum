@@ -23,6 +23,7 @@ public abstract class VisumIntentService extends IntentService implements VisumC
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate() {
+        super.onCreate();
         inject(getComponent());
     }
 

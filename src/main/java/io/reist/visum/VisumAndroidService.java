@@ -14,6 +14,7 @@ public abstract class VisumAndroidService extends Service implements VisumClient
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate() {
+        super.onCreate();
         inject(getComponent());
     }
 

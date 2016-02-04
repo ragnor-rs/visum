@@ -22,7 +22,9 @@ package io.reist.visum.presenter;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -62,6 +64,15 @@ public abstract class VisumPresenter<V> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .unsubscribeOn(Schedulers.io())
+                        .subscribe(observer)
+        );
+    }
+
+    protected final <T> void subscribe(Single<T> single, Action1<T> observer) {
+        subscriptions.add(
+                single
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer)
         );
     }

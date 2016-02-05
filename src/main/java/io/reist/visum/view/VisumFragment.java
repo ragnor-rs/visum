@@ -142,9 +142,21 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
     @SuppressWarnings("unchecked") //todo setView should be type safe call
     @Override
     public void detachPresenter() {
-        if (getPresenter() != null)
-            getPresenter().setView(null);
+        final P presenter = getPresenter();
+        if (presenter != null)
+            presenter.setView(null);
     }
 
     //endregion
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            detachPresenter();
+        } else {
+            attachPresenter();
+        }
+    }
+
 }

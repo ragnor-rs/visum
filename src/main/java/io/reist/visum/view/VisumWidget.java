@@ -20,6 +20,7 @@ import io.reist.visum.presenter.VisumPresenter;
 public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout implements VisumView<P>, VisumClient {
 
     private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
+    private static final String ARG_STATE_SUPER = "ARG_STATE_SUPER";
 
     @LayoutRes
     private final int layoutRes;
@@ -110,11 +111,10 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        super.onSaveInstanceState();
-
         stateSaved = true;
 
         Bundle bundle = new Bundle();
+        bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
         bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
 
         return bundle;
@@ -122,13 +122,15 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        super.onRestoreInstanceState(state);
+        stateSaved = false;
 
         if (state instanceof Bundle) {
-            componentId = ((Bundle) state).getLong(ARG_STATE_COMPONENT_ID);
+            Bundle bundle = (Bundle) state;
+            componentId = bundle.getLong(ARG_STATE_COMPONENT_ID);
+            state = bundle.getParcelable(ARG_STATE_SUPER);
         }
 
-        stateSaved = false;
+        super.onRestoreInstanceState(state);
     }
 
 }

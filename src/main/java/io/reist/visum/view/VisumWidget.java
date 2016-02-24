@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
+import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -81,10 +82,6 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
     //endregion
 
-    private ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getContext().getApplicationContext();
-        return application.getComponentCache();
-    }
 
     //region VisumClient
 
@@ -105,6 +102,12 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ComponentCache getComponentCache() {
+        ComponentCacheProvider application = (ComponentCacheProvider) getContext().getApplicationContext();
+        return application.getComponentCache();
     }
 
     //endregion

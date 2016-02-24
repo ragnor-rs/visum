@@ -28,6 +28,15 @@ import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Reist on 10/15/15.
+ * <p>
+ * VisumPresenter is a class that handles attachment and detachment of a {@link io.reist.visum.view.VisumView}.
+ * </p>
+ * It's also empowered with rx steroids, which makes it handle your subscriptions
+ * making you not to worry about android **Views** lifecycle.
+ * All your rx subscriptions are to be unsubscribed on view detached.
+ * Use {@link VisumPresenter#subscribe(Observable, Observer)} method to gain this benifits.
+ *
+ * @param <V> View to be handled
  */
 public abstract class VisumPresenter<V> {
 

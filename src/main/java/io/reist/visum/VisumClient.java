@@ -19,7 +19,7 @@ import android.os.Bundle;
  * </p><p>
  * To provide such cozy expirience you need to have a Singleton Component and a Singleton Presenter.
  * Same component should be always provided into {@link VisumClient#inject(Object)} method for the same view.
- * Talking about the same view we mean more that same instace of a view. It's same view as a logical consept.
+ * Talking about the same view we mean more that same instace of a view. It's same view as a logical concept.
  * To easily distinguish same view from another view is just think about it as the same screen or just the same stuff.
  * Just make your view implement VisumClient and follow the interface.
  * </p>

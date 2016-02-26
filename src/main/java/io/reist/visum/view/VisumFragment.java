@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
+import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -65,7 +66,7 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         return getClass().getName();
     }
 
-    /// --- ///
+    //region VisumClient implementation
 
     @Override
     public final Long getComponentId() {
@@ -91,12 +92,13 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         }
     }
 
-    private ComponentCache getComponentCache() {
+    @Override
+    public ComponentCache getComponentCache() {
         ComponentCacheProvider application = (ComponentCacheProvider) getActivity().getApplication();
         return application.getComponentCache();
     }
 
-    /// --- ///
+    //endregion
 
     @Nullable
     @Override
@@ -128,7 +130,7 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
         detachPresenter();
     }
 
-    //region VisumView
+    //region VisumView implementation
 
     @SuppressWarnings("unchecked") //todo setView should be checked call
     @Override

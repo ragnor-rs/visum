@@ -22,6 +22,8 @@ package io.reist.visum;
 
 /**
  * Created by Reist on 10/16/15.
+ * This should be class that holds an instance of your implementation of ComponentCached.
+ * Usually it's an Application class.
  */
 public interface ComponentCacheProvider {
 

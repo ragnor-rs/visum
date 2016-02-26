@@ -24,10 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import io.reist.visum.view.VisumClient;
-
 /**
- * ComponentCache let you to create and destroy components manually
+ * ComponentCache let you create and destroy components manually
  * thereby providing custom scopes for yor view.
  * In other words this is scope manager for your views.
  */

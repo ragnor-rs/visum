@@ -2,8 +2,6 @@ package io.reist.visum;
 
 import android.app.Service;
 
-import io.reist.visum.view.VisumClient;
-
 /**
  * Created by defuera on 02/02/2016.
  */
@@ -25,11 +23,6 @@ public abstract class VisumAndroidService extends Service implements VisumClient
         getComponentCache().invalidateComponentFor(this);
     }
 
-    private ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
     //region VisumClient
 
     @Override
@@ -49,6 +42,12 @@ public abstract class VisumAndroidService extends Service implements VisumClient
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ComponentCache getComponentCache() {
+        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
+        return application.getComponentCache();
     }
 
     //endregion

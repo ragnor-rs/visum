@@ -27,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
+import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -67,11 +68,6 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
     }
 
 
-    private ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
     //region VisumClient
 
     @Override
@@ -91,6 +87,12 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         } else {
             return null;
         }
+    }
+
+    @Override
+    public ComponentCache getComponentCache() {
+        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
+        return application.getComponentCache();
     }
 
     //endregion

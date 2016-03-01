@@ -24,6 +24,9 @@ import android.support.annotation.Nullable;
 
 /**
  * Created by m039 on 11/26/15.
+ * This is a helper interface for your api responses.
+ * If you use REST api and all your responces are wrapped in some model.
+ * This is probably the way to go.
  */
 public interface VisumResponse<R> {
 

@@ -22,12 +22,23 @@ package io.reist.visum.presenter;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Single;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Reist on 10/15/15.
+ * <p>
+ * VisumPresenter is a class that handles attachment and detachment of a {@link io.reist.visum.view.VisumView}.
+ * </p>
+ * It's also empowered with rx steroids, which makes it handle your subscriptions
+ * making you not to worry about android **Views** lifecycle.
+ * All your rx subscriptions are to be unsubscribed on view detached.
+ * Use {@link VisumPresenter#subscribe(Observable, Observer)} method to gain this benifits.
+ *
+ * @param <V> View to be handled
  */
 public abstract class VisumPresenter<V> {
 
@@ -62,6 +73,15 @@ public abstract class VisumPresenter<V> {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .unsubscribeOn(Schedulers.io())
+                        .subscribe(observer)
+        );
+    }
+
+    protected final <T> void subscribe(Single<T> single, Action1<T> observer) {
+        subscriptions.add(
+                single
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer)
         );
     }

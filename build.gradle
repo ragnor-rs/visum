@@ -49,7 +49,7 @@ android {
     }
 }
 
-def supportVersion = '23.1.1'
+def supportVersion = '23.2.0'
 def retrofitVersion = '2.0.0-beta4'
 
 dependencies {

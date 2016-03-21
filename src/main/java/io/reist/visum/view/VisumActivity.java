@@ -49,12 +49,22 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
 
         setContentView(getLayoutRes());
         ButterKnife.bind(this);
+    }
 
+    @Override
+    protected void onResume() { //todo implement for all VisumViews
+        super.onResume();
         attachPresenter();
     }
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        detachPresenter();
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -64,7 +74,6 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         if (!stateSaved) {
             getComponentCache().invalidateComponentFor(this);
         }
-        detachPresenter();
     }
 
 

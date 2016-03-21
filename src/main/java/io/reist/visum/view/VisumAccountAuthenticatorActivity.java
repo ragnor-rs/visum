@@ -8,6 +8,7 @@ import android.support.annotation.LayoutRes;
 import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
+import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -50,13 +51,8 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
         detachPresenter();
     }
 
-    private ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
-
     //region VisumView
+
 
     @SuppressWarnings("unchecked") //todo setView should be checked call
     @Override
@@ -72,6 +68,12 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     public void detachPresenter() {
         if (getPresenter() != null)
             getPresenter().setView(null);
+    }
+
+    @Override
+    public ComponentCache getComponentCache() {
+        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
+        return application.getComponentCache();
     }
 
     //endregion

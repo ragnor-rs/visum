@@ -49,15 +49,14 @@ android {
     }
 }
 
-def supportVersion = '23.1.1'
-def retrofitVersion = '2.0.0-beta3'
+def supportVersion = '23.2.0'
+def retrofitVersion = '2.0.0-beta4'
 
 dependencies {
 
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
     compile "com.android.support:support-annotations:$supportVersion"
 
     // UI

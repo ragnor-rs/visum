@@ -46,10 +46,12 @@ public abstract class CachedService<T> extends BaseService<T> {
      */
     @Override
     public final Observable<VisumResponse<List<T>>> list() {
-        return Observable.merge(
-                local.list(),
-                remote.list().compose(new SaveAndEmitErrorsListTransformer<>(local)))
-                .filter(new ListResponseFilter<>());
+        return Observable
+                .merge(
+                        local.list(),
+                        remote.list().compose(new SaveAndEmitErrorsListTransformer<>(local)))
+                .filter(new ListResponseFilter<>())
+                .first();
     }
 
     /**
@@ -57,10 +59,13 @@ public abstract class CachedService<T> extends BaseService<T> {
      */
     @Override
     public final Observable<VisumResponse<T>> byId(Long id) {
-        return Observable.merge(
-                local.byId(id),
-                remote.byId(id).compose(new SaveAndEmitErrorsTransformer<>(local)))
-                .filter(new ResponseFilter<>());
+        return Observable
+                .merge(
+                        local.byId(id),
+                        remote.byId(id).compose(new SaveAndEmitErrorsTransformer<>(local))
+                )
+                .filter(new ResponseFilter<>())
+                .first();
     }
 
     /**
@@ -152,9 +157,7 @@ public abstract class CachedService<T> extends BaseService<T> {
 
     public static class SaveAndEmitErrorsListTransformer<T>
             extends SaveTransformer<T>
-            implements Observable.Transformer<VisumResponse<List<T>>, VisumResponse<List<T>>>
-
-    {
+            implements Observable.Transformer<VisumResponse<List<T>>, VisumResponse<List<T>>> {
 
         public SaveAndEmitErrorsListTransformer(VisumService<T> service) {
             super(service);

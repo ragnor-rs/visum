@@ -34,18 +34,12 @@ public class VisumFragmentManager {
     ) {
 
         Fragment topmostFragment = findTopmostFragment(fragmentManager);
-
-        if (topmostFragment != null && fragment.getName().equals(topmostFragment.getTag())) {
-            return;
-        }
-
         replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive);
-
     }
 
     private static void replace(
             FragmentManager fragmentManager,
-            Fragment what,
+            @Nullable Fragment what,
             VisumFragment with,
             @IdRes int resId,
             boolean remove,

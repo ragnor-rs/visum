@@ -36,6 +36,7 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Base class for Fragments providing visum mvp inteface
+ *
  * @param <P> - subclass of VisumPresenter
  */
 public abstract class VisumFragment<P extends VisumPresenter> extends Fragment implements VisumView<P>, VisumClient {
@@ -132,6 +133,25 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
 
     //region VisumView implementation
 
+    /**
+     * <p>
+     * attachPresenter is called {@link VisumFragment#onViewCreated(View, Bundle)} on Fragment initialization.
+     * If you need to execute some code when View is initialized, but before presenter is attached
+     * just use following snippet:
+     * </p>
+     * <pre>
+     * {@code
+     * @literal @Override
+     * public void onViewCreated(View view, Bundle savedInstanceState) {
+     *      //your code here
+     *      super.onViewCreated(view, savedInstanceState);
+     * }
+     * </pre>
+     * <p>
+     * attachPresenter is also called once fragment is shown after it has been hidden.
+     * Symmetrically {@link VisumFragment#detachPresenter()} is called on fragment hidden and on Destroy View
+     * </p>
+     */
     @SuppressWarnings("unchecked") //todo setView should be checked call
     @Override
     public void attachPresenter() {

@@ -126,9 +126,13 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
     public void onDestroyView() {
         super.onDestroyView();
         if (!stateSaved) {
-            getComponentCache().invalidateComponentFor(this);
+            onViewDestroyed();
         }
         detachPresenter();
+    }
+
+    protected void onViewDestroyed() {
+        getComponentCache().invalidateComponentFor(this);
     }
 
     //region VisumView implementation

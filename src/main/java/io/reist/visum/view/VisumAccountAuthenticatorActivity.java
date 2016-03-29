@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 
-import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.VisumClient;
@@ -33,7 +32,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
         inject(getComponent());
 
         setContentView(getLayoutRes());
-        ButterKnife.bind(this);
+
         attachPresenter();
     }
 
@@ -123,4 +122,5 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
 
         stateSaved = false;
     }
+
 }

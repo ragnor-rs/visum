@@ -25,9 +25,9 @@ package io.reist.visum.model.local;
  */
 public abstract class BaseTable {
 
-    public interface Column {
-        String ID = "_id";
-        String REVISION = "revision";
+    static public abstract class Column {
+        static public final String ID = "_id";
+        static public final String REVISION = "revision";
     }
 
     public abstract String getCreateTableQuery();

@@ -7,7 +7,6 @@ import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.VisumClient;
@@ -47,7 +46,7 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
         inject(getComponent());
 
         inflate(getContext(), layoutRes, this);
-        ButterKnife.bind(this);
+
         attachPresenter();
     }
 

@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
-import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.VisumClient;
@@ -48,7 +47,6 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
         inject(getComponent());
 
         setContentView(getLayoutRes());
-        ButterKnife.bind(this);
     }
 
     @Override
@@ -125,7 +123,6 @@ public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatA
     }
 
     //endregion
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

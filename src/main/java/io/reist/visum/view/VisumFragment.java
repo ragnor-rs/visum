@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
 import io.reist.visum.VisumClient;
@@ -104,9 +103,7 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(layoutResId, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(layoutResId, container, false);
     }
 
     @Override
@@ -126,12 +123,12 @@ public abstract class VisumFragment<P extends VisumPresenter> extends Fragment i
     public void onDestroyView() {
         super.onDestroyView();
         if (!stateSaved) {
-            onViewDestroyed();
+            onInvalidateComponent();
         }
         detachPresenter();
     }
 
-    protected void onViewDestroyed() {
+    protected void onInvalidateComponent() {
         getComponentCache().invalidateComponentFor(this);
     }
 

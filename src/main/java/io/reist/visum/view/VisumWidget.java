@@ -105,6 +105,7 @@ public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout 
 
     @Override
     public ComponentCache getComponentCache() {
+        if (isInEditMode()) return null;
         ComponentCacheProvider application = (ComponentCacheProvider) getContext().getApplicationContext();
         return application.getComponentCache();
     }

@@ -20,6 +20,11 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
@@ -30,42 +35,82 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Created by Reist on 10/15/15.
- * <p>
- * VisumPresenter is a class that handles attachment and detachment of a {@link io.reist.visum.view.VisumView}.
- * </p>
- * It's also empowered with rx steroids, which makes it handle your subscriptions
- * making you not to worry about android **Views** lifecycle.
- * All your rx subscriptions are to be unsubscribed on view detached.
- * Use {@link VisumPresenter#subscribe(Observable, Observer)} method to gain this benifits.
+ * A MVP presenter which is capable of handling multiple views.
  *
- * @param <V> View to be handled
+ * VisumPresenter also manages {@link rx.Subscription}s which are used to populate the attached
+ * views. If the last view is removed then all subscription performed by views will be stopped.
+ *
+ * Created by Reist on 10/15/15.
+ *
+ * @param <V> a type of views to be handled
  */
 public abstract class VisumPresenter<V> {
 
-    private CompositeSubscription subscriptions;
-    private V view;
+    private static final int DEFAULT_VIEW_ID = -1;
 
-    public final void setView(V view) {
-        if (view == null) {
-            if (subscriptions != null) {
-                subscriptions.unsubscribe();
-            }
+    private static class ViewHolder<V> {
 
-            if (this.view != null) {
-                onViewDetached();
-            }
+        private V view;
+        private int viewId;
 
-            this.view = null;
-        } else {
-            if (this.view != null) {
-                setView(null);
-            }
-
+        public ViewHolder(int id, V view) {
+            this.viewId = id;
             this.view = view;
-            subscriptions = new CompositeSubscription();
-            onViewAttached();
         }
+
+    }
+
+    private CompositeSubscription subscriptions;
+
+    private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
+
+    private ViewHolder<V> findViewHolderById(int id) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            if (viewHolder.viewId == id) {
+                return viewHolder;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Attaches the given view to this presenter. For the view, {@link #onViewAttached(Object)} will
+     * be called and the view will be able to subscribe to {@link Observable}s and {@link Single}s via
+     * {@link #subscribe(Observable, Observer)}, {@link #subscribe(Single, Action1)} and
+     * {@link #subscribe(Single, SingleSubscriber)}.
+     *
+     * If null is passed as a view then a view with the given id will be detached from the presenter.
+     * Method {@link #onViewDetached(Object)} will be called. If there are no remaining views after
+     * removal then all existing subscriptions made by attached views will be stopped.
+     *
+     * @param id        an id used by the presenter to distinguish the view from the others
+     * @param view      a MVP view; use null to detach the view with the given id
+     */
+    public final void setView(int id, @Nullable V view) {
+
+        ViewHolder<V> viewHolder = findViewHolderById(id);
+
+        // remove the old view
+        if (viewHolder != null) {
+            if (viewHolders.isEmpty()) {
+                subscriptions.unsubscribe();
+                subscriptions = null;
+            }
+            onViewDetached(viewHolder.view);
+            viewHolders.remove(viewHolder);
+        }
+
+        if (view == null) {
+            return;
+        }
+
+        // attach the given view
+        viewHolders.add(new ViewHolder<>(id, view));
+        if (subscriptions == null) {
+            subscriptions = new CompositeSubscription();
+        }
+        onViewAttached(view);
+
     }
 
     protected final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
@@ -78,32 +123,63 @@ public abstract class VisumPresenter<V> {
         );
     }
 
-    protected final <T> void subscribe(Single<T> single, Action1<T> observer) {
+    protected final <T> void subscribe(Single<T> single, Action1<T> action) {
         subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer)
+                        .subscribe(action)
         );
     }
 
-    protected final <T> void subscribe(Single<T> single, SingleSubscriber<T> observer) {
+    protected final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer)
+                        .subscribe(subscriber)
         );
     }
 
-
-    protected abstract void onViewAttached();
-
-    protected void onViewDetached() {
+    protected void onViewDetached(V view) {
+        onViewDetached();
     }
 
+    protected void onViewAttached(V view) {
+        onViewAttached();
+    }
+
+    public final V findViewById(int id) {
+        ViewHolder<V> viewHolder = findViewHolderById(id);
+        return viewHolder == null ? null : viewHolder.view;
+    }
+
+    /**
+     * @deprecated use {@link #setView(int, Object)} instead
+     */
+    @Deprecated
+    public final void setView(V view) {
+        setView(DEFAULT_VIEW_ID, view);
+    }
+
+    /**
+     * @deprecated use {@link #onViewAttached(Object)} instead
+     */
+    @Deprecated
+    protected void onViewAttached() {}
+
+    /**
+     * @deprecated use {@link #onViewDetached(Object)} instead
+     */
+    @Deprecated
+    protected void onViewDetached() {}
+
+    /**
+     * @deprecated use {@link #findViewById(int)} instead
+     */
+    @Deprecated
     public final V view() {
-        return view;
+        return findViewById(DEFAULT_VIEW_ID);
     }
 
 }

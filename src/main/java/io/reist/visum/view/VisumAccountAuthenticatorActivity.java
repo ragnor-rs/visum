@@ -8,11 +8,13 @@ import android.os.Bundle;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Created by defuera on 01/02/2016.
  * This class provides functionality of {@link AccountAuthenticatorActivity} but extends VisumActivity,
  * providing support library and Visum benefits.
+ *
+ * Created by defuera on 01/02/2016.
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
+
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
 

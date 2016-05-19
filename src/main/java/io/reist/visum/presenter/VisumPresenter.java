@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reist.visum.view.VisumView;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
@@ -45,8 +46,6 @@ import rx.subscriptions.CompositeSubscription;
  * @param <V> a type of views to be handled
  */
 public abstract class VisumPresenter<V> {
-
-    private static final int VIEW_ID_DEFAULT = -1;
 
     private static class ViewHolder<V> {
 
@@ -159,7 +158,7 @@ public abstract class VisumPresenter<V> {
      */
     @Deprecated
     public final void setView(V view) {
-        setView(VIEW_ID_DEFAULT, view);
+        setView(VisumView.VIEW_ID_DEFAULT, view);
     }
 
     /**
@@ -179,7 +178,7 @@ public abstract class VisumPresenter<V> {
      */
     @Deprecated
     public final V view() {
-        return findViewById(VIEW_ID_DEFAULT);
+        return findViewById(VisumView.VIEW_ID_DEFAULT);
     }
 
 }

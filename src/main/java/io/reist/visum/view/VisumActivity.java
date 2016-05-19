@@ -25,125 +25,113 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
-import io.reist.visum.ComponentCacheProvider;
-import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by Defuera on 29/01/16.
  */
-public abstract class VisumActivity<P extends VisumPresenter> extends AppCompatActivity implements VisumView<P>, VisumClient {
+public abstract class VisumActivity<P extends VisumPresenter>
+        extends AppCompatActivity
+        implements VisumView<P> {
 
-    private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
+    private final VisumViewHelper viewHelper;
 
-    private Long componentId;
-    private boolean stateSaved;
+    /**
+     * @deprecated use {@link #VisumActivity(int)} instead
+     */
+    @Deprecated
+    public VisumActivity() {
+        this(VisumView.VIEW_ID_DEFAULT);
+    }
 
-    @SuppressWarnings("unchecked")
+    public VisumActivity(int viewId) {
+        this.viewHelper = new VisumViewHelper(viewId, this);
+    }
+
+
+    //region VisumClient implementation
+
+    @Override
+    public final Long getComponentId() {
+        return viewHelper.getComponentId();
+    }
+
+    @Override
+    public final void setComponentId(Long componentId) {
+        viewHelper.setComponentId(componentId);
+    }
+
+    @Override
+    public final Object getComponent() {
+        return viewHelper.getComponent();
+    }
+
+    @Override
+    public final ComponentCache getComponentCache() {
+        return viewHelper.getComponentCache(this);
+    }
+
+    //endregion
+
+
+    //region VisumView implementation
+
+    @Override
+    public void onInvalidateComponent() {
+        viewHelper.onInvalidateComponent();
+    }
+
+    @Override
+    public void attachPresenter() {
+        viewHelper.attachPresenter();
+    }
+
+    @Override
+    public void detachPresenter() {
+        viewHelper.detachPresenter();
+    }
+
+    //endregion
+
+
+    //region Activity implementation
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        inject(getComponent());
-
+        viewHelper.onCreate();
+        viewHelper.onRestoreInstanceState(savedInstanceState);
         setContentView(getLayoutRes());
     }
 
     @Override
-    protected void onResume() { //todo implement for all VisumViews
+    protected void onResume() {
         super.onResume();
-        attachPresenter();
+        viewHelper.onResume();
     }
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        detachPresenter();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (!stateSaved) {
-            getComponentCache().invalidateComponentFor(this);
-        }
-    }
-
-
-    //region VisumClient
-
-    @Override
-    public Long getComponentId() {
-        return componentId;
-    }
-
-    @Override
-    public void setComponentId(Long componentId) {
-        this.componentId = componentId;
-    }
-
-    @Override
-    public Object getComponent() {
-        if (getComponentCache() != null) {
-            return getComponentCache().getComponentFor(this);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
-    //endregion
-
-    //region VisumView
-
-    @SuppressWarnings("unchecked") //todo setView should be checked call
-    @Override
-    public void attachPresenter() {
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-    }
-
-    @SuppressWarnings("unchecked") //todo setView should be type safe call
-    @Override
-    public void detachPresenter() {
-        if (getPresenter() != null)
-            getPresenter().setView(null);
-    }
-
-    //endregion
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        stateSaved = true;
-
-        Bundle bundle = new Bundle();
-        bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
+        viewHelper.onSaveInstanceState(outState);
     }
-
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            componentId = savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
-        }
-
-        stateSaved = false;
+    public void onPause() {
+        super.onPause();
+        viewHelper.onPause();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        viewHelper.onDestroy();
+    }
+
+    //endregion
+
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
 }

@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentTransaction;
 /**
  * Created by defuera on 29/01/2016.
  * This Activity helps you handle your fragments
+ *
+ * TODO perhaps it should be removed from Visum
  */
 public class VisumFragmentManager {
 

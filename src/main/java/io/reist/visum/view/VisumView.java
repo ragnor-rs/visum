@@ -20,18 +20,51 @@
 
 package io.reist.visum.view;
 
+import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
+ * A MVP view which is capable of handling presenters' lifecycle.
+ *
  * Created by Reist on 10/15/15.
- * Interface that enforces you to handle presenter lifecycle for your View (it terms of MVP)
+ *
+ * @param <P>   a class of a MVP presenter to be attached
  */
-public interface VisumView<P extends VisumPresenter> {
+public interface VisumView<P extends VisumPresenter>
+        extends VisumClient {
 
+    /**
+     * View id is for old visum implementations. Do not rely on this constant in new code.
+     *
+     * @deprecated  specify view ids explicitly
+     */
+    @Deprecated
+    int VIEW_ID_DEFAULT = -1;
+
+    /**
+     * @return  an injected presenter
+     */
     P getPresenter();
 
+    /**
+     * Attaches a view to a presenter returned with {@link #getPresenter()}.
+     *
+     * TODO should accept the presenter as a parameter
+     */
     void attachPresenter();
 
+    /**
+     * Detaches a view from a presenter returned with {@link #getPresenter()}.
+     *
+     * TODO should accept the presenter as a parameter
+     */
     void detachPresenter();
+
+    /**
+     * Called when the view is to be completely destroyed. Re-creation of the view should
+     * not trigger this method. Implementations should destroy a component used by this
+     * view.
+     */
+    void onInvalidateComponent();
 
 }

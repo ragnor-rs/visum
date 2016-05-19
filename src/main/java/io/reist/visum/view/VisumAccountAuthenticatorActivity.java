@@ -2,125 +2,119 @@ package io.reist.visum.view;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 
 import io.reist.visum.ComponentCache;
-import io.reist.visum.ComponentCacheProvider;
-import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
+ * Extend this class if you need to implement AccountAuthenticatorActivity and you want to
+ * benefit from Visum.
+ *
  * Created by defuera on 01/02/2016.
- * If you need implement AccountAuthenticatorActivity and still want to get Visum benefits,
- * here you go.
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
         extends AccountAuthenticatorActivity
-        implements VisumView<P>, VisumClient {
+        implements VisumView<P> {
 
-    private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
+    private final VisumViewHelper viewHelper;
 
-    private Long componentId;
-    private boolean stateSaved;
+    /**
+     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
+     */
+    @Deprecated
+    public VisumAccountAuthenticatorActivity() {
+        this(VisumView.VIEW_ID_DEFAULT);
+    }
 
-    @SuppressWarnings("unchecked")
+    public VisumAccountAuthenticatorActivity(int viewId) {
+        this.viewHelper = new VisumViewHelper(viewId, this);
+    }
+
+
+    //region VisumClient implementation
+
+    @Override
+    public final Long getComponentId() {
+        return viewHelper.getComponentId();
+    }
+
+    @Override
+    public final void setComponentId(Long componentId) {
+        viewHelper.setComponentId(componentId);
+    }
+
+    @Override
+    public final Object getComponent() {
+        return viewHelper.getComponent();
+    }
+
+    @Override
+    public final ComponentCache getComponentCache() {
+        return viewHelper.getComponentCache(this);
+    }
+
+    //endregion
+
+
+    //region VisumView implementation
+
+    @Override
+    public void onInvalidateComponent() {
+        viewHelper.onInvalidateComponent();
+    }
+
+    @Override
+    public void attachPresenter() {
+        viewHelper.attachPresenter();
+    }
+
+    @Override
+    public void detachPresenter() {
+        viewHelper.detachPresenter();
+    }
+
+    //endregion
+
+
+    //region Activity implementation
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        inject(getComponent());
-
+        viewHelper.onCreate();
+        viewHelper.onRestoreInstanceState(savedInstanceState);
         setContentView(getLayoutRes());
-
-        attachPresenter();
     }
 
-    @LayoutRes
-    protected abstract int getLayoutRes();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewHelper.onResume();
+    }
 
-    @SuppressWarnings("unchecked")
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        viewHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        viewHelper.onPause();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        if (!stateSaved) {
-            getComponentCache().invalidateComponentFor(this);
-        }
-        detachPresenter();
-    }
-
-    //region VisumView
-
-
-    @SuppressWarnings("unchecked") //todo setView should be checked call
-    @Override
-    public void attachPresenter() {
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-    }
-
-    @SuppressWarnings("unchecked") //todo setView should be type safe call
-    @Override
-    public void detachPresenter() {
-        if (getPresenter() != null)
-            getPresenter().setView(null);
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
-    //endregion
-
-    //region VisumClient
-
-    @Override
-    public Long getComponentId() {
-        return componentId;
-    }
-
-    @Override
-    public void setComponentId(Long componentId) {
-        this.componentId = componentId;
-    }
-
-    @Override
-    public Object getComponent() {
-        if (getComponentCache() != null) {
-            return getComponentCache().getComponentFor(this);
-        } else {
-            return null;
-        }
+        viewHelper.onDestroy();
     }
 
     //endregion
 
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        stateSaved = true;
-
-        Bundle bundle = new Bundle();
-        bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            componentId = savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
-        }
-
-        stateSaved = false;
-    }
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
 }

@@ -21,9 +21,10 @@
 package io.reist.visum;
 
 /**
+ * A holder of an instance of local ComponentCache. This interface should be implemented by
+ * a local subclass of {@link android.app.Application}.
+
  * Created by Reist on 10/16/15.
- * This should be class that holds an instance of your implementation of ComponentCached.
- * Usually it's an Application class.
  */
 public interface ComponentCacheProvider {
 

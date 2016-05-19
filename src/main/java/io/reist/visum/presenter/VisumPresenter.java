@@ -46,7 +46,7 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class VisumPresenter<V> {
 
-    private static final int DEFAULT_VIEW_ID = -1;
+    private static final int VIEW_ID_DEFAULT = -1;
 
     private static class ViewHolder<V> {
 
@@ -113,7 +113,7 @@ public abstract class VisumPresenter<V> {
 
     }
 
-    protected final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
+    public final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
         subscriptions.add(
                 observable
                         .subscribeOn(Schedulers.io())
@@ -123,7 +123,7 @@ public abstract class VisumPresenter<V> {
         );
     }
 
-    protected final <T> void subscribe(Single<T> single, Action1<T> action) {
+    public final <T> void subscribe(Single<T> single, Action1<T> action) {
         subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
@@ -132,7 +132,7 @@ public abstract class VisumPresenter<V> {
         );
     }
 
-    protected final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
+    public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
@@ -159,7 +159,7 @@ public abstract class VisumPresenter<V> {
      */
     @Deprecated
     public final void setView(V view) {
-        setView(DEFAULT_VIEW_ID, view);
+        setView(VIEW_ID_DEFAULT, view);
     }
 
     /**
@@ -179,7 +179,7 @@ public abstract class VisumPresenter<V> {
      */
     @Deprecated
     public final V view() {
-        return findViewById(DEFAULT_VIEW_ID);
+        return findViewById(VIEW_ID_DEFAULT);
     }
 
 }

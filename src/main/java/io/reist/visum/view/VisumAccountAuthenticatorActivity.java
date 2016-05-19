@@ -1,120 +1,63 @@
 package io.reist.visum.view;
 
 import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 
-import io.reist.visum.ComponentCache;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Extend this class if you need to implement AccountAuthenticatorActivity and you want to
- * benefit from Visum.
- *
  * Created by defuera on 01/02/2016.
+ * This class provides functionality of {@link AccountAuthenticatorActivity} but extends VisumActivity,
+ * providing support library and Visum benefits.
  */
-public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
-        extends AccountAuthenticatorActivity
-        implements VisumView<P> {
-
-    private final VisumViewHelper viewHelper;
+public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
+    private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
+    private Bundle mResultBundle = null;
 
     /**
-     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
+     * Set the result that is to be sent as the result of the request that caused this
+     * Activity to be launched. If result is null or this method is never called then
+     * the request will be canceled.
+     *
+     * @param result this is returned as the result of the AbstractAccountAuthenticator request
      */
-    @Deprecated
-    public VisumAccountAuthenticatorActivity() {
-        this(VisumView.VIEW_ID_DEFAULT);
+    public final void setAccountAuthenticatorResult(Bundle result) {
+        mResultBundle = result;
     }
 
-    public VisumAccountAuthenticatorActivity(int viewId) {
-        this.viewHelper = new VisumViewHelper(viewId, this);
-    }
-
-
-    //region VisumClient implementation
-
+    /**
+     * Retreives the AccountAuthenticatorResponse from either the intent of the icicle, if the
+     * icicle is non-zero.
+     *
+     * @param icicle the save instance data of this Activity, may be null
+     */
     @Override
-    public final Long getComponentId() {
-        return viewHelper.getComponentId();
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+
+        mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+
+        if (mAccountAuthenticatorResponse != null) {
+            mAccountAuthenticatorResponse.onRequestContinued();
+        }
     }
 
-    @Override
-    public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
+    /**
+     * Sends the result or a Constants.ERROR_CODE_CANCELED error if a result isn't present.
+     */
+    public void finish() {
+        if (mAccountAuthenticatorResponse != null) {
+            // send the result bundle back if set, otherwise send an error.
+            if (mResultBundle != null) {
+                mAccountAuthenticatorResponse.onResult(mResultBundle);
+            } else {
+                mAccountAuthenticatorResponse.onError(AccountManager.ERROR_CODE_CANCELED, "canceled");
+            }
+            mAccountAuthenticatorResponse = null;
+        }
+        super.finish();
     }
-
-    @Override
-    public final Object getComponent() {
-        return viewHelper.getComponent();
-    }
-
-    @Override
-    public final ComponentCache getComponentCache() {
-        return viewHelper.getComponentCache(this);
-    }
-
-    //endregion
-
-
-    //region VisumView implementation
-
-    @Override
-    public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
-    }
-
-    @Override
-    public void attachPresenter() {
-        viewHelper.attachPresenter();
-    }
-
-    @Override
-    public void detachPresenter() {
-        viewHelper.detachPresenter();
-    }
-
-    //endregion
-
-
-    //region Activity implementation
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewHelper.onCreate();
-        viewHelper.onRestoreInstanceState(savedInstanceState);
-        setContentView(getLayoutRes());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        viewHelper.onResume();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        viewHelper.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        viewHelper.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        viewHelper.onDestroy();
-    }
-
-    //endregion
-
-
-    @LayoutRes
-    protected abstract int getLayoutRes();
 
 }

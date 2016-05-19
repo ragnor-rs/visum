@@ -148,6 +148,7 @@ public abstract class VisumPresenter<V> {
         onViewAttached();
     }
 
+    @Nullable
     public final V findViewById(int id) {
         ViewHolder<V> viewHolder = findViewHolderById(id);
         return viewHolder == null ? null : viewHolder.view;
@@ -177,6 +178,7 @@ public abstract class VisumPresenter<V> {
      * @deprecated use {@link #findViewById(int)} instead
      */
     @Deprecated
+    @Nullable
     public final V view() {
         return findViewById(VisumView.VIEW_ID_DEFAULT);
     }

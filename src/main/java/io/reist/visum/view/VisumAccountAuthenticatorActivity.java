@@ -1,126 +1,63 @@
 package io.reist.visum.view;
 
 import android.accounts.AccountAuthenticatorActivity;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.LayoutRes;
 
-import io.reist.visum.ComponentCache;
-import io.reist.visum.ComponentCacheProvider;
-import io.reist.visum.VisumClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by defuera on 01/02/2016.
- * If you need implement AccountAuthenticatorActivity and still want to get Visum benefits,
- * here you go.
+ * This class provides functionality of {@link AccountAuthenticatorActivity} but extends VisumActivity,
+ * providing support library and Visum benefits.
  */
-public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter>
-        extends AccountAuthenticatorActivity
-        implements VisumView<P>, VisumClient {
+public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
+    private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
+    private Bundle mResultBundle = null;
 
-    private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
-
-    private Long componentId;
-    private boolean stateSaved;
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        inject(getComponent());
-
-        setContentView(getLayoutRes());
-
-        attachPresenter();
+    /**
+     * Set the result that is to be sent as the result of the request that caused this
+     * Activity to be launched. If result is null or this method is never called then
+     * the request will be canceled.
+     *
+     * @param result this is returned as the result of the AbstractAccountAuthenticator request
+     */
+    public final void setAccountAuthenticatorResult(Bundle result) {
+        mResultBundle = result;
     }
 
-    @LayoutRes
-    protected abstract int getLayoutRes();
-
-    @SuppressWarnings("unchecked")
+    /**
+     * Retreives the AccountAuthenticatorResponse from either the intent of the icicle, if the
+     * icicle is non-zero.
+     *
+     * @param icicle the save instance data of this Activity, may be null
+     */
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
 
-        if (!stateSaved) {
-            getComponentCache().invalidateComponentFor(this);
-        }
-        detachPresenter();
-    }
+        mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 
-    //region VisumView
-
-
-    @SuppressWarnings("unchecked") //todo setView should be checked call
-    @Override
-    public void attachPresenter() {
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
+        if (mAccountAuthenticatorResponse != null) {
+            mAccountAuthenticatorResponse.onRequestContinued();
         }
     }
 
-    @SuppressWarnings("unchecked") //todo setView should be type safe call
-    @Override
-    public void detachPresenter() {
-        if (getPresenter() != null)
-            getPresenter().setView(null);
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
-    }
-
-    //endregion
-
-    //region VisumClient
-
-    @Override
-    public Long getComponentId() {
-        return componentId;
-    }
-
-    @Override
-    public void setComponentId(Long componentId) {
-        this.componentId = componentId;
-    }
-
-    @Override
-    public Object getComponent() {
-        if (getComponentCache() != null) {
-            return getComponentCache().getComponentFor(this);
-        } else {
-            return null;
+    /**
+     * Sends the result or a Constants.ERROR_CODE_CANCELED error if a result isn't present.
+     */
+    public void finish() {
+        if (mAccountAuthenticatorResponse != null) {
+            // send the result bundle back if set, otherwise send an error.
+            if (mResultBundle != null) {
+                mAccountAuthenticatorResponse.onResult(mResultBundle);
+            } else {
+                mAccountAuthenticatorResponse.onError(AccountManager.ERROR_CODE_CANCELED, "canceled");
+            }
+            mAccountAuthenticatorResponse = null;
         }
-    }
-
-    //endregion
-
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-
-        stateSaved = true;
-
-        Bundle bundle = new Bundle();
-        bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
-    }
-
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            componentId = savedInstanceState.getLong(ARG_STATE_COMPONENT_ID);
-        }
-
-        stateSaved = false;
+        super.finish();
     }
 
 }

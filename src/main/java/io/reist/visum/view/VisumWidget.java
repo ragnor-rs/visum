@@ -14,18 +14,18 @@ public abstract class VisumWidget<P extends VisumPresenter>
         extends FrameLayout
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper<VisumWidget<P>> viewHelper;
 
     private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
     public VisumWidget(int viewId, Context context) {
         super(context);
-        this.viewHelper = new VisumViewHelper(viewId, this);
+        this.viewHelper = new VisumViewHelper<>(viewId, this);
     }
 
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.viewHelper = new VisumViewHelper(viewId, this);
+        this.viewHelper = new VisumViewHelper<>(viewId, this);
     }
 
 

@@ -34,7 +34,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
         extends AppCompatActivity
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper<VisumActivity<P>> viewHelper;
 
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
@@ -45,7 +45,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     public VisumActivity(int viewId) {
-        this.viewHelper = new VisumViewHelper(viewId, this);
+        this.viewHelper = new VisumViewHelper<>(viewId, this);
     }
 
 

@@ -60,11 +60,4 @@ public interface VisumView<P extends VisumPresenter>
      */
     void detachPresenter();
 
-    /**
-     * Called when the view is to be completely destroyed. Re-creation of the view should
-     * not trigger this method. Implementations should destroy a component used by this
-     * view.
-     */
-    void onInvalidateComponent();
-
 }

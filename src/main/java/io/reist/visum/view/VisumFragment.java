@@ -41,7 +41,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
         extends Fragment
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper<VisumFragment<P>> viewHelper;
 
     /**
      * @deprecated use {@link #VisumFragment(int)} instead
@@ -52,7 +52,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     public VisumFragment(int viewId) {
-        this.viewHelper = new VisumViewHelper(viewId, this);
+        this.viewHelper = new VisumViewHelper<>(viewId, this);
     }
 
 

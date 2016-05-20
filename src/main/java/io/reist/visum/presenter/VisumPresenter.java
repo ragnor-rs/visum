@@ -51,15 +51,15 @@ public abstract class VisumPresenter<V> {
 
         private V view;
         private int viewId;
+        private CompositeSubscription subscriptions;
 
         public ViewHolder(int id, V view) {
             this.viewId = id;
             this.view = view;
+            this.subscriptions = new CompositeSubscription();
         }
 
     }
-
-    private CompositeSubscription subscriptions;
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
@@ -91,10 +91,7 @@ public abstract class VisumPresenter<V> {
 
         // remove the old view
         if (viewHolder != null) {
-            if (viewHolders.isEmpty()) {
-                subscriptions.unsubscribe();
-                subscriptions = null;
-            }
+            viewHolder.subscriptions.unsubscribe();
             onViewDetached(viewHolder.view);
             viewHolders.remove(viewHolder);
         }
@@ -105,15 +102,20 @@ public abstract class VisumPresenter<V> {
 
         // attach the given view
         viewHolders.add(new ViewHolder<>(id, view));
-        if (subscriptions == null) {
-            subscriptions = new CompositeSubscription();
-        }
         onViewAttached(view);
 
     }
 
-    public final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
-        subscriptions.add(
+    private CompositeSubscription findSubscriptionsByViewIdOrThrow(int viewId) {
+        ViewHolder<V> viewHolder = findViewHolderById(viewId);
+        if (viewHolder == null) {
+            throw new IllegalStateException("No view with id = " + viewId);
+        }
+        return viewHolder.subscriptions;
+    }
+
+    public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
+        findSubscriptionsByViewIdOrThrow(viewId).add(
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -122,8 +124,8 @@ public abstract class VisumPresenter<V> {
         );
     }
 
-    public final <T> void subscribe(Single<T> single, Action1<T> action) {
-        subscriptions.add(
+    public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
+        findSubscriptionsByViewIdOrThrow(viewId).add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -131,8 +133,8 @@ public abstract class VisumPresenter<V> {
         );
     }
 
-    public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        subscriptions.add(
+    public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
+        findSubscriptionsByViewIdOrThrow(viewId).add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -181,6 +183,29 @@ public abstract class VisumPresenter<V> {
     @Nullable
     public final V view() {
         return findViewById(VisumView.VIEW_ID_DEFAULT);
+    }
+
+    /**
+     * @deprecated use {@link #subscribe(int, Observable, Observer)} instead
+     */
+    @Deprecated
+    public final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
+        subscribe(VisumView.VIEW_ID_DEFAULT, observable, observer);
+    }
+
+    /**
+     * @deprecated use {@link #subscribe(int, Single, Action1)} instead
+     */
+    @Deprecated
+    public final <T> void subscribe(Single<T> single, Action1<T> action) {
+        subscribe(VisumView.VIEW_ID_DEFAULT, single, action);
+    }
+    /**
+     * @deprecated use {@link #subscribe(int, Single, SingleSubscriber)} instead
+     */
+    @Deprecated
+    public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
+        subscribe(VisumView.VIEW_ID_DEFAULT, single, subscriber);
     }
 
 }

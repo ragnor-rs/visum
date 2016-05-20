@@ -1,6 +1,7 @@
 package io.reist.visum.view;
 
 import android.content.Context;
+import android.support.annotation.CallSuper;
 import android.util.Log;
 
 import io.reist.visum.ComponentCache;
@@ -67,6 +68,7 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
     }
 
     @Override
+    @CallSuper
     public void attachPresenter() {
         if (attachedToPresenter) {
             Log.d(TAG, "VisumBaseView is already created");
@@ -78,6 +80,7 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
     }
 
     @Override
+    @CallSuper
     public void detachPresenter() {
         if (!attachedToPresenter) {
             Log.d(TAG, "VisumBaseView is not created");

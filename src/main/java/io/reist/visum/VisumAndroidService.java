@@ -9,7 +9,7 @@ import android.app.Service;
  */
 public abstract class VisumAndroidService extends Service implements VisumClient {
 
-    private final VisumClientHelper<VisumAndroidService> clientHelper = new VisumClientHelper<>(this);
+    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
 
 
     //region Service implementation

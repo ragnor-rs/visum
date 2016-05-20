@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -20,18 +21,18 @@ public abstract class VisumWidget<P extends VisumPresenter>
         extends FrameLayout
         implements VisumView<P> {
 
-    private final VisumViewHelper<VisumWidget<P>> viewHelper;
+    private final VisumViewHelper viewHelper;
 
     private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
     public VisumWidget(int viewId, Context context) {
         super(context);
-        this.viewHelper = new VisumViewHelper<>(viewId, this);
+        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.viewHelper = new VisumViewHelper<>(viewId, this);
+        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
     /**
@@ -75,15 +76,15 @@ public abstract class VisumWidget<P extends VisumPresenter>
         return isInEditMode() ? null : viewHelper.getComponentCache(getContext());
     }
 
-    //endregion
-
-
-    //region VisumView implementation
-
     @Override
     public void onInvalidateComponent() {
         viewHelper.onInvalidateComponent();
     }
+
+    //endregion
+
+
+    //region VisumView implementation
 
     @Override
     public void attachPresenter() {

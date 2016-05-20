@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -41,7 +42,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
         extends Fragment
         implements VisumView<P> {
 
-    private final VisumViewHelper<VisumFragment<P>> viewHelper;
+    private final VisumViewHelper viewHelper;
 
     /**
      * @deprecated use {@link #VisumFragment(int)} instead
@@ -53,7 +54,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     public VisumFragment(int viewId) {
-        this.viewHelper = new VisumViewHelper<>(viewId, this);
+        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
 
@@ -79,15 +80,15 @@ public abstract class VisumFragment<P extends VisumPresenter>
         return viewHelper.getComponentCache(getActivity());
     }
 
-    //endregion
-
-
-    //region VisumView implementation
-
     @Override
     public void onInvalidateComponent() {
         viewHelper.onInvalidateComponent();
     }
+
+    //endregion
+
+
+    //region VisumView implementation
 
     @Override
     public void attachPresenter() {

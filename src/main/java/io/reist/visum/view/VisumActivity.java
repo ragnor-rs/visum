@@ -25,6 +25,7 @@ import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -36,7 +37,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
         extends AppCompatActivity
         implements VisumView<P> {
 
-    private final VisumViewHelper<VisumActivity<P>> viewHelper;
+    private final VisumViewHelper helper;
 
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
@@ -48,7 +49,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     public VisumActivity(int viewId) {
-        this.viewHelper = new VisumViewHelper<>(viewId, this);
+        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
 
@@ -56,22 +57,27 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
     @Override
     public final Long getComponentId() {
-        return viewHelper.getComponentId();
+        return helper.getComponentId();
     }
 
     @Override
     public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
+        helper.setComponentId(componentId);
     }
 
     @Override
     public final Object getComponent() {
-        return viewHelper.getComponent();
+        return helper.getComponent();
     }
 
     @Override
     public final ComponentCache getComponentCache() {
-        return viewHelper.getComponentCache(this);
+        return helper.getComponentCache(this);
+    }
+
+    @Override
+    public void onInvalidateComponent() {
+        helper.onInvalidateComponent();
     }
 
     //endregion
@@ -80,18 +86,13 @@ public abstract class VisumActivity<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
-    }
-
-    @Override
     public void attachPresenter() {
-        viewHelper.attachPresenter();
+        helper.attachPresenter();
     }
 
     @Override
     public void detachPresenter() {
-        viewHelper.detachPresenter();
+        helper.detachPresenter();
     }
 
     //endregion
@@ -102,33 +103,33 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewHelper.onCreate();
-        viewHelper.onRestoreInstanceState(savedInstanceState);
+        helper.onCreate();
+        helper.onRestoreInstanceState(savedInstanceState);
         setContentView(getLayoutRes());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewHelper.onResume();
+        helper.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        viewHelper.onPause();
+        helper.onPause();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        viewHelper.onSaveInstanceState(outState);
+        helper.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        viewHelper.onDestroy();
+        helper.onDestroy();
     }
 
     //endregion

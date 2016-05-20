@@ -1,23 +1,20 @@
 package io.reist.visum;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
 
 /**
  * A helper class for implementations of {@link VisumClient}. It provides callback for typical
  * Android components such as {@link android.app.Service}.
  *
- * @param <C>   Visum client type
- *
  * Created by Reist on 19.05.16.
  */
-public class VisumClientHelper<C extends VisumClient> {
+public final class VisumClientHelper {
 
-    protected final C client;
+    protected final VisumClient client;
 
     protected Long componentId;
 
-    public VisumClientHelper(C client) {
+    public VisumClientHelper(VisumClient client) {
         this.client = client;
     }
 
@@ -42,19 +39,20 @@ public class VisumClientHelper<C extends VisumClient> {
         return ((ComponentCacheProvider) context.getApplicationContext()).getComponentCache();
     }
 
-    @CallSuper
     public void onCreate() {
         client.inject(client.getComponent());
     }
 
-    @CallSuper
     public void onDestroy() {
         client.onInvalidateComponent();
     }
 
-    @CallSuper
     public void onInvalidateComponent() {
         client.getComponentCache().invalidateComponentFor(client);
+    }
+
+    public VisumClient getClient() {
+        return client;
     }
 
 }

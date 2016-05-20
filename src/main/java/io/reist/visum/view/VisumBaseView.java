@@ -4,19 +4,20 @@ import android.content.Context;
 import android.support.annotation.CallSuper;
 import android.util.Log;
 
-import io.reist.visum.ComponentCache;
+import io.reist.visum.VisumBaseClient;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Created by Reist on 20.05.16.
  */
-public abstract class VisumBaseView<P extends VisumPresenter> implements VisumView<P> {
+@SuppressWarnings("unused")
+public abstract class VisumBaseView<P extends VisumPresenter>
+        extends VisumBaseClient
+        implements VisumView<P> {
 
     private static final String TAG = VisumBaseView.class.getName();
 
-    private final VisumViewHelper<VisumBaseView<P>> viewHelper;
-
-    private final Context context;
+    private final VisumViewHelper helper;
 
     private boolean attachedToPresenter;
 
@@ -30,42 +31,12 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
     }
 
     public VisumBaseView(int viewId, Context context) {
-        this.viewHelper = new VisumViewHelper<>(viewId, this);
-        this.context = context;
+        super(context);
+        this.helper = new VisumViewHelper(viewId, getClientHelper());
     }
-
-
-    //region VisumClient implementation
-
-    @Override
-    public final Long getComponentId() {
-        return viewHelper.getComponentId();
-    }
-
-    @Override
-    public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return viewHelper.getComponent();
-    }
-
-    @Override
-    public final ComponentCache getComponentCache() {
-        return viewHelper.getComponentCache(context);
-    }
-
-    //endregion
 
 
     //region VisumView implementation
-
-    @Override
-    public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
-    }
 
     @Override
     @CallSuper
@@ -74,8 +45,8 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
             Log.d(TAG, "VisumBaseView is already created");
             return;
         }
-        viewHelper.onCreate();
-        viewHelper.attachPresenter();
+        helper.onCreate();
+        helper.attachPresenter();
         attachedToPresenter = true;
     }
 
@@ -86,8 +57,8 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
             Log.d(TAG, "VisumBaseView is not created");
             return;
         }
-        viewHelper.detachPresenter();
-        viewHelper.onDestroy();
+        helper.detachPresenter();
+        helper.onDestroy();
         attachedToPresenter = false;
     }
 

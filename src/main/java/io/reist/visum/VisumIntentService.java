@@ -9,7 +9,7 @@ import android.app.IntentService;
  */
 public abstract class VisumIntentService extends IntentService implements VisumClient {
 
-    private final VisumClientHelper<VisumIntentService> clientHelper = new VisumClientHelper<>(this);
+    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.

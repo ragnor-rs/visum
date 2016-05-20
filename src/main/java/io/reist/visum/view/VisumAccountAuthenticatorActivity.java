@@ -19,12 +19,27 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     private Bundle mResultBundle = null;
 
     /**
+     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
+     */
+    @SuppressWarnings("unused")
+    @Deprecated
+    public VisumAccountAuthenticatorActivity() {
+        this(VisumView.VIEW_ID_DEFAULT);
+    }
+
+    @SuppressWarnings("unused")
+    public VisumAccountAuthenticatorActivity(int viewId) {
+        super(viewId);
+    }
+
+    /**
      * Set the result that is to be sent as the result of the request that caused this
      * Activity to be launched. If result is null or this method is never called then
      * the request will be canceled.
      *
      * @param result this is returned as the result of the AbstractAccountAuthenticator request
      */
+    @SuppressWarnings("unused")
     public final void setAccountAuthenticatorResult(Bundle result) {
         mResultBundle = result;
     }

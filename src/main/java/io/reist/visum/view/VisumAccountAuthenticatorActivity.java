@@ -24,7 +24,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     @SuppressWarnings({"unused", "deprecation"})
     @Deprecated
     public VisumAccountAuthenticatorActivity() {
-        this(VisumView.VIEW_ID_DEFAULT);
+        this(VisumPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumAccountAuthenticatorActivity(int viewId) {

@@ -47,7 +47,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumDialogFragment() {
-        this(VisumView.VIEW_ID_DEFAULT);
+        this(VisumPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumDialogFragment(int viewId) {

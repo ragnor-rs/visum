@@ -44,7 +44,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumActivity() {
-        this(VisumView.VIEW_ID_DEFAULT);
+        this(VisumPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumActivity(int viewId) {

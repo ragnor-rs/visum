@@ -40,7 +40,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context) {
-        this(VIEW_ID_DEFAULT, context);
+        this(VisumPresenter.VIEW_ID_DEFAULT, context);
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(VIEW_ID_DEFAULT, context, attrs);
+        this(VisumPresenter.VIEW_ID_DEFAULT, context, attrs);
     }
 
 

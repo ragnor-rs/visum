@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * ComponentCache let you create and destroy components manually
+ * ComponentCache let you attach and destroy components manually
  * thereby providing custom scopes for yor view.
  * In other words this is scope manager for your views.
  */

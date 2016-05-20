@@ -30,16 +30,7 @@ import io.reist.visum.presenter.VisumPresenter;
  *
  * @param <P>   a class of a MVP presenter to be attached
  */
-public interface VisumView<P extends VisumPresenter>
-        extends VisumClient {
-
-    /**
-     * View id is for old visum implementations. Do not rely on this constant in new code.
-     *
-     * @deprecated  specify view ids explicitly
-     */
-    @Deprecated
-    int VIEW_ID_DEFAULT = -1;
+public interface VisumView<P extends VisumPresenter> extends VisumClient {
 
     /**
      * @return  an injected presenter

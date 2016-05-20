@@ -20,6 +20,7 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public abstract class VisumPresenter<V> {
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
-    private ViewHolder<V> findViewHolderById(int id) {
+    private ViewHolder<V> findViewHolderByViewId(int id) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             if (viewHolder.viewId == id) {
                 return viewHolder;
@@ -87,7 +88,7 @@ public abstract class VisumPresenter<V> {
      */
     public final void setView(int id, @Nullable V view) {
 
-        ViewHolder<V> viewHolder = findViewHolderById(id);
+        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 
         // remove the old view
         if (viewHolder != null) {
@@ -106,16 +107,17 @@ public abstract class VisumPresenter<V> {
 
     }
 
-    private CompositeSubscription findSubscriptionsByViewIdOrThrow(int viewId) {
-        ViewHolder<V> viewHolder = findViewHolderById(viewId);
+    @NonNull
+    private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
         if (viewHolder == null) {
-            throw new IllegalStateException("No view with id = " + viewId);
+            throw new IllegalStateException("No view with id = " + id);
         }
-        return viewHolder.subscriptions;
+        return viewHolder;
     }
 
     public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
-        findSubscriptionsByViewIdOrThrow(viewId).add(
+        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -125,7 +127,7 @@ public abstract class VisumPresenter<V> {
     }
 
     public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
-        findSubscriptionsByViewIdOrThrow(viewId).add(
+        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -134,7 +136,7 @@ public abstract class VisumPresenter<V> {
     }
 
     public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
-        findSubscriptionsByViewIdOrThrow(viewId).add(
+        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -142,24 +144,26 @@ public abstract class VisumPresenter<V> {
         );
     }
 
+    @SuppressWarnings({"unused", "deprecation"})
     protected void onViewDetached(V view) {
         onViewDetached();
     }
 
+    @SuppressWarnings({"unused", "deprecation"})
     protected void onViewAttached(V view) {
         onViewAttached();
     }
 
-    @Nullable
+    @NonNull
     public final V findViewById(int id) {
-        ViewHolder<V> viewHolder = findViewHolderById(id);
-        return viewHolder == null ? null : viewHolder.view;
+        return findViewHolderByViewIdOrThrow(id).view;
     }
 
     /**
      * @deprecated use {@link #setView(int, Object)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     public final void setView(V view) {
         setView(VisumView.VIEW_ID_DEFAULT, view);
     }
@@ -168,19 +172,22 @@ public abstract class VisumPresenter<V> {
      * @deprecated use {@link #onViewAttached(Object)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     protected void onViewAttached() {}
 
     /**
      * @deprecated use {@link #onViewDetached(Object)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     protected void onViewDetached() {}
 
     /**
      * @deprecated use {@link #findViewById(int)} instead
      */
     @Deprecated
-    @Nullable
+    @SuppressWarnings({"unused", "deprecation"})
+    @NonNull
     public final V view() {
         return findViewById(VisumView.VIEW_ID_DEFAULT);
     }
@@ -189,6 +196,7 @@ public abstract class VisumPresenter<V> {
      * @deprecated use {@link #subscribe(int, Observable, Observer)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     public final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
         subscribe(VisumView.VIEW_ID_DEFAULT, observable, observer);
     }
@@ -197,6 +205,7 @@ public abstract class VisumPresenter<V> {
      * @deprecated use {@link #subscribe(int, Single, Action1)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     public final <T> void subscribe(Single<T> single, Action1<T> action) {
         subscribe(VisumView.VIEW_ID_DEFAULT, single, action);
     }
@@ -204,6 +213,7 @@ public abstract class VisumPresenter<V> {
      * @deprecated use {@link #subscribe(int, Single, SingleSubscriber)} instead
      */
     @Deprecated
+    @SuppressWarnings({"unused", "deprecation"})
     public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         subscribe(VisumView.VIEW_ID_DEFAULT, single, subscriber);
     }

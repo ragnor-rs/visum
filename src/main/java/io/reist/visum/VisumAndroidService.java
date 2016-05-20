@@ -3,7 +3,9 @@ package io.reist.visum;
 import android.app.Service;
 
 /**
- * Created by defuera on 02/02/2016.
+ * Extend your {@link Service}s with this class to take advantage of Visum MVP.
+ *
+ * Created by Defuera on 2/2/16.
  */
 public abstract class VisumAndroidService extends Service implements VisumClient {
 

@@ -4,7 +4,12 @@ import android.content.Context;
 import android.support.annotation.CallSuper;
 
 /**
- * Created by Reist on 20.05.16.
+ * A helper class for implementations of {@link VisumClient}. It provides callback for typical
+ * Android components such as {@link android.app.Service}.
+ *
+ * @param <C>   Visum client type
+ *
+ * Created by Reist on 19.05.16.
  */
 public class VisumClientHelper<C extends VisumClient> {
 

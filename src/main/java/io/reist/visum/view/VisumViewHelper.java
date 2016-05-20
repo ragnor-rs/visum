@@ -7,6 +7,12 @@ import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
+ * A helper class for implementations of {@link VisumView}. It persists {@link #componentId}
+ * on configuration changes and provides callback for typical Android UI components such as
+ * {@link android.app.Activity} and {@link android.app.Fragment}.
+ *
+ * @param <V>   MVP view class
+ *
  * Created by Reist on 19.05.16.
  */
 public class VisumViewHelper<V extends VisumView> extends VisumClientHelper<V> {

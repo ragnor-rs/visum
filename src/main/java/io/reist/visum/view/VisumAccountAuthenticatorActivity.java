@@ -21,13 +21,12 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     /**
      * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "deprecation"})
     @Deprecated
     public VisumAccountAuthenticatorActivity() {
         this(VisumView.VIEW_ID_DEFAULT);
     }
 
-    @SuppressWarnings("unused")
     public VisumAccountAuthenticatorActivity(int viewId) {
         super(viewId);
     }

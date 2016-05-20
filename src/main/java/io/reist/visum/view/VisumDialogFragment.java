@@ -31,6 +31,10 @@ import android.view.ViewGroup;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.presenter.VisumPresenter;
 
+/**
+ * Extend your dialog fragments with this class to take advantage of Visum MVP.
+ */
+@SuppressWarnings("unused")
 public abstract class VisumDialogFragment<P extends VisumPresenter>
         extends DialogFragment
         implements VisumView<P> {
@@ -40,6 +44,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     /**
      * @deprecated use {@link #VisumDialogFragment(int)} instead
      */
+    @SuppressWarnings("deprecation")
     @Deprecated
     public VisumDialogFragment() {
         this(VisumView.VIEW_ID_DEFAULT);

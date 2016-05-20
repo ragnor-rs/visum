@@ -28,6 +28,8 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
+ * Extend your activities with this class to take advantage of Visum MVP.
+ *
  * Created by Defuera on 29/01/16.
  */
 public abstract class VisumActivity<P extends VisumPresenter>
@@ -39,6 +41,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
      */
+    @SuppressWarnings("deprecation")
     @Deprecated
     public VisumActivity() {
         this(VisumView.VIEW_ID_DEFAULT);

@@ -7,8 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 /**
+ * Use this class to manage your {@link VisumFragment}s.
+ *
  * Created by defuera on 29/01/2016.
- * This Activity helps you handle your fragments
  *
  * TODO perhaps it should be removed from Visum
  */
@@ -20,6 +21,7 @@ public class VisumFragmentManager {
      *                 false to stay in a back stack
      * @param resId    - id of view group to put fragment to
      */
+    @SuppressWarnings("unused")
     public static void showFragment(FragmentManager fragmentManager, VisumFragment fragment, @IdRes int resId, boolean remove) {
         showFragment(fragmentManager, fragment, resId, remove, false);
     }

@@ -10,6 +10,12 @@ import android.widget.FrameLayout;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.presenter.VisumPresenter;
 
+/**
+ * Extend your {@link FrameLayout}s with this class to take advantage of Visum MVP.
+ *
+ * Created by Defuera on 29/01/16.
+ */
+@SuppressWarnings("unused")
 public abstract class VisumWidget<P extends VisumPresenter>
         extends FrameLayout
         implements VisumView<P> {
@@ -26,6 +32,24 @@ public abstract class VisumWidget<P extends VisumPresenter>
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
         this.viewHelper = new VisumViewHelper<>(viewId, this);
+    }
+
+    /**
+     * @deprecated use {@link #VisumWidget(int, Context)} instead
+     */
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public VisumWidget(Context context) {
+        this(VIEW_ID_DEFAULT, context);
+    }
+
+    /**
+     * @deprecated use {@link #VisumWidget(int, Context, AttributeSet)} instead
+     */
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public VisumWidget(Context context, AttributeSet attrs) {
+        this(VIEW_ID_DEFAULT, context, attrs);
     }
 
 

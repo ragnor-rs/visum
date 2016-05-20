@@ -46,6 +46,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     /**
      * @deprecated use {@link #VisumFragment(int)} instead
      */
+    @SuppressWarnings("deprecation")
     @Deprecated
     public VisumFragment() {
         this(VisumView.VIEW_ID_DEFAULT);

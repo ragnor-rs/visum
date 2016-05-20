@@ -114,15 +114,15 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        viewHelper.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         viewHelper.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        viewHelper.onSaveInstanceState(outState);
     }
 
     @Override

@@ -20,11 +20,9 @@
 
 package io.reist.visum.presenter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,30 +54,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @deprecated  specify view ids explicitly
      */
     @Deprecated
-    public static final int VIEW_ID_DEFAULT = -1;
-
-    @SuppressWarnings("TryWithIdenticalCatches")
-    public void attach(int viewId, Class<? extends V> viewClass, Context context) {
-        try {
-            V view = viewClass.getConstructor(Context.class).newInstance(context);
-            view.attachPresenter();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void detach(int viewId) {
-        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
-        if (viewHolder != null) {
-            viewHolder.view.detachPresenter();
-        }
-    }
+    public static final int VIEW_ID_DEFAULT = 0;
 
     private static class ViewHolder<V> {
 

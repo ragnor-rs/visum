@@ -17,7 +17,7 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
 
     private final Context context;
 
-    private boolean created;
+    private boolean attachedToPresenter;
 
     /**
      * @deprecated use {@link #VisumBaseView(int, Context)} instead
@@ -68,26 +68,24 @@ public abstract class VisumBaseView<P extends VisumPresenter> implements VisumVi
 
     @Override
     public void attachPresenter() {
-        if (created) {
+        if (attachedToPresenter) {
             Log.d(TAG, "VisumBaseView is already created");
             return;
         }
         viewHelper.onCreate();
-        viewHelper.onResume();
-        created = true;
         viewHelper.attachPresenter();
+        attachedToPresenter = true;
     }
 
     @Override
     public void detachPresenter() {
-        viewHelper.detachPresenter();
-        if (!created) {
+        if (!attachedToPresenter) {
             Log.d(TAG, "VisumBaseView is not created");
             return;
         }
-        viewHelper.onPause();
+        viewHelper.detachPresenter();
         viewHelper.onDestroy();
-        created = false;
+        attachedToPresenter = false;
     }
 
     //endregion

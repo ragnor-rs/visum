@@ -8,132 +8,136 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
-import io.reist.visum.ComponentCacheProvider;
-import io.reist.visum.VisumClient;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Created by defuera on 26/01/2016.
- * Base class for FrameLayout providing visum mvp inteface
- * @param <P> - subclass of VisumPresenter
+ * Extend your {@link FrameLayout}s with this class to take advantage of Visum MVP.
+ *
+ * Created by Defuera on 29/01/16.
  */
-public abstract class VisumWidget<P extends VisumPresenter> extends FrameLayout implements VisumView<P>, VisumClient {
+@SuppressWarnings("unused")
+public abstract class VisumWidget<P extends VisumPresenter>
+        extends FrameLayout
+        implements VisumView<P> {
 
-    private static final String ARG_STATE_COMPONENT_ID = "ARG_STATE_COMPONENT_ID";
-    private static final String ARG_STATE_SUPER = "ARG_STATE_SUPER";
+    private final VisumViewHelper viewHelper;
 
-    @LayoutRes
-    private final int layoutRes;
+    private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
-    private Long componentId;
-    private boolean stateSaved;
-
-    public VisumWidget(Context context, @LayoutRes int layoutRes) {
+    public VisumWidget(int viewId, Context context) {
         super(context);
-        this.layoutRes = layoutRes;
+        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
-    public VisumWidget(Context context, AttributeSet attrs, @LayoutRes int layoutRes) {
+    public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.layoutRes = layoutRes;
+        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated use {@link #VisumWidget(int, Context)} instead
+     */
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public VisumWidget(Context context) {
+        this(VisumPresenter.VIEW_ID_DEFAULT, context);
+    }
+
+    /**
+     * @deprecated use {@link #VisumWidget(int, Context, AttributeSet)} instead
+     */
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    public VisumWidget(Context context, AttributeSet attrs) {
+        this(VisumPresenter.VIEW_ID_DEFAULT, context, attrs);
+    }
+
+
+    //region VisumClient implementation
+
+    @Override
+    public final Long getComponentId() {
+        return viewHelper.getComponentId();
+    }
+
+    @Override
+    public final void setComponentId(Long componentId) {
+        viewHelper.setComponentId(componentId);
+    }
+
+    @Override
+    public final Object getComponent() {
+        return viewHelper.getComponent();
+    }
+
+    @Override
+    public final ComponentCache getComponentCache() {
+        return isInEditMode() ? null : viewHelper.getComponentCache(getContext());
+    }
+
+    @Override
+    public void onInvalidateComponent() {
+        viewHelper.onInvalidateComponent();
+    }
+
+    //endregion
+
+
+    //region VisumView implementation
+
+    @Override
+    public void attachPresenter() {
+        viewHelper.attachPresenter();
+    }
+
+    @Override
+    public void detachPresenter() {
+        viewHelper.detachPresenter();
+    }
+
+    //endregion
+
+
+    //region View implementation
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        inject(getComponent());
-
-        inflate(getContext(), layoutRes, this);
-
-        attachPresenter();
+        viewHelper.onCreate();
+        inflate(getContext(), getLayoutRes(), this);
+        viewHelper.onResume();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
-        if (!stateSaved) {
-            getComponentCache().invalidateComponentFor(this);
-        }
-        detachPresenter();
+        viewHelper.onPause();
+        viewHelper.onDestroy();
     }
-
-    //region VisumView
-
-    @SuppressWarnings("unchecked") //todo setView should be checked call
-    @Override
-    public void attachPresenter() {
-        final P presenter = getPresenter();
-        if (presenter != null) {
-            presenter.setView(this);
-        }
-    }
-
-    @SuppressWarnings("unchecked") //todo setView should be type safe call
-    @Override
-    public void detachPresenter() {
-        if (getPresenter() != null)
-            getPresenter().setView(null);
-    }
-
-    //endregion
-
-
-    //region VisumClient
-
-    @Override
-    public Long getComponentId() {
-        return componentId;
-    }
-
-    @Override
-    public void setComponentId(Long componentId) {
-        this.componentId = componentId;
-    }
-
-    @Override
-    public Object getComponent() {
-        if (getComponentCache() != null) {
-            return getComponentCache().getComponentFor(this);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        if (isInEditMode()) return null;
-        ComponentCacheProvider application = (ComponentCacheProvider) getContext().getApplicationContext();
-        return application.getComponentCache();
-    }
-
-    //endregion
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        stateSaved = true;
-
         Bundle bundle = new Bundle();
+        viewHelper.onSaveInstanceState(bundle);
         bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
-        bundle.putLong(ARG_STATE_COMPONENT_ID, componentId);
-
         return bundle;
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        stateSaved = false;
-
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            componentId = bundle.getLong(ARG_STATE_COMPONENT_ID);
+            viewHelper.onRestoreInstanceState(bundle);
             state = bundle.getParcelable(ARG_STATE_SUPER);
         }
-
         super.onRestoreInstanceState(state);
     }
+
+    //endregion
+
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
 }

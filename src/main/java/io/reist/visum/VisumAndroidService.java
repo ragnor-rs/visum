@@ -3,53 +3,59 @@ package io.reist.visum;
 import android.app.Service;
 
 /**
- * Created by defuera on 02/02/2016.
+ * Extend your {@link Service}s with this class to take advantage of Visum MVP.
+ *
+ * Created by Defuera on 2/2/16.
  */
 public abstract class VisumAndroidService extends Service implements VisumClient {
 
-    private Long componentId;
+    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
 
-    @SuppressWarnings("unchecked")
+
+    //region Service implementation
+
     @Override
     public void onCreate() {
         super.onCreate();
-        inject(getComponent());
+        clientHelper.onCreate();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getComponentCache().invalidateComponentFor(this);
+        clientHelper.onDestroy();
     }
+
+    //endregion
+
 
     //region VisumClient
 
     @Override
     public Long getComponentId() {
-        return componentId;
+        return clientHelper.getComponentId();
     }
 
     @Override
     public void setComponentId(Long componentId) {
-        this.componentId = componentId;
+        clientHelper.setComponentId(componentId);
     }
 
     @Override
     public Object getComponent() {
-        if (getComponentCache() != null) {
-            return getComponentCache().getComponentFor(this);
-        } else {
-            return null;
-        }
+       return clientHelper.getComponent();
     }
 
     @Override
     public ComponentCache getComponentCache() {
-        ComponentCacheProvider application = (ComponentCacheProvider) getApplicationContext();
-        return application.getComponentCache();
+        return clientHelper.getComponentCache(this);
+    }
+
+    public void onInvalidateComponent() {
+        clientHelper.onInvalidateComponent();
     }
 
     //endregion
+
 
 }

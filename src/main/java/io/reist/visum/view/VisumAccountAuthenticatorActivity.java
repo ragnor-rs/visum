@@ -8,13 +8,28 @@ import android.os.Bundle;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * Created by defuera on 01/02/2016.
  * This class provides functionality of {@link AccountAuthenticatorActivity} but extends VisumActivity,
  * providing support library and Visum benefits.
+ *
+ * Created by defuera on 01/02/2016.
  */
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
+
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
+
+    /**
+     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
+     */
+    @SuppressWarnings({"unused", "deprecation"})
+    @Deprecated
+    public VisumAccountAuthenticatorActivity() {
+        this(VisumPresenter.VIEW_ID_DEFAULT);
+    }
+
+    public VisumAccountAuthenticatorActivity(int viewId) {
+        super(viewId);
+    }
 
     /**
      * Set the result that is to be sent as the result of the request that caused this
@@ -23,6 +38,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
      *
      * @param result this is returned as the result of the AbstractAccountAuthenticator request
      */
+    @SuppressWarnings("unused")
     public final void setAccountAuthenticatorResult(Bundle result) {
         mResultBundle = result;
     }

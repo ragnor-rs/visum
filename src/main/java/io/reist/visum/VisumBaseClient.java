@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.annotation.CallSuper;
 
 /**
- * Created by Reist on 20.05.16.
+ * Any non-UI class which utilizes Visum dependency injection mechanism.
+ *
+ * @see VisumClient
  */
 public abstract class VisumBaseClient implements VisumClient {
 
@@ -13,7 +15,7 @@ public abstract class VisumBaseClient implements VisumClient {
 
     public VisumBaseClient(Context context) {
         this.helper = new VisumClientHelper(this);
-        this.context = context;
+        this.context = context.getApplicationContext();
     }
 
 

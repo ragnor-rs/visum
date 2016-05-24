@@ -55,7 +55,9 @@ public final class VisumViewHelper {
     }
 
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        helper.setComponentId(savedInstanceState == null ? null : savedInstanceState.getLong(ARG_STATE_COMPONENT_ID));
+        if (savedInstanceState != null) {
+            helper.setComponentId(savedInstanceState.getLong(ARG_STATE_COMPONENT_ID));
+        }
         stateSaved = false;
     }
 

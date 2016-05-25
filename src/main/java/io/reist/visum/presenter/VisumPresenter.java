@@ -121,10 +121,14 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
 
         // attach the given view
-        viewHolders.add(new ViewHolder<>(id, view));
-        onViewAttached(id, view);
+            viewHolders.add(new ViewHolder<>(id, view));
+            onViewAttached(id, view);
 
     }
+
+    protected void onStop() {}
+
+    protected void onStart() {}
 
     @NonNull
     private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {

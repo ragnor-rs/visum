@@ -94,7 +94,7 @@ public final class VisumViewHelper {
         VisumView view = ((VisumView) helper.getClient());
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, view);
+            presenter.setView(viewId, null);
         }
     }
 

@@ -73,6 +73,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
+    private CompositeSubscription subscriptions;
+
     private ViewHolder<V> findViewHolderByViewId(int id) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             if (viewHolder.viewId == id) {
@@ -116,13 +118,30 @@ public abstract class VisumPresenter<V extends VisumView> {
             viewHolders.remove(viewHolder);
         }
 
-        if (view == null) {
-            return;
+        boolean empty = viewHolders.isEmpty();
+
+        if (empty) {
+            if (view != null) {
+                subscriptions = new CompositeSubscription();
+            } else {
+                subscriptions.unsubscribe();
+                subscriptions = null;
+            }
         }
 
         // attach the given view
+        if (view != null) {
             viewHolders.add(new ViewHolder<>(id, view));
             onViewAttached(id, view);
+        }
+
+        if (empty) {
+            if (view != null) {
+                onStart();
+            } else {
+                onStop();
+            }
+        }
 
     }
 
@@ -179,7 +198,7 @@ public abstract class VisumPresenter<V extends VisumView> {
     }
 
     public final <T> void subscribeAll(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        startSubscription(observable, new Observer<T>() {
+        subscriptions.add(startSubscription(observable, new Observer<T>() {
 
             @Override
             public void onCompleted() {
@@ -196,11 +215,11 @@ public abstract class VisumPresenter<V extends VisumView> {
                 notifyResult(viewNotifier, t);
             }
 
-        });
+        }));
     }
 
     public final <T> void subscribeAll(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
-         startSubscription(single, new SingleSubscriber<T>() {
+        subscriptions.add(startSubscription(single, new SingleSubscriber<T>() {
 
             @Override
             public void onSuccess(T t) {
@@ -212,7 +231,7 @@ public abstract class VisumPresenter<V extends VisumView> {
                 notifyError(viewNotifier, e);
             }
 
-        });
+        }));
     }
 
     private <T> void subscribe(Observable<T> observable, Observer<? super T> observer, ViewHolder<V> viewHolder) {

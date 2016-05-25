@@ -98,11 +98,6 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         helper.detachPresenter();
     }
 
-    @Override
-    public int getViewId() {
-        return helper.getViewId();
-    }
-
     //endregion
 
 

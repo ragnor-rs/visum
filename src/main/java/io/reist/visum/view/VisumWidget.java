@@ -96,11 +96,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         helper.detachPresenter();
     }
 
-    @Override
-    public int getViewId() {
-        return helper.getViewId();
-    }
-
     //endregion
 
 

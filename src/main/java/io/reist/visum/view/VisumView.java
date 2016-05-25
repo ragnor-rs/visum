@@ -51,6 +51,4 @@ public interface VisumView<P extends VisumPresenter> extends VisumClient {
      */
     void detachPresenter();
 
-    int getViewId();
-
 }

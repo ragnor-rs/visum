@@ -31,6 +31,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -173,32 +174,75 @@ public abstract class VisumPresenter<V extends VisumView> {
         subscribe(single, subscriber, viewHolder);
     }
 
+    public final <T> void subscribeAll(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
+        startSubscription(observable, new Observer<T>() {
+
+            @Override
+            public void onCompleted() {
+                notifyCompleted(viewNotifier);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                notifyError(viewNotifier, e);
+            }
+
+            @Override
+            public void onNext(T t) {
+                notifyResult(viewNotifier, t);
+            }
+
+        });
+    }
+
+    public final <T> void subscribeAll(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
+         startSubscription(single, new SingleSubscriber<T>() {
+
+            @Override
+            public void onSuccess(T t) {
+                notifyResult(viewNotifier, t);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                notifyError(viewNotifier, e);
+            }
+
+        });
+    }
+
     private <T> void subscribe(Observable<T> observable, Observer<? super T> observer, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(
-                observable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .unsubscribeOn(Schedulers.io())
-                        .subscribe(observer)
-        );
+        viewHolder.subscriptions.add(startSubscription(observable, observer));
     }
 
     private <T> void subscribe(Single<T> single, Action1<T> action, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(
-                single
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(action)
-        );
+        viewHolder.subscriptions.add(startSubscription(single, action));
     }
 
     private <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(
-                single
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(subscriber)
-        );
+        viewHolder.subscriptions.add(startSubscription(single, subscriber));
+    }
+
+    private <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(observer);
+    }
+
+    private <T> Subscription startSubscription(Single<T> single, Action1<T> action) {
+        return single
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action);
+    }
+
+    private <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
+        return single
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
     @SuppressWarnings({"unused", "deprecation"})
@@ -273,6 +317,30 @@ public abstract class VisumPresenter<V extends VisumView> {
     @SuppressWarnings({"unused", "deprecation"})
     public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         subscribe(VIEW_ID_DEFAULT, single, subscriber);
+    }
+
+    public final void forEach(@NonNull Action1<V> action1) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            action1.call(viewHolder.view);
+        }
+    }
+
+    private <T> void notifyCompleted(@NonNull ViewNotifier<V, T> viewNotifier) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyCompleted(viewHolder.view);
+        }
+    }
+
+    private <T> void notifyResult(@NonNull ViewNotifier<V, T> viewNotifier, T t) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyResult(viewHolder.view, t);
+        }
+    }
+
+    private <T> void notifyError(@NonNull ViewNotifier<V, T> viewNotifier, Throwable e) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyError(viewHolder.view, e);
+        }
     }
 
 }

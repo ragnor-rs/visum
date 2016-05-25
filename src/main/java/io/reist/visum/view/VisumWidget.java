@@ -21,18 +21,18 @@ public abstract class VisumWidget<P extends VisumPresenter>
         extends FrameLayout
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper helper;
 
     private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
     public VisumWidget(int viewId, Context context) {
         super(context);
-        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
     /**
@@ -58,27 +58,27 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     public final Long getComponentId() {
-        return viewHelper.getComponentId();
+        return helper.getComponentId();
     }
 
     @Override
     public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
+        helper.setComponentId(componentId);
     }
 
     @Override
     public final Object getComponent() {
-        return viewHelper.getComponent();
+        return helper.getComponent();
     }
 
     @Override
     public final ComponentCache getComponentCache() {
-        return isInEditMode() ? null : viewHelper.getComponentCache(getContext());
+        return isInEditMode() ? null : helper.getComponentCache(getContext());
     }
 
     @Override
     public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
+        helper.onInvalidateComponent();
     }
 
     //endregion
@@ -88,12 +88,17 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     public void attachPresenter() {
-        viewHelper.attachPresenter();
+        helper.attachPresenter();
     }
 
     @Override
     public void detachPresenter() {
-        viewHelper.detachPresenter();
+        helper.detachPresenter();
+    }
+
+    @Override
+    public int getViewId() {
+        return helper.getViewId();
     }
 
     //endregion
@@ -104,22 +109,22 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        viewHelper.onCreate();
+        helper.onCreate();
         inflate(getContext(), getLayoutRes(), this);
-        viewHelper.onResume();
+        helper.onResume();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        viewHelper.onPause();
-        viewHelper.onDestroy();
+        helper.onPause();
+        helper.onDestroy();
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        viewHelper.onSaveInstanceState(bundle);
+        helper.onSaveInstanceState(bundle);
         bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
         return bundle;
     }
@@ -128,7 +133,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            viewHelper.onRestoreInstanceState(bundle);
+            helper.onRestoreInstanceState(bundle);
             state = bundle.getParcelable(ARG_STATE_SUPER);
         }
         super.onRestoreInstanceState(state);

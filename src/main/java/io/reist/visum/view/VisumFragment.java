@@ -42,7 +42,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
         extends Fragment
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper helper;
 
     /**
      * @deprecated use {@link #VisumFragment(int)} instead
@@ -54,7 +54,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     public VisumFragment(int viewId) {
-        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
     }
 
 
@@ -62,27 +62,27 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @Override
     public final Long getComponentId() {
-        return viewHelper.getComponentId();
+        return helper.getComponentId();
     }
 
     @Override
     public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
+        helper.setComponentId(componentId);
     }
 
     @Override
     public final Object getComponent() {
-        return viewHelper.getComponent();
+        return helper.getComponent();
     }
 
     @Override
     public final ComponentCache getComponentCache() {
-        return viewHelper.getComponentCache(getActivity());
+        return helper.getComponentCache(getActivity());
     }
 
     @Override
     public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
+        helper.onInvalidateComponent();
     }
 
     //endregion
@@ -92,12 +92,17 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @Override
     public void attachPresenter() {
-        viewHelper.attachPresenter();
+        helper.attachPresenter();
     }
 
     @Override
     public void detachPresenter() {
-        viewHelper.detachPresenter();
+        helper.detachPresenter();
+    }
+
+    @Override
+    public int getViewId() {
+        return helper.getViewId();
     }
 
     //endregion
@@ -108,8 +113,8 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewHelper.onRestoreInstanceState(savedInstanceState);
-        viewHelper.onCreate();
+        helper.onRestoreInstanceState(savedInstanceState);
+        helper.onCreate();
     }
 
     @Nullable
@@ -121,29 +126,29 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewHelper.onResume();
+        helper.onResume();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (hidden) {
-            viewHelper.detachPresenter();
+            helper.detachPresenter();
         } else {
-            viewHelper.attachPresenter();
+            helper.attachPresenter();
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        viewHelper.onSaveInstanceState(outState);
+        helper.onSaveInstanceState(outState);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        viewHelper.onPause();
-        viewHelper.onDestroy();
+        helper.onPause();
+        helper.onDestroy();
     }
 
     //endregion

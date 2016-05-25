@@ -62,6 +62,11 @@ public abstract class VisumBaseView<P extends VisumPresenter>
         attachedToPresenter = false;
     }
 
+    @Override
+    public int getViewId() {
+        return helper.getViewId();
+    }
+
     //endregion
 
 

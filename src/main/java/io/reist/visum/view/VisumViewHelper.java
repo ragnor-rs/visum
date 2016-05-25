@@ -98,4 +98,8 @@ public final class VisumViewHelper {
         }
     }
 
+    public int getViewId() {
+        return viewId;
+    }
+
 }

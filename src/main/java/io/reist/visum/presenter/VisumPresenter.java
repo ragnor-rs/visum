@@ -81,6 +81,15 @@ public abstract class VisumPresenter<V extends VisumView> {
         return null;
     }
 
+    private ViewHolder<V> findViewHolderByView(V v) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            if (viewHolder.view == v) {
+                return viewHolder;
+            }
+        }
+        return null;
+    }
+
     /**
      * Attaches the given view to this presenter. For the view,
      * {@link #onViewAttached(int, VisumView)} will be called and the view will be able to subscribe
@@ -125,8 +134,47 @@ public abstract class VisumPresenter<V extends VisumView> {
         return viewHolder;
     }
 
+    @NonNull
+    private ViewHolder<V> findViewHolderByViewOrThrow(V view) {
+        ViewHolder<V> viewHolder = findViewHolderByView(view);
+        if (viewHolder == null) {
+            throw new IllegalStateException(view + " is not registered under " + this);
+        }
+        return viewHolder;
+    }
+
     public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        subscribe(observable, observer, viewHolder);
+    }
+
+    public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        subscribe(single, action, viewHolder);
+    }
+
+    public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        subscribe(single, subscriber, viewHolder);
+    }
+
+    public final <T> void subscribe(V view, Observable<T> observable, Observer<? super T> observer) {
+        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
+        subscribe(observable, observer, viewHolder);
+    }
+
+    public final <T> void subscribe(V view, Single<T> single, Action1<T> action) {
+        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
+        subscribe(single, action, viewHolder);
+    }
+
+    public final <T> void subscribe(V view, Single<T> single, SingleSubscriber<T> subscriber) {
+        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
+        subscribe(single, subscriber, viewHolder);
+    }
+
+    private <T> void subscribe(Observable<T> observable, Observer<? super T> observer, ViewHolder<V> viewHolder) {
+        viewHolder.subscriptions.add(
                 observable
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -135,8 +183,8 @@ public abstract class VisumPresenter<V extends VisumView> {
         );
     }
 
-    public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
+    private <T> void subscribe(Single<T> single, Action1<T> action, ViewHolder<V> viewHolder) {
+        viewHolder.subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -144,8 +192,8 @@ public abstract class VisumPresenter<V extends VisumView> {
         );
     }
 
-    public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
+    private <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber, ViewHolder<V> viewHolder) {
+        viewHolder.subscriptions.add(
                 single
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

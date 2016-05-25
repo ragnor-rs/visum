@@ -22,6 +22,7 @@ package io.reist.visum.view;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
@@ -55,29 +56,21 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
     //region VisumClient implementation
 
+    @NonNull
     @Override
-    public final Long getComponentId() {
-        return helper.getComponentId();
+    public final Object onStartClient() {
+        return helper.onStartClient();
     }
 
-    @Override
-    public final void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return helper.getComponent();
-    }
-
+    @NonNull
     @Override
     public final ComponentCache getComponentCache() {
         return helper.getComponentCache(this);
     }
 
     @Override
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public final void onStopClient() {
+        helper.onStopClient();
     }
 
     //endregion
@@ -104,7 +97,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         helper.onCreate();
-        helper.onRestoreInstanceState(savedInstanceState);
+        helper.onRestoreInstanceState();
         setContentView(getLayoutRes());
     }
 
@@ -123,7 +116,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState(outState);
+        helper.onSaveInstanceState();
     }
 
     @Override

@@ -105,7 +105,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      * stopped.
      *
      * @param id        an id used by the presenter to distinguish the view from the others
-     * @param view      a MVP view; use null to detach the view with the given id
+     * @param view      a MVP view; use null to onStopClient the view with the given id
      */
     public final void setView(int id, @Nullable V view) {
 
@@ -129,7 +129,7 @@ public abstract class VisumPresenter<V extends VisumView> {
             }
         }
 
-        // attach the given view
+        // onStartClient the given view
         if (view != null) {
             viewHolders.add(new ViewHolder<>(id, view));
             onViewAttached(id, view);
@@ -311,6 +311,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         subscribe(VIEW_ID_DEFAULT, single, subscriber);
     }
 
+    @SuppressWarnings("unused")
     public final void forEach(@NonNull Action1<V> action1) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             action1.call(viewHolder.view);

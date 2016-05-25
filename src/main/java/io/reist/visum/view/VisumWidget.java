@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -56,29 +57,21 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     //region VisumClient implementation
 
+    @NonNull
     @Override
-    public final Long getComponentId() {
-        return helper.getComponentId();
+    public final Object onStartClient() {
+        return helper.onStartClient();
     }
 
-    @Override
-    public final void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return helper.getComponent();
-    }
-
+    @NonNull
     @Override
     public final ComponentCache getComponentCache() {
         return isInEditMode() ? null : helper.getComponentCache(getContext());
     }
 
     @Override
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public final void onStopClient() {
+        helper.onStopClient();
     }
 
     //endregion
@@ -119,7 +112,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        helper.onSaveInstanceState(bundle);
+        helper.onSaveInstanceState();
         bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
         return bundle;
     }
@@ -128,7 +121,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            helper.onRestoreInstanceState(bundle);
+            helper.onRestoreInstanceState();
             state = bundle.getParcelable(ARG_STATE_SUPER);
         }
         super.onRestoreInstanceState(state);

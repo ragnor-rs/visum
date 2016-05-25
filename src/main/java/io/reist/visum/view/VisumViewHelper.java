@@ -1,7 +1,6 @@
 package io.reist.visum.view;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import io.reist.visum.ComponentCache;
@@ -9,16 +8,13 @@ import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * A helper class for implementations of {@link VisumView}. It persists
- * {@link VisumClientHelper#componentId} during configuration changes and provides callback for
+ * A helper class for implementations of {@link VisumView}. It provides callback for
  * typical Android UI components such as {@link android.app.Activity} and
  * {@link android.app.Fragment}.
  *
  * Created by Reist on 19.05.16.
  */
 public final class VisumViewHelper {
-
-    private static final String ARG_STATE_COMPONENT_ID = VisumViewHelper.class.getName() + ".ARG_STATE_COMPONENT_ID";
 
     private final int viewId;
     private final VisumClientHelper helper;
@@ -30,34 +26,25 @@ public final class VisumViewHelper {
         this.helper = helper;
     }
 
-    public Long getComponentId() {
-        return helper.getComponentId();
+    @NonNull
+    public Object onStartClient() {
+        return helper.onStartClient();
     }
 
-    public void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
-    }
-
-    public Object getComponent() {
-        return helper.getComponent();
-    }
-
+    @NonNull
     public ComponentCache getComponentCache(Context context) {
         return helper.getComponentCache(context);
     }
 
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public void onStopClient() {
+        helper.onStopClient();
     }
 
     public void onCreate() {
         helper.onCreate();
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            helper.setComponentId(savedInstanceState.getLong(ARG_STATE_COMPONENT_ID));
-        }
+    public void onRestoreInstanceState() {
         stateSaved = false;
     }
 
@@ -69,8 +56,7 @@ public final class VisumViewHelper {
         ((VisumView) helper.getClient()).detachPresenter();
     }
 
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(ARG_STATE_COMPONENT_ID, helper.getComponentId());
+    public void onSaveInstanceState() {
         stateSaved = true;
     }
 

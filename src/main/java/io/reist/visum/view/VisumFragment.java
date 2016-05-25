@@ -22,6 +22,7 @@ package io.reist.visum.view;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -60,29 +61,21 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     //region VisumClient implementation
 
+    @NonNull
     @Override
-    public final Long getComponentId() {
-        return helper.getComponentId();
+    public final Object onStartClient() {
+        return helper.onStartClient();
     }
 
-    @Override
-    public final void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return helper.getComponent();
-    }
-
+    @NonNull
     @Override
     public final ComponentCache getComponentCache() {
         return helper.getComponentCache(getActivity());
     }
 
     @Override
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public void onStopClient() {
+        helper.onStopClient();
     }
 
     //endregion
@@ -108,7 +101,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onRestoreInstanceState(savedInstanceState);
+        helper.onRestoreInstanceState();
         helper.onCreate();
     }
 
@@ -136,7 +129,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState(outState);
+        helper.onSaveInstanceState();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.reist.visum;
 
 import android.app.Service;
+import android.support.annotation.NonNull;
 
 /**
  * Extend your {@link Service}s with this class to take advantage of Visum MVP.
@@ -31,28 +32,20 @@ public abstract class VisumAndroidService extends Service implements VisumClient
 
     //region VisumClient
 
+    @NonNull
     @Override
-    public Long getComponentId() {
-        return clientHelper.getComponentId();
+    public Object onStartClient() {
+       return clientHelper.onStartClient();
     }
 
-    @Override
-    public void setComponentId(Long componentId) {
-        clientHelper.setComponentId(componentId);
-    }
-
-    @Override
-    public Object getComponent() {
-       return clientHelper.getComponent();
-    }
-
+    @NonNull
     @Override
     public ComponentCache getComponentCache() {
         return clientHelper.getComponentCache(this);
     }
 
-    public void onInvalidateComponent() {
-        clientHelper.onInvalidateComponent();
+    public void onStopClient() {
+        clientHelper.onStopClient();
     }
 
     //endregion

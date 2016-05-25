@@ -84,15 +84,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return null;
     }
 
-    private ViewHolder<V> findViewHolderByView(V v) {
-        for (ViewHolder<V> viewHolder : viewHolders) {
-            if (viewHolder.view == v) {
-                return viewHolder;
-            }
-        }
-        return null;
-    }
-
     /**
      * Attaches the given view to this presenter. For the view,
      * {@link #onViewAttached(int, VisumView)} will be called and the view will be able to subscribe

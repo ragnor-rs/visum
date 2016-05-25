@@ -158,46 +158,26 @@ public abstract class VisumPresenter<V extends VisumView> {
         return viewHolder;
     }
 
-    @NonNull
-    private ViewHolder<V> findViewHolderByViewOrThrow(V view) {
-        ViewHolder<V> viewHolder = findViewHolderByView(view);
-        if (viewHolder == null) {
-            throw new IllegalStateException(view + " is not registered under " + this);
-        }
-        return viewHolder;
-    }
-
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        subscribe(observable, observer, viewHolder);
+        viewHolder.subscriptions.add(startSubscription(observable, observer));
     }
 
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        subscribe(single, action, viewHolder);
+        viewHolder.subscriptions.add(startSubscription(single, action));
     }
 
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        subscribe(single, subscriber, viewHolder);
+        viewHolder.subscriptions.add(startSubscription(single, subscriber));
     }
 
-    public final <T> void subscribe(V view, Observable<T> observable, Observer<? super T> observer) {
-        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
-        subscribe(observable, observer, viewHolder);
-    }
-
-    public final <T> void subscribe(V view, Single<T> single, Action1<T> action) {
-        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
-        subscribe(single, action, viewHolder);
-    }
-
-    public final <T> void subscribe(V view, Single<T> single, SingleSubscriber<T> subscriber) {
-        ViewHolder<V> viewHolder = findViewHolderByViewOrThrow(view);
-        subscribe(single, subscriber, viewHolder);
-    }
-
-    public final <T> void subscribeAll(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
+    @SuppressWarnings("unused")
+    public final <T> void subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
         subscriptions.add(startSubscription(observable, new Observer<T>() {
 
             @Override
@@ -218,7 +198,8 @@ public abstract class VisumPresenter<V extends VisumView> {
         }));
     }
 
-    public final <T> void subscribeAll(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
+    @SuppressWarnings("unused")
+    public final <T> void subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
         subscriptions.add(startSubscription(single, new SingleSubscriber<T>() {
 
             @Override
@@ -232,18 +213,6 @@ public abstract class VisumPresenter<V extends VisumView> {
             }
 
         }));
-    }
-
-    private <T> void subscribe(Observable<T> observable, Observer<? super T> observer, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(startSubscription(observable, observer));
-    }
-
-    private <T> void subscribe(Single<T> single, Action1<T> action, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(startSubscription(single, action));
-    }
-
-    private <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber, ViewHolder<V> viewHolder) {
-        viewHolder.subscriptions.add(startSubscription(single, subscriber));
     }
 
     private <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {

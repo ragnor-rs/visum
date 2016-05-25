@@ -84,11 +84,10 @@ public abstract class ComponentCache {
     @CallSuper
     public void onStopClient(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClientOrThrow(client);
-        int referenceCount = entry.referenceCount;
         entry.referenceCount--;
-        if (referenceCount == 0) {
+        if (entry.referenceCount == 0) {
             entry.component = null;
-        } else {
+        } else if (entry.referenceCount < 0) {
             throw new IllegalStateException(client + " is already detached");
         }
     }

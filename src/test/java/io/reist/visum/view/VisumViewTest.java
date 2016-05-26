@@ -1,4 +1,4 @@
-package io.reist.visum.presenter;
+package io.reist.visum.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -32,13 +32,7 @@ import java.util.Arrays;
 import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
-import io.reist.visum.view.VisumAccountAuthenticatorActivity;
-import io.reist.visum.view.VisumActivity;
-import io.reist.visum.view.VisumBaseView;
-import io.reist.visum.view.VisumDialogFragment;
-import io.reist.visum.view.VisumFragment;
-import io.reist.visum.view.VisumView;
-import io.reist.visum.view.VisumWidget;
+import io.reist.visum.presenter.TestPresenter;
 
 /**
  * Created by Reist on 26.05.16.

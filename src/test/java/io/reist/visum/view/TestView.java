@@ -1,8 +1,8 @@
-package io.reist.visum.presenter;
+package io.reist.visum.view;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.TestClient;
-import io.reist.visum.view.VisumView;
+import io.reist.visum.presenter.TestPresenter;
 
 /**
  * Created by Reist on 26.05.16.

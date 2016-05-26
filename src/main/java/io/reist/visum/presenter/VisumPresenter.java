@@ -22,6 +22,7 @@ package io.reist.visum.presenter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class VisumPresenter<V extends VisumView> {
 
+    public static final String TAG = "Visum";
+
     /**
      * View id is for old visum implementations. Do not rely on this constant in new code.
      *
@@ -56,6 +59,11 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     @Deprecated
     public static final int VIEW_ID_DEFAULT = 0;
+
+    @NonNull
+    public static String toString(Object o) {
+        return o == null ? "null" : (o.getClass().getSimpleName() + "@" + o.hashCode());
+    }
 
     private static class ViewHolder<V> {
 
@@ -100,38 +108,36 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     public final void setView(int id, @Nullable V view) {
 
+        Log.d(TAG, "setView(" + id + ", " + toString(view) + ")");
+
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 
-        // remove the old view
         if (viewHolder != null) {
+
+            // remove the old view
             viewHolder.subscriptions.unsubscribe();
             onViewDetached(id, viewHolder.view);
             viewHolders.remove(viewHolder);
-        }
 
-        boolean empty = viewHolders.isEmpty();
-
-        if (empty) {
-            if (view != null) {
-                subscriptions = new CompositeSubscription();
-            } else {
+            if (viewHolders.isEmpty()) {
+                onStop();
                 subscriptions.unsubscribe();
                 subscriptions = null;
             }
+
         }
 
-        // start the given view
         if (view != null) {
+
+            // start the given view
             viewHolders.add(new ViewHolder<>(id, view));
             onViewAttached(id, view);
-        }
 
-        if (empty) {
-            if (view != null) {
+            if (viewHolders.size() == 1) {
+                subscriptions = new CompositeSubscription();
                 onStart();
-            } else {
-                onStop();
             }
+
         }
 
     }

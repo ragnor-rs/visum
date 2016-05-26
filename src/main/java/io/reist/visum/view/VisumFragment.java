@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,20 +101,27 @@ public abstract class VisumFragment<P extends VisumPresenter>
         helper.onRestoreInstanceState();
     }
 
+    private void log(String m) {
+        Log.d(VisumPresenter.TAG, VisumPresenter.toString(this) + " - " + m);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        log("onCreateView");
         return inflater.inflate(getLayoutRes(), container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        log("onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         helper.attachPresenter();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        log("onHiddenChanged(" + hidden + ")");
         if (hidden) {
             helper.detachPresenter();
         } else {
@@ -129,6 +137,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @Override
     public void onDestroyView() {
+        log("onDestroyView");
         super.onDestroyView();
         helper.detachPresenter();
     }

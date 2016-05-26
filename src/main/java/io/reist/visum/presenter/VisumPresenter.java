@@ -49,8 +49,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class VisumPresenter<V extends VisumView> {
 
-    public static final String TAG = "Visum";
-
     /**
      * View id is for old visum implementations. Do not rely on this constant in new code.
      *
@@ -121,14 +119,14 @@ public abstract class VisumPresenter<V extends VisumView> {
 
         if (view != null) {
 
-            // start the given view
-            viewHolders.add(new ViewHolder<>(id, view));
-            onViewAttached(id, view);
-
-            if (viewHolders.size() == 1) {
+            if (viewHolders.isEmpty()) {
                 subscriptions = new CompositeSubscription();
                 onStart();
             }
+
+            // start the given view
+            viewHolders.add(new ViewHolder<>(id, view));
+            onViewAttached(id, view);
 
         }
 

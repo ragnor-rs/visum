@@ -1,6 +1,5 @@
 package io.reist.visum;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,8 +19,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.Arrays;
 
-import rx.functions.Func0;
-
 /**
  * Created by Reist on 26.05.16.
  */
@@ -29,40 +26,27 @@ import rx.functions.Func0;
 @Config(
         constants = BuildConfig.class,
         sdk = {Build.VERSION_CODES.JELLY_BEAN},
-        application = VisumClientTest.TestApplication.class
+        application = TestApplication.class
 )
-public class VisumClientTest {
+public class VisumClientTest extends VisumTest<VisumClientTest.TestComponent> {
 
     private TestVisumBaseClient testVisumBaseClient;
     private TestVisumAndroidService testVisumAndroidService;
     private TestVisumIntentService testVisumIntentService;
 
-    private TestComponent testComponent;
+    public VisumClientTest() {
+        super(VisumClientTest.TestComponent.class);
+    }
 
     @Before
     public void start() {
 
-        getComponentCache().register(
-                Arrays.asList(TestVisumBaseClient.class, TestVisumAndroidService.class, TestVisumIntentService.class),
-                new Func0<Object>() {
-
-                    @Override
-                    public Object call() {
-                        return testComponent = Mockito.mock(TestComponent.class);
-                    }
-
-                }
-        );
+        register(Arrays.asList(TestVisumBaseClient.class, TestVisumAndroidService.class, TestVisumIntentService.class));
 
         testVisumBaseClient = new TestVisumBaseClient(RuntimeEnvironment.application);
         testVisumAndroidService = new TestVisumAndroidService();
         testVisumIntentService = new TestVisumIntentService();
 
-    }
-
-    @NonNull
-    public ComponentCache getComponentCache() {
-        return ((TestApplication) RuntimeEnvironment.application).getComponentCache();
     }
 
     @Test
@@ -170,28 +154,13 @@ public class VisumClientTest {
 
     }
 
-    private interface TestComponent {
+    protected interface TestComponent {
 
         void inject(TestVisumBaseClient testVisumBaseClient);
 
         void inject(TestVisumAndroidService testVisumAndroidService);
 
         void inject(TestVisumIntentService testVisumIntentService);
-
-    }
-
-    public static class TestApplication extends Application implements ComponentCacheProvider {
-
-        protected ComponentCache componentCache;
-
-        @NonNull
-        @Override
-        public ComponentCache getComponentCache() {
-            if (componentCache == null) {
-                componentCache = new ComponentCache();
-            }
-            return componentCache;
-        }
 
     }
 

@@ -13,8 +13,8 @@ public abstract class VisumBaseClient implements VisumClient {
     private final VisumClientHelper helper;
     private final Context context;
 
-    public VisumBaseClient(Context context) {
-        this.helper = new VisumClientHelper(this);
+    public VisumBaseClient(@NonNull Context context) {
+        this.helper = new VisumClientHelper<>(this);
         this.context = context.getApplicationContext();
     }
 
@@ -23,14 +23,13 @@ public abstract class VisumBaseClient implements VisumClient {
 
     @NonNull
     @Override
-    public final Object onStartClient() {
-        return helper.onStartClient();
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
     }
 
-    @NonNull
     @Override
-    public final ComponentCache getComponentCache() {
-        return helper.getComponentCache(context);
+    public final void onStartClient() {
+        helper.onStartClient();
     }
 
     @Override
@@ -38,15 +37,12 @@ public abstract class VisumBaseClient implements VisumClient {
         helper.onStopClient();
     }
 
-    //endregion
-
-
-    protected final VisumClientHelper getClientHelper() {
-        return helper;
-    }
-
-    protected final Context getContext() {
+    @NonNull
+    public final Context getContext() {
         return context;
     }
+
+    //endregion
+
 
 }

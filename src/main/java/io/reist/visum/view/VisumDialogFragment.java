@@ -41,7 +41,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         extends DialogFragment
         implements VisumView<P> {
 
-    private final VisumViewHelper helper;
+    private final VisumViewHelper<P> helper;
 
     /**
      * @deprecated use {@link #VisumDialogFragment(int)} instead
@@ -53,22 +53,21 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     }
 
     public VisumDialogFragment(int viewId) {
-        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
 
     //region VisumClient implementation
 
-    @NonNull
     @Override
-    public final Object onStartClient() {
-        return helper.onStartClient();
+    public final void onStartClient() {
+        helper.onStartClient();
     }
 
     @NonNull
     @Override
     public final ComponentCache getComponentCache() {
-        return helper.getComponentCache(getActivity());
+        return helper.getComponentCache();
     }
 
     @Override
@@ -99,7 +98,6 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onCreate();
         helper.onRestoreInstanceState();
     }
 
@@ -112,7 +110,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        helper.onResume();
+        helper.onStartClient();
     }
 
     @Override
@@ -133,8 +131,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        helper.onPause();
-        helper.onDestroy();
+        helper.onStopClient();
     }
 
     //endregion

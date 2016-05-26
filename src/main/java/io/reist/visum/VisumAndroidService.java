@@ -1,6 +1,7 @@
 package io.reist.visum;
 
 import android.app.Service;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
@@ -10,7 +11,7 @@ import android.support.annotation.NonNull;
  */
 public abstract class VisumAndroidService extends Service implements VisumClient {
 
-    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
+    private final VisumClientHelper helper = new VisumClientHelper<>(this);
 
 
     //region Service implementation
@@ -18,37 +19,37 @@ public abstract class VisumAndroidService extends Service implements VisumClient
     @Override
     public void onCreate() {
         super.onCreate();
-        clientHelper.onCreate();
+        helper.onStartClient();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        clientHelper.onDestroy();
+        helper.onStopClient();
     }
 
     //endregion
 
 
-    //region VisumClient
-
     @NonNull
     @Override
-    public Object onStartClient() {
-       return clientHelper.onStartClient();
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
+    }
+
+    @Override
+    public final void onStartClient() {
+        helper.onStartClient();
+    }
+
+    @Override
+    public final void onStopClient() {
+        helper.onStopClient();
     }
 
     @NonNull
-    @Override
-    public ComponentCache getComponentCache() {
-        return clientHelper.getComponentCache(this);
+    public final Context getContext() {
+        return this;
     }
-
-    public void onStopClient() {
-        clientHelper.onStopClient();
-    }
-
-    //endregion
-
 
 }

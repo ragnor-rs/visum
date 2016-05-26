@@ -1,6 +1,7 @@
 package io.reist.visum;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
@@ -10,7 +11,7 @@ import android.support.annotation.NonNull;
  */
 public abstract class VisumIntentService extends IntentService implements VisumClient {
 
-    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
+    private final VisumClientHelper helper = new VisumClientHelper<>(this);
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -27,38 +28,38 @@ public abstract class VisumIntentService extends IntentService implements VisumC
     @Override
     public void onCreate() {
         super.onCreate();
-        clientHelper.onCreate();
+        helper.onStartClient();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        clientHelper.onDestroy();
+        helper.onStopClient();
     }
 
     //endregion
 
-
-    //region VisumClient
-
-    @NonNull
-    @Override
-    public final Object onStartClient() {
-        return clientHelper.onStartClient();
-    }
 
     @NonNull
     @Override
     public final ComponentCache getComponentCache() {
-        return clientHelper.getComponentCache(this);
+        return helper.getComponentCache();
     }
 
+    @Override
+    public final void onStartClient() {
+        helper.onStartClient();
+    }
+
+    @Override
     public final void onStopClient() {
-        clientHelper.onStopClient();
+        helper.onStopClient();
     }
 
-    //endregion
-
+    @NonNull
+    public final Context getContext() {
+        return this;
+    }
 
 }
 

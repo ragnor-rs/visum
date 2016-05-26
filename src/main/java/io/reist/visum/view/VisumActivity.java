@@ -38,7 +38,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
         extends AppCompatActivity
         implements VisumView<P> {
 
-    private final VisumViewHelper helper;
+    private final VisumViewHelper<P> helper;
 
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
@@ -50,22 +50,21 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     public VisumActivity(int viewId) {
-        this.helper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
 
     //region VisumClient implementation
 
-    @NonNull
     @Override
-    public final Object onStartClient() {
-        return helper.onStartClient();
+    public final void onStartClient() {
+        helper.onStartClient();
     }
 
     @NonNull
     @Override
     public final ComponentCache getComponentCache() {
-        return helper.getComponentCache(this);
+        return helper.getComponentCache();
     }
 
     @Override
@@ -96,7 +95,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onCreate();
         helper.onRestoreInstanceState();
         setContentView(getLayoutRes());
     }
@@ -104,25 +102,19 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     protected void onResume() {
         super.onResume();
-        helper.onResume();
+        helper.onStartClient();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        helper.onPause();
+        helper.onStopClient();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         helper.onSaveInstanceState();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        helper.onDestroy();
     }
 
     //endregion

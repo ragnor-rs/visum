@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 import android.util.Log;
 
 import io.reist.visum.VisumBaseClient;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -12,12 +13,11 @@ import io.reist.visum.presenter.VisumPresenter;
  */
 @SuppressWarnings("unused")
 public abstract class VisumBaseView<P extends VisumPresenter>
-        extends VisumBaseClient
-        implements VisumView<P> {
+        extends VisumBaseClient implements VisumView<P> {
 
     private static final String TAG = VisumBaseView.class.getName();
 
-    private final VisumViewHelper helper;
+    private final VisumViewHelper<P> helper;
 
     private boolean attachedToPresenter;
 
@@ -32,7 +32,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
 
     public VisumBaseView(int viewId, Context context) {
         super(context);
-        this.helper = new VisumViewHelper(viewId, getClientHelper());
+        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
 
@@ -45,7 +45,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
             Log.d(TAG, "VisumBaseView is already created");
             return;
         }
-        helper.onCreate();
+        helper.onStartClient();
         helper.attachPresenter();
         attachedToPresenter = true;
     }
@@ -58,7 +58,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
             return;
         }
         helper.detachPresenter();
-        helper.onDestroy();
+        helper.onStopClient();
         attachedToPresenter = false;
     }
 

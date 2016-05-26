@@ -9,39 +9,43 @@ import android.support.annotation.NonNull;
  *
  * Created by Reist on 19.05.16.
  */
-public final class VisumClientHelper {
+public final class VisumClientHelper<C extends VisumClient> implements VisumClient {
 
-    protected final VisumClient client;
+    protected final C client;
 
-    public VisumClientHelper(@NonNull VisumClient client) {
+    public VisumClientHelper(@NonNull C client) {
         this.client = client;
     }
 
-    @NonNull
-    public Object onStartClient() {
-        return client.getComponentCache().onStartClient(client);
-    }
-
-    @NonNull
-    public ComponentCache getComponentCache(Context context) {
-        return ((ComponentCacheProvider) context.getApplicationContext()).getComponentCache();
-    }
-
-    public void onCreate() {
-        client.inject(client.onStartClient());
-    }
-
-    public void onDestroy() {
-        client.onStopClient();
-    }
-
-    public void onStopClient() {
-        client.getComponentCache().onStopClient(client);
-    }
-
-    @NonNull
-    public VisumClient getClient() {
+    public C getClient() {
         return client;
+    }
+
+    @NonNull
+    @Override
+    public ComponentCache getComponentCache() {
+        return ((ComponentCacheProvider) client.getContext().getApplicationContext()).getComponentCache();
+    }
+
+    @Override
+    public void onStartClient() {
+        client.inject(client.getComponentCache().start(client));
+    }
+
+    @Override
+    public void onStopClient() {
+        client.getComponentCache().stop(client);
+    }
+
+    @Override
+    public void inject(@NonNull Object from) {
+        client.inject(from);
+    }
+
+    @NonNull
+    @Override
+    public Context getContext() {
+        return client.getContext();
     }
 
 }

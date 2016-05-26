@@ -57,16 +57,15 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     //region VisumClient implementation
 
-    @NonNull
     @Override
-    public final Object onStartClient() {
-        return helper.onStartClient();
+    public final void onStartClient() {
+        helper.onStartClient();
     }
 
     @NonNull
     @Override
     public final ComponentCache getComponentCache() {
-        return isInEditMode() ? null : helper.getComponentCache(getContext());
+        return isInEditMode() ? null : helper.getComponentCache();
     }
 
     @Override
@@ -97,16 +96,14 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        helper.onCreate();
         inflate(getContext(), getLayoutRes(), this);
-        helper.onResume();
+        helper.onStartClient();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        helper.onPause();
-        helper.onDestroy();
+        helper.onStopClient();
     }
 
     @Override

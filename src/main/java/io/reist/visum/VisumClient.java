@@ -1,5 +1,6 @@
 package io.reist.visum;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 /**
@@ -32,25 +33,6 @@ import android.support.annotation.NonNull;
 public interface VisumClient {
 
     /**
-     * Implementations must return a component for this view. E.g.:
-     * "return getComponentCache().onStartClient(this);"
-     *
-     * @return  a component which provides the view with its own dependencies
-     *
-     * @see VisumClient#inject(Object)
-     */
-    @NonNull
-    Object onStartClient();
-
-    /**
-     * Implementations must inject dependencies to the view using the given component. E.g.:
-     * "((MyComponent) from).inject(this);"
-     *
-     * @param from  a component which provides the view with its own dependencies
-     */
-    void inject(@NonNull Object from);
-
-    /**
      * Implementation must return local component cache. E.g.:
      * "return ((ComponentCacheProvider) context.getApplicationContext()).getComponentCache();"
      *
@@ -60,10 +42,26 @@ public interface VisumClient {
     ComponentCache getComponentCache();
 
     /**
-     * Called when the view is to be completely destroyed. Re-creation of the view should
+     * Called when the client is to be created.
+     */
+    void onStartClient();
+
+    /**
+     * Called when the client is to be completely destroyed. Re-creation of the view should
      * not trigger this method. Implementations should destroy a component used by this
      * view.
      */
     void onStopClient();
+
+    /**
+     * Implementations must inject dependencies to the view using the given component. E.g.:
+     * "((MyComponent) from).inject(this);"
+     *
+     * @param from  a component which provides the view with its own dependencies
+     */
+    void inject(@NonNull Object from);
+
+    @NonNull
+    Context getContext();
 
 }

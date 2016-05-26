@@ -37,12 +37,15 @@ public abstract class ComponentCache {
     private final List<ComponentEntry> componentEntries = new ArrayList<>();
 
     @CallSuper
-    public Object onStartClient(@NonNull VisumClient client) {
+    public Object start(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClientOrThrow(client);
         if (entry.component == null) {
             entry.component = entry.componentFactory.call();
         }
-        entry.referenceCount++;
+        if (entry.clients.contains(client)) {
+            throw new IllegalStateException(client + " is already attached");
+        }
+        entry.clients.add(client);
         return entry.component;
     }
 
@@ -82,12 +85,14 @@ public abstract class ComponentCache {
     }
 
     @CallSuper
-    public void onStopClient(@NonNull VisumClient client) {
+    public void stop(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClientOrThrow(client);
-        entry.referenceCount--;
-        if (entry.referenceCount == 0) {
-            entry.component = null;
-        } else if (entry.referenceCount < 0) {
+        List<VisumClient> clients = entry.clients;
+        if (clients.remove(client)) {
+            if (clients.isEmpty()) {
+                entry.component = null;
+            }
+        } else  {
             throw new IllegalStateException(client + " is already detached");
         }
     }
@@ -97,9 +102,9 @@ public abstract class ComponentCache {
         private final List<Class<? extends VisumClient>> clientClasses;
         private final Func0<Object> componentFactory;
 
-        private Object component;
+        private final List<VisumClient> clients = new ArrayList<>();
 
-        private int referenceCount;
+        private Object component;
 
         private ComponentEntry(List<Class<? extends VisumClient>> clientClasses, Func0<Object> componentFactory) {
             this.clientClasses = clientClasses;

@@ -20,6 +20,7 @@
 
 package io.reist.visum.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -70,6 +71,11 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public final void onStopClient() {
         helper.onStopClient();
+    }
+
+    @NonNull
+    public final Context getContext() {
+        return this;
     }
 
     //endregion

@@ -3,6 +3,7 @@ package io.reist.visum.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.view.View;
@@ -78,10 +79,16 @@ public abstract class VisumWidget<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void attachPresenter() {}
+    @CallSuper
+    public void attachPresenter() {
+        helper.attachPresenter();
+    }
 
     @Override
-    public void detachPresenter() {}
+    @CallSuper
+    public void detachPresenter() {
+        helper.detachPresenter();
+    }
 
     //endregion
 
@@ -93,7 +100,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
         super.onAttachedToWindow();
         inflate();
         helper.onStartClient();
-        helper.attachPresenter();
+        attachPresenter();
     }
 
     protected void inflate() {
@@ -103,7 +110,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        helper.detachPresenter();
+        detachPresenter();
         helper.onStopClient();
     }
 

@@ -1,8 +1,9 @@
-package io.reist.visum.presenter;
+package io.reist.visum.view;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.TestClient;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.TestPresenter;
 import io.reist.visum.view.VisumView;
 import io.reist.visum.view.VisumViewHelper;
 
@@ -27,14 +28,12 @@ public abstract class TestView extends TestClient implements VisumView<TestPrese
 
     @Override
     public void attachPresenter() {
-        helper.onStartClient();
         helper.attachPresenter();
     }
 
     @Override
     public void detachPresenter() {
         helper.detachPresenter();
-        helper.onStopClient();
     }
 
 }

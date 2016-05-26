@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumTest;
+import io.reist.visum.view.TestView;
 import rx.functions.Func0;
 
 /**

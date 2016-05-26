@@ -22,6 +22,7 @@ package io.reist.visum.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -84,10 +85,16 @@ public abstract class VisumActivity<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void attachPresenter() {}
+    @CallSuper
+    public void attachPresenter() {
+        helper.attachPresenter();
+    }
 
     @Override
-    public void detachPresenter() {}
+    @CallSuper
+    public void detachPresenter() {
+        helper.detachPresenter();
+    }
 
     //endregion
 
@@ -105,13 +112,14 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onResume() {
         super.onResume();
-        helper.attachPresenter();
+        attachPresenter();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        helper.detachPresenter();
+        detachPresenter();
+
     }
 
     @Override

@@ -19,8 +19,6 @@ public abstract class VisumBaseView<P extends VisumPresenter>
 
     private final VisumViewHelper<P> helper;
 
-    private boolean attachedToPresenter;
-
     /**
      * @deprecated use {@link #VisumBaseView(int, Context)} instead
      */
@@ -41,11 +39,6 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @Override
     @CallSuper
     public void attachPresenter() {
-        if (attachedToPresenter) {
-            Log.d(TAG, "VisumBaseView is already created");
-            return;
-        }
-        attachedToPresenter = true;
         helper.onStartClient();
         helper.attachPresenter();
     }
@@ -53,11 +46,6 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @Override
     @CallSuper
     public void detachPresenter() {
-        if (!attachedToPresenter) {
-            Log.d(TAG, "VisumBaseView is not created");
-            return;
-        }
-        attachedToPresenter = false;
         helper.detachPresenter();
         helper.onStopClient();
     }

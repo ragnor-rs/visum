@@ -38,7 +38,6 @@ public interface VisumClient {
      *
      * @return  local implementation of the {@link ComponentCache} class
      */
-    @NonNull
     ComponentCache getComponentCache();
 
     /**

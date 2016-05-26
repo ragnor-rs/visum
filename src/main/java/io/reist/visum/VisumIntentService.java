@@ -23,6 +23,33 @@ public abstract class VisumIntentService extends IntentService implements VisumC
     }
 
 
+    //region VisumClient implementation
+
+    @Override
+    public final void onStartClient() {
+        helper.onStartClient();
+    }
+
+    @NonNull
+    @Override
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
+    }
+
+    @Override
+    public final void onStopClient() {
+        helper.onStopClient();
+    }
+
+    @NonNull
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    //endregion
+
+
     //region Service implementation
 
     @Override
@@ -39,27 +66,6 @@ public abstract class VisumIntentService extends IntentService implements VisumC
 
     //endregion
 
-
-    @NonNull
-    @Override
-    public final ComponentCache getComponentCache() {
-        return helper.getComponentCache();
-    }
-
-    @Override
-    public final void onStartClient() {
-        helper.onStartClient();
-    }
-
-    @Override
-    public final void onStopClient() {
-        helper.onStopClient();
-    }
-
-    @NonNull
-    public final Context getContext() {
-        return this;
-    }
 
 }
 

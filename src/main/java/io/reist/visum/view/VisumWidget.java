@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -62,7 +61,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         helper.onStartClient();
     }
 
-    @NonNull
     @Override
     public final ComponentCache getComponentCache() {
         return isInEditMode() ? null : helper.getComponentCache();
@@ -79,14 +77,10 @@ public abstract class VisumWidget<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void attachPresenter() {
-        helper.attachPresenter();
-    }
+    public void attachPresenter() {}
 
     @Override
-    public void detachPresenter() {
-        helper.detachPresenter();
-    }
+    public void detachPresenter() {}
 
     //endregion
 
@@ -98,11 +92,13 @@ public abstract class VisumWidget<P extends VisumPresenter>
         super.onAttachedToWindow();
         inflate(getContext(), getLayoutRes(), this);
         helper.onStartClient();
+        attachPresenter();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        detachPresenter();
         helper.onStopClient();
     }
 

@@ -78,14 +78,10 @@ public abstract class VisumActivity<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void attachPresenter() {
-        helper.attachPresenter();
-    }
+    public void attachPresenter() {}
 
     @Override
-    public void detachPresenter() {
-        helper.detachPresenter();
-    }
+    public void detachPresenter() {}
 
     //endregion
 
@@ -95,19 +91,26 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        helper.onStartClient();
         helper.onRestoreInstanceState();
         setContentView(getLayoutRes());
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        helper.onStartClient();
+        helper.attachPresenter();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        helper.detachPresenter();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         helper.onStopClient();
     }
 

@@ -51,7 +51,6 @@ public final class VisumViewHelper<P extends VisumPresenter> implements VisumVie
         }
     }
 
-    @NonNull
     @Override
     public ComponentCache getComponentCache() {
         return helper.getComponentCache();

@@ -14,6 +14,33 @@ public abstract class VisumAndroidService extends Service implements VisumClient
     private final VisumClientHelper helper = new VisumClientHelper<>(this);
 
 
+    //region VisumClient implementation
+
+    @Override
+    public final void onStartClient() {
+        helper.onStartClient();
+    }
+
+    @NonNull
+    @Override
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
+    }
+
+    @Override
+    public final void onStopClient() {
+        helper.onStopClient();
+    }
+
+    @NonNull
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    //endregion
+
+
     //region Service implementation
 
     @Override
@@ -30,26 +57,5 @@ public abstract class VisumAndroidService extends Service implements VisumClient
 
     //endregion
 
-
-    @NonNull
-    @Override
-    public final ComponentCache getComponentCache() {
-        return helper.getComponentCache();
-    }
-
-    @Override
-    public final void onStartClient() {
-        helper.onStartClient();
-    }
-
-    @Override
-    public final void onStopClient() {
-        helper.onStopClient();
-    }
-
-    @NonNull
-    public final Context getContext() {
-        return this;
-    }
 
 }

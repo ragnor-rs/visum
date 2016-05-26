@@ -65,8 +65,10 @@ public abstract class ComponentCache {
 
     private ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
         for (ComponentEntry componentEntry : componentEntries) {
-            if (componentEntry.clientClasses.contains(clazz)) {
-                return componentEntry;
+            for(Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
+                if (clientClass.isAssignableFrom(clazz)) {
+                    return componentEntry;
+                }
             }
         }
         return null;

@@ -16,57 +16,36 @@ import rx.functions.Func0;
 /**
  * Created by Reist on 26.05.16.
  */
-public class ComponentCacheTest {
+public class ComponentCacheTest extends VisumTest<ComponentCacheTest.TestClient> {
 
-    private ComponentCache componentCache;
-
-    private TestClientOne clientOne;
     private TestClientThree clientThree;
     private TestClientTwo clientTwo;
 
-    private ComponentCache.ComponentEntry componentEntry;
-
     @Before
     public void start() {
-
-        componentCache = new ComponentCache();
-
-        Func0<Object> componentFactory = new Func0<Object>() {
-
-            @Override
-            public Object call() {
-                return new TestComponentOne();
-            }
-
-        };
-
-        componentCache.register(
+        start(
                 Arrays.asList(TestClientOne.class, TestClientThree.class),
-                componentFactory
+                new Func0<Object>() {
+
+                    @Override
+                    public Object call() {
+                        return new TestComponentOne();
+                    }
+
+                }
         );
+    }
 
-        clientOne = new TestClientOne();
-        clientTwo = new TestClientTwo();
-        clientThree = new TestClientThree();
-
-        componentEntry = componentCache.findComponentEntryByClient(clientOne);
-
-        Assert.assertNotNull("ComponentEntry has not been created via ComponentCache.register()", componentEntry);
-        Assert.assertTrue(
-                "ComponentEntry client classes don't match the supplied ones via ComponentCache.register()",
-                componentEntry.clientClasses.size() == 2 &&
-                componentEntry.clientClasses.contains(TestClientOne.class) &&
-                componentEntry.clientClasses.contains(TestClientThree.class)
-        );
-        Assert.assertEquals("ComponentEntry factory doesn't match the supplied Func0", componentFactory, componentEntry.componentFactory);
-
-        Assert.assertTrue("No clients should be attached till ComponentCache.start() is called", componentEntry.clients.isEmpty());
-        Assert.assertNull("No components should be created until the very first call of ComponentCache.start()", componentEntry.component);
-
+    protected TestClient createClient() {
+        clientTwo = new TestClientTwo(getComponentCache());
+        clientThree = new TestClientThree(getComponentCache());
+        return new TestClientOne(getComponentCache());
     }
 
     @Test
     public void testFewRegistrations() {
+
+        ComponentCache componentCache = getComponentCache();
 
         componentCache.register(TestClientFour.class, new Func0<Object>() {
 
@@ -77,10 +56,10 @@ public class ComponentCacheTest {
 
         });
 
-        TestClientFour client = new TestClientFour();
+        TestClientFour client = new TestClientFour(getComponentCache());
 
         ComponentCache.ComponentEntry componentEntry = componentCache.findComponentEntryByClient(client);
-        Assert.assertNotEquals("A new entry should have been created for a new registration", this.componentEntry, componentEntry);
+        Assert.assertNotEquals("A new entry should have been created for a new registration", getComponentEntry(), componentEntry);
 
         Object component = componentCache.start(client);
         Assert.assertEquals("Invalid type of the created component", TestComponentTwo.class, component.getClass());
@@ -91,40 +70,38 @@ public class ComponentCacheTest {
     public void testFindComponentOk() {
         Assert.assertEquals(
                 "Can't find a ComponentEntry for the client of a registered type",
-                componentEntry,
-                componentCache.findComponentEntryByClientOrThrow(clientOne)
+                getComponentEntry(),
+                getComponentCache().findComponentEntryByClientOrThrow(getClient())
         );
     }
 
     @Test(expected = IllegalStateException.class)
     public void testFindComponentFail() {
-        componentCache.findComponentEntryByClientOrThrow(clientTwo);
+        getComponentCache().findComponentEntryByClientOrThrow(clientTwo);
     }
 
     @Test
     public void testStartAndStop() {
 
-        Object component = componentCache.start(clientOne);
-        Assert.assertTrue(
-                "Only one client should be registered here",
-                componentEntry.clients.size() == 1 && componentEntry.clients.contains(clientOne)
-        );
-        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
+        TestClient client = getClient();
+        ComponentCache componentCache = getComponentCache();
+
+        Object component = componentCache.start(client);
+        checkClientStarted();
 
         try {
-            componentCache.start(clientOne);
+            componentCache.start(client);
             Assertions.shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
         Assert.assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
-        Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, componentEntry.component);
+        Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
 
-        componentCache.stop(clientOne);
-        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
-        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
+        componentCache.stop(client);
+        checkClientStopped();
 
         try {
-            componentCache.stop(clientOne);
+            componentCache.stop(client);
             Assertions.shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
@@ -133,7 +110,10 @@ public class ComponentCacheTest {
     @Test
     public void testTwoClients() {
 
-        Object component1 = componentCache.start(clientOne);
+        TestClient client = getClient();
+        ComponentCache componentCache = getComponentCache();
+
+        Object component1 = componentCache.start(client);
         Assert.assertNotNull("No component is returned for a client of a registered type", component1);
 
         Object component3 = componentCache.start(clientThree);
@@ -143,28 +123,31 @@ public class ComponentCacheTest {
                 component3
         );
 
-        componentCache.stop(clientOne);
-        Assert.assertNotNull("The component is still in use", componentEntry.component);
+        componentCache.stop(client);
+        Assert.assertNotNull("The component is still in use", getComponentEntry().component);
 
         componentCache.stop(clientThree);
-        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
+        Assert.assertNull("ComponentCache should have removed the unused component", getComponentEntry().component);
 
     }
 
     @After
     public void finish() {
 
-        componentCache = null;
+        stop();
 
-        clientOne = null;
         clientTwo = null;
         clientThree = null;
 
-        componentEntry = null;
-
     }
 
-    private abstract class TestClient implements VisumClient {
+    public abstract static class TestClient implements VisumClient {
+
+        private final ComponentCache componentCache;
+
+        protected TestClient(ComponentCache componentCache) {
+            this.componentCache = componentCache;
+        }
 
         @Override
         public ComponentCache getComponentCache() {
@@ -172,10 +155,14 @@ public class ComponentCacheTest {
         }
 
         @Override
-        public void onStartClient() {}
+        public void onStartClient() {
+            componentCache.start(this);
+        }
 
         @Override
-        public void onStopClient() {}
+        public void onStopClient() {
+            componentCache.stop(this);
+        }
 
         @Override
         public void inject(@NonNull Object from) {}
@@ -189,13 +176,29 @@ public class ComponentCacheTest {
 
     }
 
-    private class TestClientOne extends TestClient {}
+    private static class TestClientOne extends TestClient {
+        private TestClientOne(ComponentCache componentCache) {
+            super(componentCache);
+        }
+    }
 
-    private class TestClientTwo extends TestClient {}
+    private static class TestClientTwo extends TestClient {
+        private TestClientTwo(ComponentCache componentCache) {
+            super(componentCache);
+        }
+    }
 
-    private class TestClientThree extends TestClient {}
+    private static class TestClientThree extends TestClient {
+        private TestClientThree(ComponentCache componentCache) {
+            super(componentCache);
+        }
+    }
 
-    private class TestClientFour extends TestClient {}
+    private static class TestClientFour extends TestClient {
+        private TestClientFour(ComponentCache componentCache) {
+            super(componentCache);
+        }
+    }
 
     private static class TestComponentOne {}
 

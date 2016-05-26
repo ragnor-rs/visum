@@ -1,9 +1,6 @@
 package io.reist.visum;
 
-import android.support.annotation.NonNull;
-
-import org.mockito.Mockito;
-import org.robolectric.RuntimeEnvironment;
+import org.junit.Assert;
 
 import java.util.List;
 
@@ -12,36 +9,77 @@ import rx.functions.Func0;
 /**
  * Created by Reist on 26.05.16.
  */
-public abstract class VisumTest<C> {
+public abstract class VisumTest<C extends VisumClient> {
 
-    protected C testComponent;
+    public ComponentCache getComponentCache() {
+        return componentCache;
+    }
 
-    private final Class<? extends C> componentClass;
+    public ComponentCache.ComponentEntry getComponentEntry() {
+        return componentEntry;
+    }
 
-    private final Func0<Object> componentFactory = new Func0<Object>() {
+    public C getClient() {
+        return client;
+    }
 
-        @Override
-        public C call() {
-            return testComponent = Mockito.mock(componentClass);
+    private ComponentCache componentCache;
+
+    private ComponentCache.ComponentEntry componentEntry;
+
+    private C client;
+
+    protected void start(List<Class<? extends C>> clientClasses, Func0<Object> componentFactory) {
+
+        componentCache = new ComponentCache();
+        componentCache.register(clientClasses, componentFactory);
+        client = createClient();
+        componentEntry = componentCache.findComponentEntryByClient(client);
+
+        Assert.assertNotNull("ComponentEntry has not been created via ComponentCache.register()", componentEntry);
+        Assert.assertTrue("ComponentEntry client classes don't match the supplied ones via ComponentCache.register()", checkClientClasses(clientClasses));
+        Assert.assertEquals("ComponentEntry factory doesn't match the supplied Func0", componentFactory, componentEntry.componentFactory);
+
+        Assert.assertTrue("No clients should be attached till ComponentCache.start() is called", componentEntry.clients.isEmpty());
+        Assert.assertNull("No components should be created until the very first call of ComponentCache.start()", componentEntry.component);
+
+    }
+
+    protected void stop() {
+        componentCache = null;
+        client = null;
+        componentEntry = null;
+    }
+
+    private boolean checkClientClasses(List<Class<? extends C>> clientClasses) {
+
+        if (clientClasses.size() != componentEntry.clientClasses.size()) {
+            return false;
         }
 
-    };
+        for (Class<? extends C> clientClass : clientClasses) {
+            if (!componentEntry.clientClasses.contains(clientClass)) {
+                return false;
+            }
+        }
 
-    protected VisumTest(Class<? extends C> componentClass) {
-        this.componentClass = componentClass;
+        return true;
+
     }
 
-    @NonNull
-    protected ComponentCache getComponentCache() {
-        return ((TestApplication) RuntimeEnvironment.application).getComponentCache();
+    protected abstract C createClient();
+
+    protected void checkClientStopped() {
+        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
+        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
     }
 
-    protected void register(@NonNull List<? extends Class<? extends VisumClient>> clientClasses) {
-        getComponentCache().register(clientClasses, componentFactory);
-    }
-
-    protected void register(@NonNull Class<? extends VisumClient> clientClass) {
-        getComponentCache().register(clientClass, componentFactory);
+    protected void checkClientStarted() {
+        Assert.assertTrue(
+                "Only one client should be registered here",
+                componentEntry.clients.size() == 1 && componentEntry.clients.contains(client)
+        );
+        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
     }
 
 }

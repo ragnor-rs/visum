@@ -323,4 +323,8 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
     }
 
+    protected int getViewCount() {
+        return viewHolders.size();
+    }
+
 }

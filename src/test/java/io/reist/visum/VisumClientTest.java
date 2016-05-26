@@ -28,7 +28,7 @@ import java.util.Arrays;
         sdk = {Build.VERSION_CODES.JELLY_BEAN},
         application = TestApplication.class
 )
-public class VisumClientTest extends VisumTest<VisumClientTest.TestComponent> {
+public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {
 
     private TestVisumBaseClient testVisumBaseClient;
     private TestVisumAndroidService testVisumAndroidService;

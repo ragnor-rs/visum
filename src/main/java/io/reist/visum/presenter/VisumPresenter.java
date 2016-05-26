@@ -22,7 +22,6 @@ package io.reist.visum.presenter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +58,6 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     @Deprecated
     public static final int VIEW_ID_DEFAULT = 0;
-
-    @NonNull
-    public static String toString(Object o) {
-        return o == null ? "null" : (o.getClass().getSimpleName() + "@" + o.hashCode());
-    }
 
     private static class ViewHolder<V> {
 
@@ -107,8 +101,6 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @param view      a MVP view; use null to stop the view with the given id
      */
     public final void setView(int id, @Nullable V view) {
-
-        Log.d(TAG, "setView(" + id + ", " + toString(view) + ")");
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 

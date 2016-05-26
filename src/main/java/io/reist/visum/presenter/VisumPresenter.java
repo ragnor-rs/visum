@@ -99,7 +99,9 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @param id        an id used by the presenter to distinguish the view from the others
      * @param view      a MVP view; use null to stop the view with the given id
      */
-    public final void setView(int id, @Nullable V view) {
+    public final boolean setView(int id, @Nullable V view) {
+
+        boolean didChange = false;
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 
@@ -110,34 +112,32 @@ public abstract class VisumPresenter<V extends VisumView> {
             onViewDetached(id, viewHolder.view);
             viewHolders.remove(viewHolder);
 
-            if (viewHolders.isEmpty()) {
-                onStop();
-            }
+            didChange = true;
 
         }
 
         if (view != null) {
 
-            if (viewHolders.isEmpty()) {
-                onStart();
-            }
-
             // start the given view
             viewHolders.add(new ViewHolder<>(id, view));
             onViewAttached(id, view);
 
+            didChange = true;
+
         }
+
+        return didChange;
 
     }
 
     @CallSuper
-    protected void onStop() {
+    public void onStop() {
         subscriptions.unsubscribe();
         subscriptions = null;
     }
 
     @CallSuper
-    protected void onStart() {
+    public void onStart() {
         subscriptions = new CompositeSubscription();
     }
 
@@ -328,7 +328,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
     }
 
-    protected int getViewCount() {
+    public int getViewCount() {
         return viewHolders.size();
     }
 

@@ -15,13 +15,13 @@ public class TestPresenter extends VisumPresenter<VisumView> {
     private final TestPresenter dummy = Mockito.mock(TestPresenter.class);
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         dummy.onStop();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         dummy.onStart();
     }
@@ -46,10 +46,10 @@ public class TestPresenter extends VisumPresenter<VisumView> {
 
     protected void checkPresenterAttached(int viewId, VisumView<TestPresenter> view) {
         InOrder inOrder = Mockito.inOrder(dummy);
+        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
         if (getViewCount() == 1) {
             inOrder.verify(dummy, Mockito.times(1)).onStart();
         }
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
     }
 
 }

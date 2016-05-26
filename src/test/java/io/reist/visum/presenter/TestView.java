@@ -2,7 +2,9 @@ package io.reist.visum.presenter;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.TestClient;
+import io.reist.visum.VisumClientHelper;
 import io.reist.visum.view.VisumView;
+import io.reist.visum.view.VisumViewHelper;
 
 /**
  * Created by Reist on 26.05.16.
@@ -10,12 +12,12 @@ import io.reist.visum.view.VisumView;
 public abstract class TestView extends TestClient implements VisumView<TestPresenter> {
 
     private final TestPresenter presenter;
-    private final int viewId;
+    private final VisumViewHelper<TestPresenter> helper;
 
     protected TestView(ComponentCache componentCache, TestPresenter presenter, int viewId) {
         super(componentCache);
         this.presenter = presenter;
-        this.viewId = viewId;
+        helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
     @Override
@@ -25,14 +27,14 @@ public abstract class TestView extends TestClient implements VisumView<TestPrese
 
     @Override
     public void attachPresenter() {
-        onStartClient();
-        presenter.setView(viewId, this);
+        helper.onStartClient();
+        helper.attachPresenter();
     }
 
     @Override
     public void detachPresenter() {
-        presenter.setView(viewId, null);
-        onStopClient();
+        helper.detachPresenter();
+        helper.onStopClient();
     }
 
 }

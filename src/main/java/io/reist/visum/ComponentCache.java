@@ -33,7 +33,7 @@ import rx.functions.Func0;
  * ComponentCache provides custom scopes for your components.
  * In other words, this is a scope manager for your clients.
  */
-public abstract class ComponentCache {
+public class ComponentCache {
 
     private final List<ComponentEntry> componentEntries = new ArrayList<>();
 
@@ -50,12 +50,12 @@ public abstract class ComponentCache {
         return entry.component;
     }
 
-    private ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
+    protected final ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
         return findComponentEntryByClientClass(client.getClass());
     }
 
     @NonNull
-    private ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
+    protected final ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClient(client);
         if (entry == null) {
             throw new IllegalStateException(client + " is not registered");
@@ -63,7 +63,7 @@ public abstract class ComponentCache {
         return entry;
     }
 
-    private ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
+    protected final ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
         for (ComponentEntry componentEntry : componentEntries) {
             for(Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
                 if (clientClass.isAssignableFrom(clazz)) {
@@ -109,14 +109,14 @@ public abstract class ComponentCache {
         }
     }
 
-    private static class ComponentEntry {
+    static class ComponentEntry {
 
-        private final List<? extends Class<? extends VisumClient>> clientClasses;
-        private final Func0<Object> componentFactory;
+        final List<? extends Class<? extends VisumClient>> clientClasses;
+        final Func0<Object> componentFactory;
 
-        private final List<VisumClient> clients = new ArrayList<>();
+        final List<VisumClient> clients = new ArrayList<>();
 
-        private Object component;
+        Object component;
 
         private ComponentEntry(List<? extends Class<? extends VisumClient>> clientClasses, Func0<Object> componentFactory) {
             this.clientClasses = clientClasses;

@@ -38,11 +38,13 @@ public final class VisumViewHelper<P extends VisumPresenter> implements VisumVie
         if (presenter != null) {
             presenter.setView(viewId, view);
         }
+        view.attachPresenter();
     }
 
     @SuppressWarnings("unchecked") // todo setView should be checked call
     public void detachPresenter() {
         VisumView<P> view = helper.getClient();
+        view.detachPresenter();
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
             presenter.setView(viewId, null);

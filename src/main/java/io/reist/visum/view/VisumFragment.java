@@ -83,14 +83,10 @@ public abstract class VisumFragment<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
-    public void attachPresenter() {
-        helper.attachPresenter();
-    }
+    public void attachPresenter() {}
 
     @Override
-    public void detachPresenter() {
-        helper.detachPresenter();
-    }
+    public void detachPresenter() {}
 
     //endregion
 
@@ -100,6 +96,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        helper.onStartClient();
         helper.onRestoreInstanceState();
     }
 
@@ -112,7 +109,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        helper.onStartClient();
+        helper.attachPresenter();
     }
 
     @Override
@@ -133,6 +130,12 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        helper.detachPresenter();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         helper.onStopClient();
     }
 

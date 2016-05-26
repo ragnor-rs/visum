@@ -45,9 +45,9 @@ public abstract class VisumBaseView<P extends VisumPresenter>
             Log.d(TAG, "VisumBaseView is already created");
             return;
         }
+        attachedToPresenter = true;
         helper.onStartClient();
         helper.attachPresenter();
-        attachedToPresenter = true;
     }
 
     @Override
@@ -57,9 +57,9 @@ public abstract class VisumBaseView<P extends VisumPresenter>
             Log.d(TAG, "VisumBaseView is not created");
             return;
         }
+        attachedToPresenter = false;
         helper.detachPresenter();
         helper.onStopClient();
-        attachedToPresenter = false;
     }
 
     //endregion

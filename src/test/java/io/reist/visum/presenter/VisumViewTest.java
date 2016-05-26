@@ -146,7 +146,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         V newTestView = (V) testActivity
                 .getSupportFragmentManager()
                 .findFragmentById(TestActivity.CONTAINER_ID);
-        checkViewRecreated(testView, newTestView);
+        checkConfigChange(testView, newTestView);
         testView = newTestView;
 
         // destroy
@@ -168,7 +168,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         // config change
         activityController = simulateConfigChange(activityController, activityClass);
         V newTestView = activityController.get();
-        checkViewRecreated(testView, newTestView);
+        checkConfigChange(testView, newTestView);
         testView = newTestView;
 
         // destroy
@@ -203,10 +203,12 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    private <V extends VisumView<TestPresenter>> void checkViewRecreated(V oldTestView, V newTestView) {
+    private <V extends VisumView<TestPresenter>> void checkConfigChange(V oldTestView, V newTestView) {
         Assert.assertFalse("View has not been recreated", newTestView == oldTestView);
         testPresenter.checkPresenterDetached(VIEW_ID, oldTestView);
         testPresenter.checkPresenterAttached(VIEW_ID, newTestView);
+        Assert.assertNotNull("No presenter is attached to the former instance of the view", oldTestView.getPresenter());
+        Assert.assertTrue("Presenter didn't survive", oldTestView.getPresenter() == newTestView.getPresenter());
     }
 
     @Override

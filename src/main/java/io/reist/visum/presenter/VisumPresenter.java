@@ -20,6 +20,7 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -111,8 +112,6 @@ public abstract class VisumPresenter<V extends VisumView> {
 
             if (viewHolders.isEmpty()) {
                 onStop();
-                subscriptions.unsubscribe();
-                subscriptions = null;
             }
 
         }
@@ -120,7 +119,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         if (view != null) {
 
             if (viewHolders.isEmpty()) {
-                subscriptions = new CompositeSubscription();
                 onStart();
             }
 
@@ -132,9 +130,16 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     }
 
-    protected void onStop() {}
+    @CallSuper
+    protected void onStop() {
+        subscriptions.unsubscribe();
+        subscriptions = null;
+    }
 
-    protected void onStart() {}
+    @CallSuper
+    protected void onStart() {
+        subscriptions = new CompositeSubscription();
+    }
 
     @NonNull
     private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {

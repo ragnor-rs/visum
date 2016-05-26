@@ -16,11 +16,13 @@ public class TestPresenter extends VisumPresenter<VisumView> {
 
     @Override
     protected void onStop() {
+        super.onStop();
         dummy.onStop();
     }
 
     @Override
     protected void onStart() {
+        super.onStart();
         dummy.onStart();
     }
 

@@ -34,25 +34,33 @@ public class VisumViewTest extends VisumTest<VisumViewTest.TestComponent> {
 
     private TestPresenter testPresenter;
 
+    private TestVisumBaseView testVisumBaseView;
+
     public VisumViewTest() {
         super(VisumViewTest.TestComponent.class);
     }
 
     @Before
     public void setUp() throws Exception {
+
         register(TestVisumBaseView.class);
         testPresenter = new TestPresenter();
+
+        testVisumBaseView = new TestVisumBaseView(VIEW_ID, RuntimeEnvironment.application);
+
     }
 
     @After
     public void tearDown() throws Exception {
+
+        testVisumBaseView = null;
+
         testPresenter = null;
+
     }
 
     @Test
-    public void visumPresenter() {
-
-        TestVisumBaseView testVisumBaseView = new TestVisumBaseView(VIEW_ID, RuntimeEnvironment.application);
+    public void visumBaseView() {
 
         testVisumBaseView.attachPresenter();
         checkPresenterAttached(testVisumBaseView);
@@ -60,6 +68,31 @@ public class VisumViewTest extends VisumTest<VisumViewTest.TestComponent> {
         testVisumBaseView.detachPresenter();
         checkPresenterDetached(testVisumBaseView);
 
+    }
+
+    @Test
+    public void visumAccountAuthenticatorActivity() {
+        // TODO
+    }
+
+    @Test
+    public void visumActivity() {
+        // TODO
+    }
+
+    @Test
+    public void visumDialogFragment() {
+        // TODO
+    }
+
+    @Test
+    public void visumFragment() {
+        // TODO
+    }
+
+    @Test
+    public void visumWidget() {
+        // TODO
     }
 
     private void checkPresenterDetached(TestVisumBaseView testVisumBaseView) {

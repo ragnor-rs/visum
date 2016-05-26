@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.Arrays;
 
@@ -17,10 +16,7 @@ import rx.functions.Func0;
 /**
  * Created by Reist on 26.05.16.
  */
-public class ComponentCacheTest {
-
-    private ComponentCache componentCache;
-    private Context context;
+public class ComponentCacheTest extends VisumTestCase {
 
     private TestClientOne clientOne;
     private TestClientThree clientThree;
@@ -29,25 +25,28 @@ public class ComponentCacheTest {
     private ComponentCache.ComponentEntry componentEntry;
 
     @Before
+    @Override
     public void start() {
+
+        super.start();
 
         Func0<Object> componentFactory = new Func0<Object>() {
 
             @Override
             public Object call() {
-                return new TestComponent();
+                return new TestComponentOne();
             }
 
         };
 
-        componentCache = new ComponentCache();
-        componentCache.register(Arrays.asList(TestClientOne.class, TestClientThree.class), componentFactory);
+        componentCache.register(
+                Arrays.asList(TestClientOne.class, TestClientThree.class),
+                componentFactory
+        );
 
-        context = Mockito.mock(Context.class);
-
-        clientOne = new TestClientOne(context);
-        clientTwo = new TestClientTwo(context);
-        clientThree = new TestClientThree(context);
+        clientOne = new TestClientOne();
+        clientTwo = new TestClientTwo();
+        clientThree = new TestClientThree();
 
         componentEntry = componentCache.findComponentEntryByClient(clientOne);
 
@@ -62,6 +61,28 @@ public class ComponentCacheTest {
 
         Assert.assertTrue("No clients should be attached till ComponentCache.start() is called", componentEntry.clients.isEmpty());
         Assert.assertNull("No components should be created until the very first call of ComponentCache.start()", componentEntry.component);
+
+    }
+
+    @Test
+    public void testFewRegistrations() {
+
+        componentCache.register(TestClientFour.class, new Func0<Object>() {
+
+            @Override
+            public Object call() {
+                return new TestComponentTwo();
+            }
+
+        });
+
+        TestClientFour client = new TestClientFour();
+
+        ComponentCache.ComponentEntry componentEntry = componentCache.findComponentEntryByClient(client);
+        Assert.assertNotEquals("A new entry should have been created for a new registration", this.componentEntry, componentEntry);
+
+        Object component = componentCache.start(client);
+        Assert.assertEquals("Invalid type of the created component", TestComponentTwo.class, component.getClass());
 
     }
 
@@ -94,11 +115,11 @@ public class ComponentCacheTest {
             Assertions.shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
-        Assert.assertTrue("Invalid type of the created component", component instanceof TestComponent);
+        Assert.assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
         Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, componentEntry.component);
 
         componentCache.stop(clientOne);
-        Assert.assertTrue("Requested client stop but there are some attached clients", componentEntry.clients.isEmpty());
+        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
         Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
 
         try {
@@ -107,7 +128,6 @@ public class ComponentCacheTest {
         } catch (IllegalStateException ignored) {}
 
     }
-
 
     @Test
     public void testTwoClients() {
@@ -131,11 +151,10 @@ public class ComponentCacheTest {
     }
 
     @After
+    @Override
     public void finish() {
 
-        componentCache = null;
-
-        context = null;
+        super.finish();
 
         clientOne = null;
         clientTwo = null;
@@ -145,53 +164,41 @@ public class ComponentCacheTest {
 
     }
 
-    private static class TestClientOne extends VisumBaseClient {
+    private abstract class TestClient implements VisumClient {
 
-        public TestClientOne(@NonNull Context context) {
-            super(context);
+        @Override
+        public ComponentCache getComponentCache() {
+            return componentCache;
         }
 
         @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
-        }
-
-    }
-
-    private static class TestClientTwo extends VisumBaseClient {
-
-        public TestClientTwo(@NonNull Context context) {
-            super(context);
-        }
+        public void onStartClient() {}
 
         @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
-        }
-
-    }
-
-    private static class TestClientThree extends VisumBaseClient {
-
-        public TestClientThree(@NonNull Context context) {
-            super(context);
-        }
+        public void onStopClient() {}
 
         @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+        public void inject(@NonNull Object from) {}
+
+        @SuppressWarnings("ConstantConditions")
+        @NonNull
+        @Override
+        public Context getContext() {
+            return null;
         }
 
     }
 
-    private static class TestComponent {
+    private class TestClientOne extends TestClient {}
 
-        public void inject(TestClientOne client) {}
+    private class TestClientTwo extends TestClient {}
 
-        public void inject(TestClientTwo client) {}
+    private class TestClientThree extends TestClient {}
 
-        public void inject(TestClientThree client) {}
+    private class TestClientFour extends TestClient {}
 
-    }
+    private static class TestComponentOne {}
+
+    private static class TestComponentTwo {}
 
 }

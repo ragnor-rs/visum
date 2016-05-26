@@ -46,6 +46,10 @@ android {
         disable 'InvalidPackage'
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
 }
 
 def supportVersion = '23.4.0'

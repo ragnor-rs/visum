@@ -28,19 +28,19 @@ import io.reist.visum.view.VisumBaseView;
         sdk = {Build.VERSION_CODES.JELLY_BEAN},
         application = TestApplication.class
 )
-public class VisumPresenterTest extends VisumTest<VisumPresenterTest.TestComponent> {
+public class VisumViewTest extends VisumTest<VisumViewTest.TestComponent> {
 
     private static final int VIEW_ID = 1;
 
     private TestPresenter testPresenter;
 
-    public VisumPresenterTest() {
-        super(VisumPresenterTest.TestComponent.class);
+    public VisumViewTest() {
+        super(VisumViewTest.TestComponent.class);
     }
 
     @Before
     public void setUp() throws Exception {
-        register(TestView.class);
+        register(TestVisumBaseView.class);
         testPresenter = new TestPresenter();
     }
 
@@ -52,30 +52,30 @@ public class VisumPresenterTest extends VisumTest<VisumPresenterTest.TestCompone
     @Test
     public void visumPresenter() {
 
-        TestView testView = new TestView(VIEW_ID, RuntimeEnvironment.application);
+        TestVisumBaseView testVisumBaseView = new TestVisumBaseView(VIEW_ID, RuntimeEnvironment.application);
 
-        testView.attachPresenter();
-        checkPresenterAttached(testView);
+        testVisumBaseView.attachPresenter();
+        checkPresenterAttached(testVisumBaseView);
 
-        testView.detachPresenter();
-        checkPresenterDetached(testView);
+        testVisumBaseView.detachPresenter();
+        checkPresenterDetached(testVisumBaseView);
 
     }
 
-    private void checkPresenterDetached(TestView testView) {
+    private void checkPresenterDetached(TestVisumBaseView testVisumBaseView) {
         InOrder inOrder = Mockito.inOrder(testPresenter.dummy);
-        inOrder.verify(testPresenter.dummy, Mockito.times(1)).onViewDetached(VIEW_ID, testView);
+        inOrder.verify(testPresenter.dummy, Mockito.times(1)).onViewDetached(VIEW_ID, testVisumBaseView);
         inOrder.verify(testPresenter.dummy, Mockito.times(1)).onStop();
     }
 
-    private void checkPresenterAttached(TestView testView) {
+    private void checkPresenterAttached(TestVisumBaseView testVisumBaseView) {
         InOrder inOrder = Mockito.inOrder(testPresenter.dummy, testComponent);
-        inOrder.verify(testComponent, Mockito.times(1)).inject(testView);
+        inOrder.verify(testComponent, Mockito.times(1)).inject(testVisumBaseView);
         inOrder.verify(testPresenter.dummy, Mockito.times(1)).onStart();
-        inOrder.verify(testPresenter.dummy, Mockito.times(1)).onViewAttached(VIEW_ID, testView);
+        inOrder.verify(testPresenter.dummy, Mockito.times(1)).onViewAttached(VIEW_ID, testVisumBaseView);
     }
 
-    private static class TestPresenter extends VisumPresenter<TestView> {
+    private static class TestPresenter extends VisumPresenter<TestVisumBaseView> {
 
         private final TestPresenter dummy = Mockito.mock(TestPresenter.class);
 
@@ -90,20 +90,20 @@ public class VisumPresenterTest extends VisumTest<VisumPresenterTest.TestCompone
         }
 
         @Override
-        protected void onViewAttached(int id, @NonNull TestView view) {
+        protected void onViewAttached(int id, @NonNull TestVisumBaseView view) {
             dummy.onViewAttached(id, view);
         }
 
         @Override
-        protected void onViewDetached(int id, @NonNull TestView view) {
+        protected void onViewDetached(int id, @NonNull TestVisumBaseView view) {
             dummy.onViewDetached(id, view);
         }
 
     }
 
-    private class TestView extends VisumBaseView<TestPresenter> {
+    private class TestVisumBaseView extends VisumBaseView<TestPresenter> {
 
-        public TestView(int viewId, Context context) {
+        public TestVisumBaseView(int viewId, Context context) {
             super(viewId, context);
         }
 
@@ -120,7 +120,7 @@ public class VisumPresenterTest extends VisumTest<VisumPresenterTest.TestCompone
     }
 
     protected interface TestComponent {
-        void inject(TestView testView);
+        void inject(TestVisumBaseView testVisumBaseView);
     }
 
 }

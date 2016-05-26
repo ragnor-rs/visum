@@ -16,7 +16,9 @@ import rx.functions.Func0;
 /**
  * Created by Reist on 26.05.16.
  */
-public class ComponentCacheTest extends VisumTestCase {
+public class ComponentCacheTest {
+
+    private ComponentCache componentCache;
 
     private TestClientOne clientOne;
     private TestClientThree clientThree;
@@ -25,10 +27,9 @@ public class ComponentCacheTest extends VisumTestCase {
     private ComponentCache.ComponentEntry componentEntry;
 
     @Before
-    @Override
     public void start() {
 
-        super.start();
+        componentCache = new ComponentCache();
 
         Func0<Object> componentFactory = new Func0<Object>() {
 
@@ -151,10 +152,9 @@ public class ComponentCacheTest extends VisumTestCase {
     }
 
     @After
-    @Override
     public void finish() {
 
-        super.finish();
+        componentCache = null;
 
         clientOne = null;
         clientTwo = null;

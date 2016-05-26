@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
@@ -90,15 +91,19 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        inflate(getContext(), getLayoutRes(), this);
+        inflate();
         helper.onStartClient();
-        attachPresenter();
+        helper.attachPresenter();
+    }
+
+    protected void inflate() {
+        inflate(getContext(), getLayoutRes(), this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        detachPresenter();
+        helper.detachPresenter();
         helper.onStopClient();
     }
 

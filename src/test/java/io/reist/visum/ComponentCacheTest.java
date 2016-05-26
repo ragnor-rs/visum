@@ -1,8 +1,5 @@
 package io.reist.visum;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Assert;
@@ -16,7 +13,7 @@ import rx.functions.Func0;
 /**
  * Created by Reist on 26.05.16.
  */
-public class ComponentCacheTest extends VisumTest<ComponentCacheTest.TestClient> {
+public class ComponentCacheTest extends VisumTest<TestClient> {
 
     private TestClientThree clientThree;
     private TestClientTwo clientTwo;
@@ -138,41 +135,6 @@ public class ComponentCacheTest extends VisumTest<ComponentCacheTest.TestClient>
 
         clientTwo = null;
         clientThree = null;
-
-    }
-
-    public abstract static class TestClient implements VisumClient {
-
-        private final ComponentCache componentCache;
-
-        protected TestClient(ComponentCache componentCache) {
-            this.componentCache = componentCache;
-        }
-
-        @Override
-        public ComponentCache getComponentCache() {
-            return componentCache;
-        }
-
-        @Override
-        public void onStartClient() {
-            componentCache.start(this);
-        }
-
-        @Override
-        public void onStopClient() {
-            componentCache.stop(this);
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {}
-
-        @SuppressWarnings("ConstantConditions")
-        @NonNull
-        @Override
-        public Context getContext() {
-            return null;
-        }
 
     }
 

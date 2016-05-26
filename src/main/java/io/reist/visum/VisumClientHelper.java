@@ -48,4 +48,8 @@ public final class VisumClientHelper<C extends VisumClient> implements VisumClie
         return client.getContext();
     }
 
+    public void onRestartClient() {
+       client.inject(client.getComponentCache().findComponentEntryByClientOrThrow(client).component);
+    }
+
 }

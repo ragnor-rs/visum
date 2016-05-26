@@ -58,7 +58,11 @@ public final class VisumViewHelper<P extends VisumPresenter> implements VisumVie
 
     @Override
     public void onStartClient() {
-        helper.onStartClient();
+        if (!stateSaved) {
+            helper.onStartClient();
+        } else {
+            helper.onRestartClient();
+        }
     }
 
     @Override

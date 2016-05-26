@@ -2,6 +2,7 @@ package io.reist.visum;
 
 import android.support.annotation.NonNull;
 
+import org.junit.Assert;
 import org.mockito.Mockito;
 import org.robolectric.RuntimeEnvironment;
 
@@ -14,7 +15,7 @@ import rx.functions.Func0;
  */
 public abstract class VisumImplTest<C> {
 
-    protected C testComponent;
+    private C component;
 
     private final Class<? extends C> componentClass;
 
@@ -22,10 +23,14 @@ public abstract class VisumImplTest<C> {
 
         @Override
         public C call() {
-            return testComponent = Mockito.mock(componentClass);
+            return component = mock();
         }
 
     };
+
+    protected C mock() {
+        return Mockito.mock(componentClass);
+    }
 
     protected VisumImplTest(Class<? extends C> componentClass) {
         this.componentClass = componentClass;
@@ -40,8 +45,20 @@ public abstract class VisumImplTest<C> {
         getComponentCache().register(clientClasses, componentFactory);
     }
 
-    protected void register(@NonNull Class<? extends VisumClient> clientClass) {
-        getComponentCache().register(clientClass, componentFactory);
+    protected void checkClientDetached(VisumClient client) {
+        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
+        Assert.assertFalse("Requested client stop but there are still some clients attached", componentEntry.clients.contains(client));
+        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
+    }
+
+    protected void checkClientAttached(VisumClient client) {
+        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
+        Assert.assertTrue( "Only one client should be registered here", componentEntry.clients.contains(client));
+        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
+    }
+
+    public C getComponent() {
+        return component;
     }
 
 }

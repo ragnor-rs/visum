@@ -58,7 +58,7 @@ public class ComponentCache {
     protected final ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClient(client);
         if (entry == null) {
-            throw new IllegalStateException(client + " is not registered");
+            throw new IllegalStateException(client.getClass() + " is not registered");
         }
         return entry;
     }

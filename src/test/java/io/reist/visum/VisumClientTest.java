@@ -7,9 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -30,84 +29,58 @@ import java.util.Arrays;
 )
 public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {
 
-    private TestVisumBaseClient testVisumBaseClient;
-    private TestVisumAndroidService testVisumAndroidService;
-    private TestVisumIntentService testVisumIntentService;
-
     public VisumClientTest() {
         super(VisumClientTest.TestComponent.class);
-    }
-
-    @Before
-    public void start() {
-
-        register(Arrays.asList(TestVisumBaseClient.class, TestVisumAndroidService.class, TestVisumIntentService.class));
-
-        testVisumBaseClient = new TestVisumBaseClient(RuntimeEnvironment.application);
-        testVisumAndroidService = new TestVisumAndroidService();
-        testVisumIntentService = new TestVisumIntentService();
-
+        register(Arrays.asList(
+                TestVisumBaseClient.class,
+                TestVisumAndroidService.class,
+                TestVisumIntentService.class
+        ));
     }
 
     @Test
     public void visumBaseClient() {
 
-        testVisumBaseClient.onStartClient();
-        checkClientStart(testVisumBaseClient);
+        TestVisumBaseClient testClient = new TestVisumBaseClient(RuntimeEnvironment.application);
 
-        Mockito.verify(testComponent, Mockito.times(1)).inject(testVisumBaseClient);
+        testClient.onStartClient();
+        checkClientAttached(testClient);
 
-        testVisumBaseClient.onStopClient();
-        checkClientStop(testVisumBaseClient);
+        Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
+
+        testClient.onStopClient();
+        checkClientDetached(testClient);
 
     }
 
     @Test
     public void visumAndroidService() {
 
-        testVisumAndroidService.onCreate();
-        checkClientStart(testVisumAndroidService);
+        TestVisumAndroidService testClient = new TestVisumAndroidService();
 
-        Mockito.verify(testComponent, Mockito.times(1)).inject(testVisumAndroidService);
+        testClient.onCreate();
+        checkClientAttached(testClient);
 
-        testVisumAndroidService.onDestroy();
-        checkClientStop(testVisumAndroidService);
+        Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
+
+        testClient.onDestroy();
+        checkClientDetached(testClient);
 
     }
 
     @Test
     public void visumIntentService() {
 
-        testVisumIntentService.onCreate();
-        checkClientStart(testVisumIntentService);
+        TestVisumIntentService testClient = new TestVisumIntentService();
 
-        Mockito.verify(testComponent, Mockito.times(1)).inject(testVisumIntentService);
+        testClient.onCreate();
+        checkClientAttached(testClient);
 
-        testVisumIntentService.onDestroy();
-        checkClientStop(testVisumIntentService);
+        Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
-    }
+        testClient.onDestroy();
+        checkClientDetached(testClient);
 
-    private void checkClientStop(VisumClient client) {
-        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
-        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
-    }
-
-    private void checkClientStart(VisumClient client) {
-        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertTrue(
-                "Only one client should be registered here",
-                componentEntry.clients.size() == 1 && componentEntry.clients.contains(client)
-        );
-        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
-    }
-
-    @After
-    public void finish() {
-        testVisumBaseClient = null;
-        testVisumAndroidService = null;
-        testVisumIntentService = null;
     }
 
     private static class TestVisumBaseClient extends VisumBaseClient {

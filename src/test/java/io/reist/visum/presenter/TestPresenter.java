@@ -1,0 +1,53 @@
+package io.reist.visum.presenter;
+
+import android.support.annotation.NonNull;
+
+import org.mockito.InOrder;
+import org.mockito.Mockito;
+
+import io.reist.visum.view.VisumView;
+
+/**
+ * Created by Reist on 26.05.16.
+ */
+public class TestPresenter extends VisumPresenter<VisumView> {
+
+    private final TestPresenter dummy = Mockito.mock(TestPresenter.class);
+
+    @Override
+    protected void onStop() {
+        dummy.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        dummy.onStart();
+    }
+
+    @Override
+    protected void onViewAttached(int id, @NonNull VisumView view) {
+        dummy.onViewAttached(id, view);
+    }
+
+    @Override
+    protected void onViewDetached(int id, @NonNull VisumView view) {
+        dummy.onViewDetached(id, view);
+    }
+
+    protected void checkPresenterDetached(int viewId, VisumView<TestPresenter> view) {
+        InOrder inOrder = Mockito.inOrder(dummy);
+        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(viewId, view);
+        if (getViewCount() == 0) {
+            inOrder.verify(dummy, Mockito.times(1)).onStop();
+        }
+    }
+
+    protected void checkPresenterAttached(int viewId, VisumView<TestPresenter> view) {
+        InOrder inOrder = Mockito.inOrder(dummy);
+        if (getViewCount() == 1) {
+            inOrder.verify(dummy, Mockito.times(1)).onStart();
+        }
+        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
+    }
+
+}

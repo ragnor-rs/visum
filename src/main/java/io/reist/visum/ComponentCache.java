@@ -24,6 +24,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.functions.Func0;
@@ -49,12 +50,15 @@ public abstract class ComponentCache {
         return entry.component;
     }
 
+    private ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
+        return findComponentEntryByClientClass(client.getClass());
+    }
+
     @NonNull
     private ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
-        Class<? extends VisumClient> clientClass = client.getClass();
-        ComponentEntry entry = findComponentEntryByClientClass(clientClass);
+        ComponentEntry entry = findComponentEntryByClient(client);
         if (entry == null) {
-            throw new IllegalStateException(clientClass.getName() + " is not registered");
+            throw new IllegalStateException(client + " is not registered");
         }
         return entry;
     }
@@ -68,7 +72,8 @@ public abstract class ComponentCache {
         return null;
     }
 
-    protected final void register(@NonNull List<Class<? extends VisumClient>> clientClasses, @NonNull Func0<Object> componentFactory) {
+    @SuppressWarnings("unused")
+    protected final void register(@NonNull List<? extends Class<? extends VisumClient>> clientClasses, @NonNull Func0<Object> componentFactory) {
 
         if (clientClasses.isEmpty()) {
             throw new IllegalArgumentException("No classes specified");
@@ -82,6 +87,11 @@ public abstract class ComponentCache {
 
         componentEntries.add(new ComponentEntry(clientClasses, componentFactory));
 
+    }
+
+    @SuppressWarnings("unused")
+    protected final void register(@NonNull Class<? extends VisumClient> clientClass, @NonNull Func0<Object> componentFactory) {
+        register(Collections.singletonList(clientClass), componentFactory);
     }
 
     @CallSuper
@@ -99,14 +109,14 @@ public abstract class ComponentCache {
 
     private static class ComponentEntry {
 
-        private final List<Class<? extends VisumClient>> clientClasses;
+        private final List<? extends Class<? extends VisumClient>> clientClasses;
         private final Func0<Object> componentFactory;
 
         private final List<VisumClient> clients = new ArrayList<>();
 
         private Object component;
 
-        private ComponentEntry(List<Class<? extends VisumClient>> clientClasses, Func0<Object> componentFactory) {
+        private ComponentEntry(List<? extends Class<? extends VisumClient>> clientClasses, Func0<Object> componentFactory) {
             this.clientClasses = clientClasses;
             this.componentFactory = componentFactory;
         }

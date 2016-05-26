@@ -21,6 +21,7 @@
 package io.reist.visum.view;
 
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -63,18 +64,21 @@ public abstract class VisumFragment<P extends VisumPresenter>
     //region VisumClient implementation
 
     @Override
-    public final void onStartClient() {
+    @CallSuper
+    public void onStartClient() {
         helper.onStartClient();
     }
 
     @NonNull
     @Override
-    public final ComponentCache getComponentCache() {
+    @CallSuper
+    public ComponentCache getComponentCache() {
         return helper.getComponentCache();
     }
 
     @Override
-    public final void onStopClient() {
+    @CallSuper
+    public void onStopClient() {
         helper.onStopClient();
     }
 

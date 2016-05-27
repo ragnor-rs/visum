@@ -7,16 +7,12 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-
-import java.util.Arrays;
 
 /**
  * Created by Reist on 26.05.16.
@@ -31,11 +27,11 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
     public VisumClientTest() {
         super(VisumClientTest.TestComponent.class);
-        register(Arrays.asList(
+        register(
                 TestVisumBaseClient.class,
                 TestVisumAndroidService.class,
                 TestVisumIntentService.class
-        ));
+        );
     }
 
     @Test

@@ -2,8 +2,6 @@ package io.reist.visum;
 
 import org.junit.Assert;
 
-import java.util.List;
-
 import rx.functions.Func0;
 
 /**
@@ -29,10 +27,11 @@ public abstract class VisumTest<C extends VisumClient> {
 
     private C client;
 
-    protected void start(List<Class<? extends C>> clientClasses, Func0<Object> componentFactory) {
+    @SafeVarargs
+    protected final void start(Func0<Object> componentFactory, Class<? extends C>... clientClasses) {
 
         componentCache = new ComponentCache();
-        componentCache.register(clientClasses, componentFactory);
+        componentCache.register(componentFactory, clientClasses);
         client = createClient();
         componentEntry = componentCache.findComponentEntryByClient(client);
 
@@ -51,9 +50,9 @@ public abstract class VisumTest<C extends VisumClient> {
         componentEntry = null;
     }
 
-    private boolean checkClientClasses(List<Class<? extends C>> clientClasses) {
+    private boolean checkClientClasses(Class<? extends C>[] clientClasses) {
 
-        if (clientClasses.size() != componentEntry.clientClasses.size()) {
+        if (clientClasses.length != componentEntry.clientClasses.size()) {
             return false;
         }
 

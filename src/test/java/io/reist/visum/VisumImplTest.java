@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.mockito.Mockito;
 import org.robolectric.RuntimeEnvironment;
 
-import java.util.List;
-
 import rx.functions.Func0;
 
 /**
@@ -41,8 +39,9 @@ public abstract class VisumImplTest<C> {
         return ((TestApplication) RuntimeEnvironment.application).getComponentCache();
     }
 
-    protected void register(@NonNull List<? extends Class<? extends VisumClient>> clientClasses) {
-        getComponentCache().register(clientClasses, componentFactory);
+    @SafeVarargs
+    protected final void register(Class<? extends VisumClient>... clientClasses) {
+        getComponentCache().register(componentFactory, clientClasses);
     }
 
     protected void checkClientDetached(VisumClient client) {

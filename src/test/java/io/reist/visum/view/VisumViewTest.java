@@ -27,8 +27,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
-import java.util.Arrays;
-
 import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
@@ -51,14 +49,14 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     public VisumViewTest() {
         super(VisumViewTest.TestComponent.class);
-        register(Arrays.asList(
+        register(
                 TestVisumBaseView.class,
                 TestVisumFragment.class,
                 TestVisumDialogFragment.class,
                 TestVisumActivity.class,
                 TestVisumAccountAuthenticatorActivity.class,
                 TestVisumWidget.class
-        ));
+        );
     }
 
     @After

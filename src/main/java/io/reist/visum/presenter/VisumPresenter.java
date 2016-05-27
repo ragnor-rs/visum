@@ -304,7 +304,7 @@ public abstract class VisumPresenter<V extends VisumView> {
     }
 
     @SuppressWarnings("unused")
-    public final void forEach(@NonNull Action1<V> action1) {
+    public final void forEachView(@NonNull Action1<V> action1) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             action1.call(viewHolder.view);
         }

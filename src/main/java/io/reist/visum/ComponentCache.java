@@ -24,7 +24,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import rx.functions.Func0;
@@ -80,9 +80,10 @@ public class ComponentCache {
     }
 
     @SuppressWarnings("unused")
-    protected final void register(@NonNull List<? extends Class<? extends VisumClient>> clientClasses, @NonNull Func0<Object> componentFactory) {
+    @SafeVarargs
+    protected final void register(@NonNull Func0<Object> componentFactory, Class<? extends VisumClient>... clientClasses) {
 
-        if (clientClasses.isEmpty()) {
+        if (clientClasses.length == 0) {
             throw new IllegalArgumentException("No classes specified");
         }
 
@@ -92,13 +93,8 @@ public class ComponentCache {
             }
         }
 
-        componentEntries.add(new ComponentEntry(clientClasses, componentFactory));
+        componentEntries.add(new ComponentEntry(Arrays.asList(clientClasses), componentFactory));
 
-    }
-
-    @SuppressWarnings("unused")
-    protected final void register(@NonNull Class<? extends VisumClient> clientClass, @NonNull Func0<Object> componentFactory) {
-        register(Collections.singletonList(clientClass), componentFactory);
     }
 
     @CallSuper

@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import rx.functions.Func0;
 
 /**
@@ -21,7 +19,6 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @Before
     public void start() {
         start(
-                Arrays.asList(TestClientOne.class, TestClientThree.class),
                 new Func0<Object>() {
 
                     @Override
@@ -29,7 +26,8 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
                         return new TestComponentOne();
                     }
 
-                }
+                },
+                TestClientOne.class, TestClientThree.class
         );
     }
 
@@ -44,14 +42,14 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
 
         ComponentCache componentCache = getComponentCache();
 
-        componentCache.register(TestClientFour.class, new Func0<Object>() {
+        componentCache.register(new Func0<Object>() {
 
             @Override
             public Object call() {
                 return new TestComponentTwo();
             }
 
-        });
+        }, TestClientFour.class);
 
         TestClientFour client = new TestClientFour(getComponentCache());
 

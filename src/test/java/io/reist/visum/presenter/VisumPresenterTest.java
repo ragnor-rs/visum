@@ -5,8 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumTest;
 import io.reist.visum.view.TestView;
@@ -31,7 +29,6 @@ public class VisumPresenterTest extends VisumTest<TestView> {
         presenter = new TestPresenter();
 
         start(
-                Arrays.asList(TestViewOne.class, TestViewTwo.class),
                 new Func0<Object>() {
 
                     @Override
@@ -39,7 +36,8 @@ public class VisumPresenterTest extends VisumTest<TestView> {
                         return new TestComponent();
                     }
 
-                }
+                },
+                TestViewOne.class, TestViewTwo.class
         );
 
         viewTwo = new TestViewTwo(getComponentCache(), VIEW_ID_TWO);

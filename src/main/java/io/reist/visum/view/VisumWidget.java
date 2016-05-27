@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
@@ -60,7 +59,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     public final void onStartClient() {
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @Override
@@ -70,7 +69,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     public final void onStopClient() {
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion
@@ -99,7 +98,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         inflate();
-        helper.onStartClient();
+        helper.onCreate();
         attachPresenter();
     }
 
@@ -111,7 +110,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detachPresenter();
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     @Override

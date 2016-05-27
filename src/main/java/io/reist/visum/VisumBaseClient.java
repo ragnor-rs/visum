@@ -29,12 +29,12 @@ public abstract class VisumBaseClient implements VisumClient {
 
     @Override
     public final void onStartClient() {
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @Override
     public final void onStopClient() {
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     @NonNull

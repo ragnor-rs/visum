@@ -62,7 +62,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
 
     @Override
     public final void onStartClient() {
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @NonNull
@@ -73,7 +73,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
 
     @Override
     public final void onStopClient() {
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion
@@ -101,7 +101,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onStartClient();
+        helper.onCreate();
         helper.onRestoreInstanceState();
     }
 
@@ -141,7 +141,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion

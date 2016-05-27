@@ -2,7 +2,6 @@ package io.reist.visum.view;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
-import android.util.Log;
 
 import io.reist.visum.VisumBaseClient;
 import io.reist.visum.VisumClientHelper;
@@ -39,7 +38,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @Override
     @CallSuper
     public void attachPresenter() {
-        helper.onStartClient();
+        helper.onCreate();
         helper.attachPresenter();
     }
 
@@ -47,7 +46,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion

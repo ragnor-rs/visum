@@ -54,6 +54,11 @@ public class ComponentCache {
         return findComponentEntryByClientClass(client.getClass());
     }
 
+    /**
+     * @throws IllegalStateException    thrown if a type of the given client is not registered
+     *                                  via {@link #register(Class, Func0)} or
+     *                                  {@link #register(List, Func0)}
+     */
     @NonNull
     protected final ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
         ComponentEntry entry = findComponentEntryByClient(client);
@@ -109,6 +114,23 @@ public class ComponentCache {
         }
     }
 
+    /**
+     * Represents an entry of registered {@link VisumClient} types. Every entry is a combo of
+     * client classes, client instances, a component which represents dependency injection graph
+     * and a component factory.
+     *
+     * When a client type is registered via {@link #register(List, Func0)} or
+     * {@link #register(Class, Func0)}, a new entry is created. In this entry, {@link #component}
+     * is null and {@link #clients} is empty.
+     *
+     * To take advantage of dependency injection, a {@link VisumClient} may be started via
+     * {@link #start(VisumClient)}. This method assigns a new component to the {@link #component} or
+     * reuses the old one.
+     *
+     * If the client is at the end if its lifecycle, {@link #stop(VisumClient)} should be called to
+     * free resources. The method destroys the component if it's not used by other clients by
+     * de-referencing {@link #component}.
+     */
     static class ComponentEntry {
 
         final List<? extends Class<? extends VisumClient>> clientClasses;

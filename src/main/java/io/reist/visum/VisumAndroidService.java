@@ -18,7 +18,7 @@ public abstract class VisumAndroidService extends Service implements VisumClient
 
     @Override
     public final void onStartClient() {
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @NonNull
@@ -29,7 +29,7 @@ public abstract class VisumAndroidService extends Service implements VisumClient
 
     @Override
     public final void onStopClient() {
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     @NonNull
@@ -46,13 +46,13 @@ public abstract class VisumAndroidService extends Service implements VisumClient
     @Override
     public void onCreate() {
         super.onCreate();
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion

@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
  *
  * Created by Reist on 19.05.16.
  */
-public final class VisumClientHelper<C extends VisumClient> implements VisumClient {
+public final class VisumClientHelper<C extends VisumClient> {
 
     protected final C client;
 
@@ -22,28 +22,19 @@ public final class VisumClientHelper<C extends VisumClient> implements VisumClie
     }
 
     @NonNull
-    @Override
     public ComponentCache getComponentCache() {
         return ((ComponentCacheProvider) client.getContext().getApplicationContext()).getComponentCache();
     }
 
-    @Override
-    public void onStartClient() {
+    public void onCreate() {
         client.inject(client.getComponentCache().start(client));
     }
 
-    @Override
-    public void onStopClient() {
+    public void onDestroy() {
         client.getComponentCache().stop(client);
     }
 
-    @Override
-    public void inject(@NonNull Object from) {
-        client.inject(from);
-    }
-
     @NonNull
-    @Override
     public Context getContext() {
         return client.getContext();
     }

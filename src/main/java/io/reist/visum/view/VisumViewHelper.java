@@ -14,7 +14,7 @@ import io.reist.visum.presenter.VisumPresenter;
  *
  * Created by Reist on 19.05.16.
  */
-public final class VisumViewHelper<P extends VisumPresenter> implements VisumView<P> {
+public final class VisumViewHelper<P extends VisumPresenter> {
 
     private final int viewId;
     private final VisumClientHelper<? extends VisumView<P>> helper;
@@ -26,7 +26,6 @@ public final class VisumViewHelper<P extends VisumPresenter> implements VisumVie
         this.helper = helper;
     }
 
-    @Override
     public P getPresenter() {
         return helper.getClient().getPresenter();
     }
@@ -49,34 +48,25 @@ public final class VisumViewHelper<P extends VisumPresenter> implements VisumVie
         }
     }
 
-    @Override
     public ComponentCache getComponentCache() {
         return helper.getComponentCache();
     }
 
-    @Override
-    public void onStartClient() {
+    public void onCreate() {
         if (!stateSaved) {
-            helper.onStartClient();
+            helper.onCreate();
         } else {
             helper.onRestartClient();
         }
     }
 
-    @Override
-    public void onStopClient() {
+    public void onDestroy() {
         if (!stateSaved) {
-            helper.onStopClient();
+            helper.onDestroy();
         }
     }
 
-    @Override
-    public void inject(@NonNull Object from) {
-        helper.inject(from);
-    }
-
     @NonNull
-    @Override
     public Context getContext() {
         return helper.getContext();
     }

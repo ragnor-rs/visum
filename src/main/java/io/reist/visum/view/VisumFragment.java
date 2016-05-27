@@ -65,7 +65,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     @CallSuper
     public void onStartClient() {
-        helper.onStartClient();
+        helper.onCreate();
     }
 
     @NonNull
@@ -78,7 +78,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     @CallSuper
     public void onStopClient() {
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion
@@ -106,7 +106,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onStartClient();
+        helper.onCreate();
         helper.onRestoreInstanceState();
     }
 
@@ -146,7 +146,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        helper.onStopClient();
+        helper.onDestroy();
     }
 
     //endregion

@@ -20,61 +20,127 @@
 
 package io.reist.visum;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import rx.functions.Func0;
 
 /**
- * ComponentCache let you attach and destroy components manually
- * thereby providing custom scopes for yor view.
- * In other words this is scope manager for your views.
+ * ComponentCache provides custom scopes for your components.
+ * In other words, this is a scope manager for your clients.
  */
-public abstract class ComponentCache {
+public class ComponentCache {
 
-    private final AtomicLong idSequence = new AtomicLong();
+    private final List<ComponentEntry> componentEntries = new ArrayList<>();
 
-    private final Map<Long, Object> componentMap = new HashMap<>();
-
-    /**
-     * Retrieves component from cache for given view or
-     * creates a new component
-     * @param view - VisumView with provides an identifier to retrieve component from cache
-     */
-    public Object getComponentFor(VisumClient view) {
-
-        Long componentId = view.getComponentId();
-
-        if (componentId == null) {
-            componentId = idSequence.incrementAndGet();
-            view.setComponentId(componentId);
+    @CallSuper
+    public Object start(@NonNull VisumClient client) {
+        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
+        if (entry.component == null) {
+            entry.component = entry.componentFactory.call();
         }
-
-        Object component = componentMap.get(componentId);
-
-        if (component == null) {
-            component = buildComponentFor(view.getClass());
-            componentMap.put(componentId, component);
+        if (entry.clients.contains(client)) {
+            throw new IllegalStateException(client + " is already attached");
         }
+        entry.clients.add(client);
+        return entry.component;
+    }
 
-        return component;
-
+    protected final ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
+        return findComponentEntryByClientClass(client.getClass());
     }
 
     /**
-     * Util method for creating new view component, every Component should be registered here
+     * @throws IllegalStateException    thrown if a type of the given client is not registered
+     *                                  via {@link #register(Class, Func0)} or
+     *                                  {@link #register(List, Func0)}
      */
-    protected abstract Object buildComponentFor(Class<? extends VisumClient> viewClass);
+    @NonNull
+    protected final ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
+        ComponentEntry entry = findComponentEntryByClient(client);
+        if (entry == null) {
+            throw new IllegalStateException(client.getClass() + " is not registered");
+        }
+        return entry;
+    }
+
+    protected final ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
+        for (ComponentEntry componentEntry : componentEntries) {
+            for(Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
+                if (clientClass.isAssignableFrom(clazz)) {
+                    return componentEntry;
+                }
+            }
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unused")
+    @SafeVarargs
+    protected final void register(@NonNull Func0<Object> componentFactory, Class<? extends VisumClient>... clientClasses) {
+
+        if (clientClasses.length == 0) {
+            throw new IllegalArgumentException("No classes specified");
+        }
+
+        for (Class<? extends VisumClient> clientClass : clientClasses) {
+            if (findComponentEntryByClientClass(clientClass) != null) {
+                throw new IllegalArgumentException(clientClass.getName() + " is already registered");
+            }
+        }
+
+        componentEntries.add(new ComponentEntry(Arrays.asList(clientClasses), componentFactory));
+
+    }
+
+    @CallSuper
+    public void stop(@NonNull VisumClient client) {
+        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
+        List<VisumClient> clients = entry.clients;
+        if (clients.remove(client)) {
+            if (clients.isEmpty()) {
+                entry.component = null;
+            }
+        } else  {
+            throw new IllegalStateException(client + " is already detached");
+        }
+    }
 
     /**
-     * Destroys component for the given view.
-     * If there's no component for the view nothing will happen.
+     * Represents an entry of registered {@link VisumClient} types. Every entry is a combo of
+     * client classes, client instances, a component which represents dependency injection graph
+     * and a component factory.
+     *
+     * When a client type is registered via {@link #register(List, Func0)} or
+     * {@link #register(Class, Func0)}, a new entry is created. In this entry, {@link #component}
+     * is null and {@link #clients} is empty.
+     *
+     * To take advantage of dependency injection, a {@link VisumClient} may be started via
+     * {@link #start(VisumClient)}. This method assigns a new component to the {@link #component} or
+     * reuses the old one.
+     *
+     * If the client is at the end if its lifecycle, {@link #stop(VisumClient)} should be called to
+     * free resources. The method destroys the component if it's not used by other clients by
+     * de-referencing {@link #component}.
      */
-    public void invalidateComponentFor(VisumClient view) {
-        Long componentId = view.getComponentId();
-        if (componentId == null) {
-            return;
+    static class ComponentEntry {
+
+        final List<? extends Class<? extends VisumClient>> clientClasses;
+        final Func0<Object> componentFactory;
+
+        final List<VisumClient> clients = new ArrayList<>();
+
+        Object component;
+
+        private ComponentEntry(List<? extends Class<? extends VisumClient>> clientClasses, Func0<Object> componentFactory) {
+            this.clientClasses = clientClasses;
+            this.componentFactory = componentFactory;
         }
-        componentMap.remove(componentId);
+
     }
 
 }

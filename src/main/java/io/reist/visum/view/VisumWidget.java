@@ -3,6 +3,7 @@ package io.reist.visum.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
@@ -21,18 +22,18 @@ public abstract class VisumWidget<P extends VisumPresenter>
         extends FrameLayout
         implements VisumView<P> {
 
-    private final VisumViewHelper viewHelper;
+    private final VisumViewHelper<P> helper;
 
     private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
     public VisumWidget(int viewId, Context context) {
         super(context);
-        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.viewHelper = new VisumViewHelper(viewId, new VisumClientHelper(this));
+        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
     /**
@@ -57,28 +58,18 @@ public abstract class VisumWidget<P extends VisumPresenter>
     //region VisumClient implementation
 
     @Override
-    public final Long getComponentId() {
-        return viewHelper.getComponentId();
-    }
-
-    @Override
-    public final void setComponentId(Long componentId) {
-        viewHelper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return viewHelper.getComponent();
+    public final void onStartClient() {
+        helper.onCreate();
     }
 
     @Override
     public final ComponentCache getComponentCache() {
-        return isInEditMode() ? null : viewHelper.getComponentCache(getContext());
+        return isInEditMode() ? null : helper.getComponentCache();
     }
 
     @Override
-    public void onInvalidateComponent() {
-        viewHelper.onInvalidateComponent();
+    public final void onStopClient() {
+        helper.onDestroy();
     }
 
     //endregion
@@ -87,13 +78,15 @@ public abstract class VisumWidget<P extends VisumPresenter>
     //region VisumView implementation
 
     @Override
+    @CallSuper
     public void attachPresenter() {
-        viewHelper.attachPresenter();
+        helper.attachPresenter();
     }
 
     @Override
+    @CallSuper
     public void detachPresenter() {
-        viewHelper.detachPresenter();
+        helper.detachPresenter();
     }
 
     //endregion
@@ -104,22 +97,26 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        viewHelper.onCreate();
+        inflate();
+        helper.onCreate();
+        attachPresenter();
+    }
+
+    protected void inflate() {
         inflate(getContext(), getLayoutRes(), this);
-        viewHelper.onResume();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        viewHelper.onPause();
-        viewHelper.onDestroy();
+        detachPresenter();
+        helper.onDestroy();
     }
 
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        viewHelper.onSaveInstanceState(bundle);
+        helper.onSaveInstanceState();
         bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
         return bundle;
     }
@@ -128,7 +125,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
             Bundle bundle = (Bundle) state;
-            viewHelper.onRestoreInstanceState(bundle);
+            helper.onRestoreInstanceState();
             state = bundle.getParcelable(ARG_STATE_SUPER);
         }
         super.onRestoreInstanceState(state);

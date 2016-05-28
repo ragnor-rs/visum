@@ -1,6 +1,7 @@
 package io.reist.visum;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * A helper class for implementations of {@link VisumClient}. It provides callback for typical
@@ -8,51 +9,38 @@ import android.content.Context;
  *
  * Created by Reist on 19.05.16.
  */
-public final class VisumClientHelper {
+public final class VisumClientHelper<C extends VisumClient> {
 
-    protected final VisumClient client;
+    protected final C client;
 
-    protected Long componentId;
-
-    public VisumClientHelper(VisumClient client) {
+    public VisumClientHelper(@NonNull C client) {
         this.client = client;
     }
 
-    public Long getComponentId() {
-        return componentId;
+    public C getClient() {
+        return client;
     }
 
-    public void setComponentId(Long componentId) {
-        this.componentId = componentId;
-    }
-
-    public Object getComponent() {
-        ComponentCache componentCache = client.getComponentCache();
-        if (componentCache != null) {
-            return componentCache.getComponentFor(client);
-        } else {
-            return null;
-        }
-    }
-
-    public ComponentCache getComponentCache(Context context) {
-        return ((ComponentCacheProvider) context.getApplicationContext()).getComponentCache();
+    @NonNull
+    public ComponentCache getComponentCache() {
+        return ((ComponentCacheProvider) client.getContext().getApplicationContext()).getComponentCache();
     }
 
     public void onCreate() {
-        client.inject(client.getComponent());
+        client.inject(client.getComponentCache().start(client));
     }
 
     public void onDestroy() {
-        client.onInvalidateComponent();
+        client.getComponentCache().stop(client);
     }
 
-    public void onInvalidateComponent() {
-        client.getComponentCache().invalidateComponentFor(client);
+    @NonNull
+    public Context getContext() {
+        return client.getContext();
     }
 
-    public VisumClient getClient() {
-        return client;
+    public void onRestartClient() {
+       client.inject(client.getComponentCache().findComponentEntryByClientOrThrow(client).component);
     }
 
 }

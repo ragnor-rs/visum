@@ -1,7 +1,7 @@
 package io.reist.visum;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 
 /**
  * Any non-UI class which utilizes Visum dependency injection mechanism.
@@ -13,49 +13,36 @@ public abstract class VisumBaseClient implements VisumClient {
     private final VisumClientHelper helper;
     private final Context context;
 
-    public VisumBaseClient(Context context) {
-        this.helper = new VisumClientHelper(this);
+    public VisumBaseClient(@NonNull Context context) {
+        this.helper = new VisumClientHelper<>(this);
         this.context = context.getApplicationContext();
     }
 
 
     //region VisumClient implementation
 
-    @Override
-    public final Long getComponentId() {
-        return helper.getComponentId();
-    }
-
-    @Override
-    public final void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
-    }
-
-    @Override
-    public final Object getComponent() {
-        return helper.getComponent();
-    }
-
+    @NonNull
     @Override
     public final ComponentCache getComponentCache() {
-        return helper.getComponentCache(context);
+        return helper.getComponentCache();
     }
 
     @Override
-    @CallSuper
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public final void onStartClient() {
+        helper.onCreate();
+    }
+
+    @Override
+    public final void onStopClient() {
+        helper.onDestroy();
+    }
+
+    @NonNull
+    public final Context getContext() {
+        return context;
     }
 
     //endregion
 
-
-    protected final VisumClientHelper getClientHelper() {
-        return helper;
-    }
-
-    protected final Context getContext() {
-        return context;
-    }
 
 }

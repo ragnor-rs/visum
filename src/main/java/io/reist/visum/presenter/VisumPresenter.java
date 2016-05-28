@@ -20,6 +20,7 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -31,6 +32,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -72,6 +74,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
+    private CompositeSubscription subscriptions;
+
     private ViewHolder<V> findViewHolderByViewId(int id) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             if (viewHolder.viewId == id) {
@@ -93,27 +97,48 @@ public abstract class VisumPresenter<V extends VisumView> {
      * stopped.
      *
      * @param id        an id used by the presenter to distinguish the view from the others
-     * @param view      a MVP view; use null to detach the view with the given id
+     * @param view      a MVP view; use null to stop the view with the given id
      */
-    public final void setView(int id, @Nullable V view) {
+    public final boolean setView(int id, @Nullable V view) {
+
+        boolean didChange = false;
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 
-        // remove the old view
         if (viewHolder != null) {
+
+            // remove the old view
             viewHolder.subscriptions.unsubscribe();
             onViewDetached(id, viewHolder.view);
             viewHolders.remove(viewHolder);
+
+            didChange = true;
+
         }
 
-        if (view == null) {
-            return;
+        if (view != null) {
+
+            // start the given view
+            viewHolders.add(new ViewHolder<>(id, view));
+            onViewAttached(id, view);
+
+            didChange = true;
+
         }
 
-        // attach the given view
-        viewHolders.add(new ViewHolder<>(id, view));
-        onViewAttached(id, view);
+        return didChange;
 
+    }
+
+    @CallSuper
+    public void onStop() {
+        subscriptions.unsubscribe();
+        subscriptions = null;
+    }
+
+    @CallSuper
+    public void onStart() {
+        subscriptions = new CompositeSubscription();
     }
 
     @NonNull
@@ -125,32 +150,83 @@ public abstract class VisumPresenter<V extends VisumView> {
         return viewHolder;
     }
 
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
-                observable
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .unsubscribeOn(Schedulers.io())
-                        .subscribe(observer)
-        );
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        viewHolder.subscriptions.add(startSubscription(observable, observer));
     }
 
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
-                single
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(action)
-        );
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        viewHolder.subscriptions.add(startSubscription(single, action));
     }
 
+    @SuppressWarnings("unused")
     public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
-        findViewHolderByViewIdOrThrow(viewId).subscriptions.add(
-                single
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(subscriber)
-        );
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        viewHolder.subscriptions.add(startSubscription(single, subscriber));
+    }
+
+    @SuppressWarnings("unused")
+    public final <T> void subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
+        subscriptions.add(startSubscription(observable, new Observer<T>() {
+
+            @Override
+            public void onCompleted() {
+                notifyCompleted(viewNotifier);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                notifyError(viewNotifier, e);
+            }
+
+            @Override
+            public void onNext(T t) {
+                notifyResult(viewNotifier, t);
+            }
+
+        }));
+    }
+
+    @SuppressWarnings("unused")
+    public final <T> void subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
+        subscriptions.add(startSubscription(single, new SingleSubscriber<T>() {
+
+            @Override
+            public void onSuccess(T t) {
+                notifyResult(viewNotifier, t);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                notifyError(viewNotifier, e);
+            }
+
+        }));
+    }
+
+    private <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(observer);
+    }
+
+    private <T> Subscription startSubscription(Single<T> single, Action1<T> action) {
+        return single
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action);
+    }
+
+    private <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
+        return single
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
     @SuppressWarnings({"unused", "deprecation"})
@@ -225,6 +301,35 @@ public abstract class VisumPresenter<V extends VisumView> {
     @SuppressWarnings({"unused", "deprecation"})
     public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         subscribe(VIEW_ID_DEFAULT, single, subscriber);
+    }
+
+    @SuppressWarnings("unused")
+    public final void forEachView(@NonNull Action1<V> action1) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            action1.call(viewHolder.view);
+        }
+    }
+
+    private <T> void notifyCompleted(@NonNull ViewNotifier<V, T> viewNotifier) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyCompleted(viewHolder.view);
+        }
+    }
+
+    private <T> void notifyResult(@NonNull ViewNotifier<V, T> viewNotifier, T t) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyResult(viewHolder.view, t);
+        }
+    }
+
+    private <T> void notifyError(@NonNull ViewNotifier<V, T> viewNotifier, Throwable e) {
+        for (ViewHolder<V> viewHolder : viewHolders) {
+            viewNotifier.notifyError(viewHolder.view, e);
+        }
+    }
+
+    public int getViewCount() {
+        return viewHolders.size();
     }
 
 }

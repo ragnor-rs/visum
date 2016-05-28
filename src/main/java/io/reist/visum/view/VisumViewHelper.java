@@ -1,7 +1,6 @@
 package io.reist.visum.view;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import io.reist.visum.ComponentCache;
@@ -9,69 +8,56 @@ import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
- * A helper class for implementations of {@link VisumView}. It persists
- * {@link VisumClientHelper#componentId} during configuration changes and provides callback for
+ * A helper class for implementations of {@link VisumView}. It provides callback for
  * typical Android UI components such as {@link android.app.Activity} and
  * {@link android.app.Fragment}.
  *
  * Created by Reist on 19.05.16.
  */
-public final class VisumViewHelper {
-
-    private static final String ARG_STATE_COMPONENT_ID = VisumViewHelper.class.getName() + ".ARG_STATE_COMPONENT_ID";
+public final class VisumViewHelper<P extends VisumPresenter> {
 
     private final int viewId;
-    private final VisumClientHelper helper;
+    private final VisumClientHelper<? extends VisumView<P>> helper;
 
     private boolean stateSaved;
 
-    public VisumViewHelper(int viewId, VisumClientHelper helper) {
+    public VisumViewHelper(int viewId, @NonNull VisumClientHelper<? extends VisumView<P>> helper) {
         this.viewId = viewId;
         this.helper = helper;
     }
 
-    public Long getComponentId() {
-        return helper.getComponentId();
+    public P getPresenter() {
+        return helper.getClient().getPresenter();
     }
 
-    public void setComponentId(Long componentId) {
-        helper.setComponentId(componentId);
+    @SuppressWarnings("unchecked") // todo setView should be checked call
+    public void attachPresenter() {
+        VisumView<P> view = helper.getClient();
+        VisumPresenter presenter = view.getPresenter();
+        if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
+            presenter.onStart();
+        }
     }
 
-    public Object getComponent() {
-        return helper.getComponent();
+    @SuppressWarnings("unchecked") // todo setView should be checked call
+    public void detachPresenter() {
+        VisumView<P> view = helper.getClient();
+        VisumPresenter presenter = view.getPresenter();
+        if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
+            presenter.onStop();
+        }
     }
 
-    public ComponentCache getComponentCache(Context context) {
-        return helper.getComponentCache(context);
-    }
-
-    public void onInvalidateComponent() {
-        helper.onInvalidateComponent();
+    public ComponentCache getComponentCache() {
+        return helper.getComponentCache();
     }
 
     public void onCreate() {
-        helper.onCreate();
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            helper.setComponentId(savedInstanceState.getLong(ARG_STATE_COMPONENT_ID));
+        if (!stateSaved) {
+            helper.onCreate();
+        } else {
+            helper.onRestartClient();
         }
-        stateSaved = false;
-    }
-
-    public void onResume() {
-        ((VisumView) helper.getClient()).attachPresenter();
-    }
-
-    public void onPause() {
-        ((VisumView) helper.getClient()).detachPresenter();
-    }
-
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putLong(ARG_STATE_COMPONENT_ID, helper.getComponentId());
-        stateSaved = true;
     }
 
     public void onDestroy() {
@@ -80,22 +66,17 @@ public final class VisumViewHelper {
         }
     }
 
-    @SuppressWarnings("unchecked") // todo setView should be checked call
-    public void attachPresenter() {
-        VisumView view = ((VisumView) helper.getClient());
-        VisumPresenter presenter = view.getPresenter();
-        if (presenter != null) {
-            presenter.setView(viewId, view);
-        }
+    @NonNull
+    public Context getContext() {
+        return helper.getContext();
     }
 
-    @SuppressWarnings("unchecked") // todo setView should be checked call
-    public void detachPresenter() {
-        VisumView view = ((VisumView) helper.getClient());
-        VisumPresenter presenter = view.getPresenter();
-        if (presenter != null) {
-            presenter.setView(viewId, view);
-        }
+    public void onRestoreInstanceState() {
+        stateSaved = false;
+    }
+
+    public void onSaveInstanceState() {
+        stateSaved = true;
     }
 
 }

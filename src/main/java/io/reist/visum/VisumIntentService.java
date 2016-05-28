@@ -1,6 +1,8 @@
 package io.reist.visum;
 
 import android.app.IntentService;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * Extend your {@link IntentService}s with this class to take advantage of Visum MVP.
@@ -9,7 +11,7 @@ import android.app.IntentService;
  */
 public abstract class VisumIntentService extends IntentService implements VisumClient {
 
-    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
+    private final VisumClientHelper helper = new VisumClientHelper<>(this);
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -21,47 +23,45 @@ public abstract class VisumIntentService extends IntentService implements VisumC
     }
 
 
-    //region Service implementation
+    //region VisumClient implementation
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        clientHelper.onCreate();
+    public final void onStartClient() {
+        helper.onCreate();
+    }
+
+    @NonNull
+    @Override
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        clientHelper.onDestroy();
+    public final void onStopClient() {
+        helper.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     //endregion
 
 
-    //region VisumClient
+    //region Service implementation
 
     @Override
-    public Long getComponentId() {
-        return clientHelper.getComponentId();
+    public void onCreate() {
+        super.onCreate();
+        helper.onCreate();
     }
 
     @Override
-    public void setComponentId(Long componentId) {
-        clientHelper.setComponentId(componentId);
-    }
-
-    @Override
-    public Object getComponent() {
-        return clientHelper.getComponent();
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        return clientHelper.getComponentCache(this);
-    }
-
-    public void onInvalidateComponent() {
-        clientHelper.onInvalidateComponent();
+    public void onDestroy() {
+        super.onDestroy();
+        helper.onDestroy();
     }
 
     //endregion

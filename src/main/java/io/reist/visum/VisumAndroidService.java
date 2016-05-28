@@ -1,6 +1,8 @@
 package io.reist.visum;
 
 import android.app.Service;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * Extend your {@link Service}s with this class to take advantage of Visum MVP.
@@ -9,7 +11,34 @@ import android.app.Service;
  */
 public abstract class VisumAndroidService extends Service implements VisumClient {
 
-    private final VisumClientHelper clientHelper = new VisumClientHelper(this);
+    private final VisumClientHelper helper = new VisumClientHelper<>(this);
+
+
+    //region VisumClient implementation
+
+    @Override
+    public final void onStartClient() {
+        helper.onCreate();
+    }
+
+    @NonNull
+    @Override
+    public final ComponentCache getComponentCache() {
+        return helper.getComponentCache();
+    }
+
+    @Override
+    public final void onStopClient() {
+        helper.onDestroy();
+    }
+
+    @NonNull
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    //endregion
 
 
     //region Service implementation
@@ -17,42 +46,13 @@ public abstract class VisumAndroidService extends Service implements VisumClient
     @Override
     public void onCreate() {
         super.onCreate();
-        clientHelper.onCreate();
+        helper.onCreate();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        clientHelper.onDestroy();
-    }
-
-    //endregion
-
-
-    //region VisumClient
-
-    @Override
-    public Long getComponentId() {
-        return clientHelper.getComponentId();
-    }
-
-    @Override
-    public void setComponentId(Long componentId) {
-        clientHelper.setComponentId(componentId);
-    }
-
-    @Override
-    public Object getComponent() {
-       return clientHelper.getComponent();
-    }
-
-    @Override
-    public ComponentCache getComponentCache() {
-        return clientHelper.getComponentCache(this);
-    }
-
-    public void onInvalidateComponent() {
-        clientHelper.onInvalidateComponent();
+        helper.onDestroy();
     }
 
     //endregion

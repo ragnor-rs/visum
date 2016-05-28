@@ -20,6 +20,8 @@
 
 package io.reist.visum;
 
+import android.support.annotation.NonNull;
+
 /**
  * A holder of an instance of local ComponentCache. This interface should be implemented by
  * a local subclass of {@link android.app.Application}.
@@ -28,6 +30,7 @@ package io.reist.visum;
  */
 public interface ComponentCacheProvider {
 
+    @NonNull
     ComponentCache getComponentCache();
 
 }

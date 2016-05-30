@@ -2,6 +2,7 @@ package io.reist.visum.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
@@ -11,10 +12,12 @@ import io.reist.visum.presenter.VisumPresenter;
  * A helper class for implementations of {@link VisumView}. It provides callback for
  * typical Android UI components such as {@link android.app.Activity} and
  * {@link android.app.Fragment}.
- *
+ * <p>
  * Created by Reist on 19.05.16.
  */
 public final class VisumViewHelper<P extends VisumPresenter> {
+
+    private static final String LOG_TAG = VisumViewHelper.class.getSimpleName();
 
     private final int viewId;
     private final VisumClientHelper<? extends VisumView<P>> helper;
@@ -34,8 +37,12 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     public void attachPresenter() {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
-        if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
-            presenter.onStart();
+        if (presenter != null) {
+            if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
+                presenter.onStart();
+            }
+        } else {
+            Log.w(LOG_TAG, "presenter is null");
         }
     }
 
@@ -43,8 +50,12 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     public void detachPresenter() {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
-        if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
-            presenter.onStop();
+        if (presenter != null) {
+            if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
+                presenter.onStop();
+            }
+        } else {
+            Log.w(LOG_TAG, "presenter is null");
         }
     }
 

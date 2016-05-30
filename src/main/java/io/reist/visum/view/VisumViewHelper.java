@@ -34,8 +34,10 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     public void attachPresenter() {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
-        if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
-            presenter.onStart();
+        if (presenter != null) {
+            if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
+                presenter.onStart();
+            }
         }
     }
 
@@ -43,8 +45,10 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     public void detachPresenter() {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
-        if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
-            presenter.onStop();
+        if (presenter != null) {
+            if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
+                presenter.onStop();
+            }
         }
     }
 

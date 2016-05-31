@@ -44,7 +44,7 @@ public final class VisumClientHelper<C extends VisumClient> {
                 Class types[] = method.getParameterTypes();
                 if (types != null && types.length == 1 && clazz.isAssignableFrom(types[0])) {
                     method.invoke(component, client);
-                    Log.d(TAG, String.format("Client [%s] was injected by [%s] with [%s]",
+                    Log.d(TAG, String.format("onCreate: client [%s] was injected by [%s] with [%s]",
                             client.getClass().getSimpleName(),
                             component.getClass().getSimpleName(),
                             method.getName()));
@@ -56,6 +56,8 @@ public final class VisumClientHelper<C extends VisumClient> {
         } catch (InvocationTargetException e) {
             Log.wtf(TAG, e);
         }
+
+        Log.d(TAG, "onCreate: client [" + client.getClass().getSimpleName() + "] fallback");
 
         client.inject(component);
     }

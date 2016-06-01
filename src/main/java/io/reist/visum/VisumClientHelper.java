@@ -30,8 +30,8 @@ public final class VisumClientHelper<C extends VisumClient> {
         client.inject(client.getComponentCache().start(client));
     }
 
-    public void onDestroy() {
-        client.getComponentCache().stop(client);
+    public void onDestroy(boolean retainComponent) {
+        client.getComponentCache().stop(client, retainComponent);
     }
 
     @NonNull

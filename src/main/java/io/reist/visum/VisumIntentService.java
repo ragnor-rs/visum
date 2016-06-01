@@ -38,7 +38,7 @@ public abstract class VisumIntentService extends IntentService implements VisumC
 
     @Override
     public final void onStopClient() {
-        helper.onDestroy();
+        helper.onDestroy(false);
     }
 
     @NonNull
@@ -55,13 +55,13 @@ public abstract class VisumIntentService extends IntentService implements VisumC
     @Override
     public void onCreate() {
         super.onCreate();
-        helper.onCreate();
+        onStartClient();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        helper.onDestroy();
+        onStopClient();
     }
 
     //endregion

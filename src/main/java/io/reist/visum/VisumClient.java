@@ -47,7 +47,7 @@ public interface VisumClient {
 
     /**
      * Called when the client is to be completely destroyed. Re-creation of the view should
-     * not trigger this method. Implementations should destroy a component used by this
+     * not trigger this method. Implementations should destroy the component used by this
      * view.
      */
     void onStopClient();

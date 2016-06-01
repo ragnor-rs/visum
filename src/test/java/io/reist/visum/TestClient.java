@@ -26,12 +26,11 @@ public abstract class TestClient implements VisumClient {
 
     @Override
     public void onStopClient() {
-        componentCache.stop(this);
+        componentCache.stop(this, false);
     }
 
     @Override
-    public void inject(@NonNull Object from) {
-    }
+    public void inject(@NonNull Object from) {}
 
     @SuppressWarnings("ConstantConditions")
     @NonNull

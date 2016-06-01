@@ -73,6 +73,12 @@ public abstract class VisumTest<C extends VisumClient> {
         Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
     }
 
+    protected void checkComponentRetained(Object component) {
+        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
+        Assert.assertNotNull("The component is null", componentEntry.component);
+        Assert.assertEquals("The component should have been retained", componentEntry.component, component);
+    }
+
     protected void checkClientStarted() {
         Assert.assertTrue(
                 "Only one client should be registered here",

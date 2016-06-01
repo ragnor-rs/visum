@@ -54,8 +54,8 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         helper.onCreate();
     }
 
-    public void onDestroy() {
-        helper.onDestroy();
+    public void onDestroy(boolean retainComponent) {
+        helper.onDestroy(retainComponent);
     }
 
     @NonNull

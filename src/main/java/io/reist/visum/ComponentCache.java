@@ -98,11 +98,11 @@ public class ComponentCache {
     }
 
     @CallSuper
-    public void stop(@NonNull VisumClient client) {
+    public void stop(@NonNull VisumClient client, boolean retainComponent) {
         ComponentEntry entry = findComponentEntryByClientOrThrow(client);
         List<VisumClient> clients = entry.clients;
         if (clients.remove(client)) {
-            if (clients.isEmpty()) {
+            if (!retainComponent && clients.isEmpty()) {
                 entry.component = null;
             }
         } else  {

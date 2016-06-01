@@ -38,7 +38,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @Override
     @CallSuper
     public void attachPresenter() {
-        helper.onCreate();
+        onStartClient();
         helper.attachPresenter();
     }
 
@@ -46,7 +46,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
-        helper.onDestroy();
+        onStopClient();
     }
 
     //endregion

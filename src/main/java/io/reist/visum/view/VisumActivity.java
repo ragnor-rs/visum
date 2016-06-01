@@ -71,7 +71,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
     @Override
     public final void onStopClient() {
-        helper.onDestroy();
+        helper.onDestroy(isChangingConfigurations());
     }
 
     @NonNull
@@ -104,7 +104,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        helper.onCreate();
+        onStartClient();
         setContentView(getLayoutRes());
     }
 
@@ -124,7 +124,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        helper.onDestroy();
+        onStopClient();
     }
 
     //endregion

@@ -92,11 +92,36 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         Assert.assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
         Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
 
-        componentCache.stop(client);
+        componentCache.stop(client, false);
         checkClientStopped();
 
         try {
-            componentCache.stop(client);
+            componentCache.stop(client, false);
+            Assertions.shouldHaveThrown(IllegalStateException.class);
+        } catch (IllegalStateException ignored) {}
+
+    }
+
+    @Test
+    public void testRetainComponent() {
+
+        TestClient client = getClient();
+        ComponentCache componentCache = getComponentCache();
+
+        Object component = componentCache.start(client);
+        checkClientStarted();
+
+        componentCache.stop(client, true);
+        checkComponentRetained(component);
+
+        componentCache.start(client);
+        checkClientStarted();
+
+        componentCache.stop(client, false);
+        checkClientStopped();
+
+        try {
+            componentCache.stop(client, false);
             Assertions.shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
@@ -118,10 +143,10 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
                 component3
         );
 
-        componentCache.stop(client);
+        componentCache.stop(client, false);
         Assert.assertNotNull("The component is still in use", getComponentEntry().component);
 
-        componentCache.stop(clientThree);
+        componentCache.stop(clientThree, false);
         Assert.assertNull("ComponentCache should have removed the unused component", getComponentEntry().component);
 
     }

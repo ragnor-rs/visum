@@ -65,7 +65,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     public final void onStopClient() {
-        helper.onDestroy();
+        helper.onDestroy(false);
     }
 
     //endregion
@@ -94,7 +94,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         inflate();
-        helper.onCreate();
+        onStartClient();
         attachPresenter();
     }
 
@@ -106,7 +106,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detachPresenter();
-        helper.onDestroy();
+        onStopClient();
     }
 
     //endregion

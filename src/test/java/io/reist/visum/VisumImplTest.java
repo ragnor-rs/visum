@@ -46,7 +46,7 @@ public abstract class VisumImplTest<C> {
 
     protected void checkClientDetached(VisumClient client) {
         ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertFalse("Requested client stop but there are still some clients attached", componentEntry.clients.contains(client));
+        Assert.assertFalse("There are still some clients attached", componentEntry.clients.contains(client));
         Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
     }
 

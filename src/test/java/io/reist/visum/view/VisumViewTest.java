@@ -31,6 +31,7 @@ import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
+import rx.functions.Func1;
 
 /**
  * Created by Reist on 26.05.16.
@@ -134,12 +135,18 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         testPresenter.checkPresenterAttached(VIEW_ID, testView);
 
         // config change
-        testActivity = simulateConfigChange(activityController, TestActivity.class).get();
-        V newTestView = (V) testActivity
-                .getSupportFragmentManager()
-                .findFragmentById(TestActivity.CONTAINER_ID);
-        checkConfigChange(testView, newTestView);
-        testView = newTestView;
+        Func1<TestActivity, V> viewFinder = new Func1<TestActivity, V>() {
+
+            @Override
+            public V call(TestActivity testActivity) {
+                return (V) testActivity
+                        .getSupportFragmentManager()
+                        .findFragmentById(TestActivity.CONTAINER_ID);
+            }
+
+        };
+        testActivity = simulateConfigChange(activityController, TestActivity.class, viewFinder).get();
+        testView = viewFinder.call(testActivity);
 
         // destroy
         testActivity.getSupportFragmentManager().beginTransaction().remove(testView).commit();
@@ -158,10 +165,16 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         testPresenter.checkPresenterAttached(VIEW_ID, testView);
 
         // config change
-        activityController = simulateConfigChange(activityController, activityClass);
-        V newTestView = activityController.get();
-        checkConfigChange(testView, newTestView);
-        testView = newTestView;
+        Func1<V, V> viewFinder = new Func1<V, V>() {
+
+            @Override
+            public V call(V v) {
+                return v;
+            }
+
+        };
+        activityController = simulateConfigChange(activityController, activityClass, viewFinder);
+        testView = viewFinder.call(activityController.get());
 
         // destroy
         activityController
@@ -172,7 +185,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    private <C extends FragmentActivity> ActivityController<C> simulateConfigChange(ActivityController<C> activityController, Class<C> activityClass) {
+    private <C extends FragmentActivity, V extends VisumView> ActivityController<C> simulateConfigChange(
+            ActivityController<C> activityController,
+            Class<C> activityClass,
+            Func1<C, V> viewFinder
+    ) {
+
+        VisumView oldView = viewFinder.call(activityController.get());
 
         Bundle bundle = new Bundle();
 
@@ -183,6 +202,8 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .stop()
                 .destroy();
 
+        checkClientDetached(oldView);
+
         // Bring up a new activity
         activityController = Robolectric.buildActivity(activityClass)
                 .create(bundle)
@@ -191,11 +212,17 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .resume()
                 .visible();
 
+        VisumView newView = viewFinder.call(activityController.get());
+
+        checkClientAttached(newView);
+
+        checkConfigChange(oldView, newView);
+
         return activityController;
 
     }
 
-    private <V extends VisumView<TestPresenter>> void checkConfigChange(V oldTestView, V newTestView) {
+    private void checkConfigChange(VisumView oldTestView, VisumView newTestView) {
         Assert.assertFalse("View has not been recreated", newTestView == oldTestView);
         testPresenter.checkPresenterDetached(VIEW_ID, oldTestView);
         testPresenter.checkPresenterAttached(VIEW_ID, newTestView);

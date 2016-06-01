@@ -39,8 +39,4 @@ public final class VisumClientHelper<C extends VisumClient> {
         return client.getContext();
     }
 
-    public void onRestartClient() {
-       client.inject(client.getComponentCache().findComponentEntryByClientOrThrow(client).component);
-    }
-
 }

@@ -102,7 +102,6 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         helper.onCreate();
-        helper.onRestoreInstanceState();
     }
 
     @Nullable
@@ -124,12 +123,6 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         } else {
             helper.attachPresenter();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState();
     }
 
     @Override

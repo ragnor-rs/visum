@@ -19,8 +19,6 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     private final int viewId;
     private final VisumClientHelper<? extends VisumView<P>> helper;
 
-    private boolean stateSaved;
-
     public VisumViewHelper(int viewId, @NonNull VisumClientHelper<? extends VisumView<P>> helper) {
         this.viewId = viewId;
         this.helper = helper;
@@ -53,30 +51,16 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     }
 
     public void onCreate() {
-        if (!stateSaved) {
-            helper.onCreate();
-        } else {
-            helper.onRestartClient();
-        }
+        helper.onCreate();
     }
 
     public void onDestroy() {
-        if (!stateSaved) {
-            helper.onDestroy();
-        }
+        helper.onDestroy();
     }
 
     @NonNull
     public Context getContext() {
         return helper.getContext();
-    }
-
-    public void onRestoreInstanceState() {
-        stateSaved = false;
-    }
-
-    public void onSaveInstanceState() {
-        stateSaved = true;
     }
 
 }

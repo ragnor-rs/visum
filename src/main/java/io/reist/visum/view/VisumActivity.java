@@ -105,7 +105,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         helper.onCreate();
-        helper.onRestoreInstanceState();
         setContentView(getLayoutRes());
     }
 
@@ -126,12 +125,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
     public void onDestroy() {
         super.onDestroy();
         helper.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        helper.onSaveInstanceState();
     }
 
     //endregion

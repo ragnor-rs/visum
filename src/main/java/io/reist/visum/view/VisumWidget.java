@@ -1,8 +1,6 @@
 package io.reist.visum.view;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.util.AttributeSet;
@@ -23,8 +21,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         implements VisumView<P> {
 
     private final VisumViewHelper<P> helper;
-
-    private static final String ARG_STATE_SUPER = VisumWidget.class.getName() + ".ARG_STATE_SUPER";
 
     public VisumWidget(int viewId, Context context) {
         super(context);
@@ -111,24 +107,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         super.onDetachedFromWindow();
         detachPresenter();
         helper.onDestroy();
-    }
-
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        helper.onSaveInstanceState();
-        bundle.putParcelable(ARG_STATE_SUPER, super.onSaveInstanceState());
-        return bundle;
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            helper.onRestoreInstanceState();
-            state = bundle.getParcelable(ARG_STATE_SUPER);
-        }
-        super.onRestoreInstanceState(state);
     }
 
     //endregion

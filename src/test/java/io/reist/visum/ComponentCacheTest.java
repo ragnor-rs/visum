@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import rx.functions.Func0;
 
@@ -18,7 +19,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
 
     @Before
     public void start() {
-        start(
+        setUp(
                 new Func0<Object>() {
 
                     @Override
@@ -29,6 +30,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
                 },
                 TestClientOne.class, TestClientThree.class
         );
+        dummyListener = Mockito.mock(ComponentCache.Listener.class);
     }
 
     protected TestClient createClient() {
@@ -38,7 +40,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     }
 
     @Test
-    public void testFewRegistrations() {
+    public void testMultiRegistrations() {
 
         ComponentCache componentCache = getComponentCache();
 
@@ -76,13 +78,29 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     }
 
     @Test
+    public void testComponentListener() {
+
+        TestClient client = getClient();
+        ComponentCache componentCache = getComponentCache();
+
+        Object component = componentCache.start(client);
+        Mockito.verify(dummyListener, Mockito.times(1)).onComponentCreated(component);
+        Mockito.verify(dummyListener, Mockito.times(0)).onComponentDestroyed(component);
+
+        componentCache.stop(client, false);
+        Mockito.verify(dummyListener, Mockito.times(1)).onComponentCreated(component);
+        Mockito.verify(dummyListener, Mockito.times(1)).onComponentDestroyed(component);
+
+    }
+
+    @Test
     public void testStartAndStop() {
 
         TestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
         Object component = componentCache.start(client);
-        checkClientStarted();
+        assertClientStarted();
 
         try {
             componentCache.start(client);
@@ -93,7 +111,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
 
         componentCache.stop(client, false);
-        checkClientStopped();
+        assertClientStoppedAndComponentRemoved();
 
         try {
             componentCache.stop(client, false);
@@ -109,26 +127,21 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         ComponentCache componentCache = getComponentCache();
 
         Object component = componentCache.start(client);
-        checkClientStarted();
+        assertClientStarted();
 
         componentCache.stop(client, true);
-        checkComponentRetained(component);
+        assertClientStoppedAndComponentRetained(component);
 
         componentCache.start(client);
-        checkClientStarted();
+        assertClientStarted();
 
         componentCache.stop(client, false);
-        checkClientStopped();
-
-        try {
-            componentCache.stop(client, false);
-            Assertions.shouldHaveThrown(IllegalStateException.class);
-        } catch (IllegalStateException ignored) {}
+        assertClientStoppedAndComponentRemoved();
 
     }
 
     @Test
-    public void testTwoClients() {
+    public void testMultiClients() {
 
         TestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
@@ -154,10 +167,12 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @After
     public void finish() {
 
-        stop();
+        tearDown();
 
         clientTwo = null;
         clientThree = null;
+
+        dummyListener = null;
 
     }
 
@@ -188,5 +203,17 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     private static class TestComponentOne {}
 
     private static class TestComponentTwo {}
+
+    private ComponentCache.Listener dummyListener;
+
+    @Override
+    public void onComponentDestroyed(Object component) {
+        dummyListener.onComponentDestroyed(component);
+    }
+
+    @Override
+    public void onComponentCreated(Object component) {
+        dummyListener.onComponentCreated(component);
+    }
 
 }

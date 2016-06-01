@@ -118,7 +118,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
     public void onPause() {
         super.onPause();
         detachPresenter();
-
     }
 
     @Override

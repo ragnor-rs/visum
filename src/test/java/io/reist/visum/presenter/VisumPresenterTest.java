@@ -28,7 +28,7 @@ public class VisumPresenterTest extends VisumTest<TestView> {
 
         presenter = new TestPresenter();
 
-        start(
+        setUp(
                 new Func0<Object>() {
 
                     @Override
@@ -49,7 +49,7 @@ public class VisumPresenterTest extends VisumTest<TestView> {
 
         presenter = null;
 
-        stop();
+        tearDown();
 
         viewTwo = null;
 
@@ -61,31 +61,31 @@ public class VisumPresenterTest extends VisumTest<TestView> {
         TestView view = getClient();
 
         view.attachPresenter();
-        presenter.checkPresenterAttached(VIEW_ID, view);
+        presenter.assertPresenterAttached(VIEW_ID, view);
 
         view.detachPresenter();
-        presenter.checkPresenterDetached(VIEW_ID, view);
+        presenter.assertPresenterDetached(VIEW_ID, view);
 
     }
 
     @Test
-    public void testFewViews() {
+    public void testMultiViews() {
 
         TestView viewOne = getClient();
 
         viewOne.attachPresenter();
-        presenter.checkPresenterAttached(VIEW_ID, viewOne);
+        presenter.assertPresenterAttached(VIEW_ID, viewOne);
 
         viewTwo.attachPresenter();
-        presenter.checkPresenterAttached(VIEW_ID_TWO, viewTwo);
+        presenter.assertPresenterAttached(VIEW_ID_TWO, viewTwo);
 
         Assert.assertEquals("Invalid view count", 2, presenter.getViewCount());
 
         viewOne.detachPresenter();
-        presenter.checkPresenterDetached(VIEW_ID, viewOne);
+        presenter.assertPresenterDetached(VIEW_ID, viewOne);
 
         viewTwo.detachPresenter();
-        presenter.checkPresenterDetached(VIEW_ID_TWO, viewTwo);
+        presenter.assertPresenterDetached(VIEW_ID_TWO, viewTwo);
 
     }
 

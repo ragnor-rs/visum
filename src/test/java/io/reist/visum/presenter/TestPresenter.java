@@ -36,7 +36,7 @@ public class TestPresenter extends VisumPresenter<VisumView> {
         dummy.onViewDetached(id, view);
     }
 
-    public void checkPresenterDetached(int viewId, VisumView<TestPresenter> view) {
+    public void assertPresenterDetached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
         inOrder.verify(dummy, Mockito.times(1)).onViewDetached(viewId, view);
         if (getViewCount() == 0) {
@@ -44,7 +44,7 @@ public class TestPresenter extends VisumPresenter<VisumView> {
         }
     }
 
-    public void checkPresenterAttached(int viewId, VisumView<TestPresenter> view) {
+    public void assertPresenterAttached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
         inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
         if (getViewCount() == 1) {

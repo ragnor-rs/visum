@@ -1,38 +1,46 @@
 package io.reist.visum;
 
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
 import org.junit.Assert;
-import org.mockito.Mockito;
 import org.robolectric.RuntimeEnvironment;
 
 import rx.functions.Func0;
 
 /**
- * Created by Reist on 26.05.16.
+ * A test for components (IoC-containers) of the given type. Unlike {@link VisumTest}, this test
+ * supports assertions for multiple clients operating simultaneously in a single component cache.
+ *
+ * On start-up, a new component is created via {@link #createComponent()}. Subclasses should
+ * register component clients by calling {@link #register(Class[])} in the setUp method. A local
+ * {@link io.reist.visum.ComponentCache.Listener} is registered and available via
+ * {@link #onComponentCreated(Object)} and {@link #onComponentDestroyed(Object)}.
+ *
+ * Basic assertions include {@link #assertClientAttached(VisumClient)} and
+ * {@link #assertClientDetached(VisumClient)} to check client lifecycle.
+ *
+ * Subclasses must call {@link #tearDown()} in tearDown methods to free resources.
+ *
+ * @see #getComponent()
+ * @see #getComponentCache()
+ *
+ * @param <C>   root component class
  */
-public abstract class VisumImplTest<C> {
+public abstract class VisumImplTest<C> implements ComponentCache.Listener {
 
     private C component;
-
-    private final Class<? extends C> componentClass;
 
     private final Func0<Object> componentFactory = new Func0<Object>() {
 
         @Override
         public C call() {
-            return component = mock();
+            return component;
         }
 
     };
 
-    protected C mock() {
-        return Mockito.mock(componentClass);
-    }
-
-    protected VisumImplTest(Class<? extends C> componentClass) {
-        this.componentClass = componentClass;
-    }
+    protected abstract C createComponent();
 
     @NonNull
     protected ComponentCache getComponentCache() {
@@ -44,20 +52,37 @@ public abstract class VisumImplTest<C> {
         getComponentCache().register(componentFactory, clientClasses);
     }
 
-    protected void checkClientDetached(VisumClient client) {
+    protected void assertClientDetached(VisumClient client) {
         ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertFalse("Requested client stop but there are still some clients attached", componentEntry.clients.contains(client));
+        Assert.assertFalse("There are still some clients attached", componentEntry.clients.contains(client));
         Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
     }
 
-    protected void checkClientAttached(VisumClient client) {
+    protected void assertClientAttached(VisumClient client) {
         ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertTrue( "Only one client should be registered here", componentEntry.clients.contains(client));
+        Assert.assertTrue("The client is not attached", componentEntry.clients.contains(client));
         Assert.assertNotNull("No component has been created for the client", componentEntry.component);
     }
 
     public C getComponent() {
         return component;
     }
+
+    @CallSuper
+    public void setUp() {
+        getComponentCache().setListener(this);
+        this.component = createComponent();
+    }
+
+    @CallSuper
+    public void tearDown() {
+        getComponentCache().setListener(null);
+    }
+
+    @Override
+    public void onComponentDestroyed(Object component) {}
+
+    @Override
+    public void onComponentCreated(Object component) {}
 
 }

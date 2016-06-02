@@ -7,12 +7,16 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ServiceController;
 
 /**
  * Created by Reist on 26.05.16.
@@ -25,13 +29,9 @@ import org.robolectric.annotation.Config;
 )
 public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {
 
-    public VisumClientTest() {
-        super(VisumClientTest.TestComponent.class);
-        register(
-                TestVisumBaseClient.class,
-                TestVisumAndroidService.class,
-                TestVisumIntentService.class
-        );
+    @Override
+    protected TestComponent createComponent() {
+        return Mockito.mock(VisumClientTest.TestComponent.class);
     }
 
     @Test
@@ -40,46 +40,50 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         TestVisumBaseClient testClient = new TestVisumBaseClient(RuntimeEnvironment.application);
 
         testClient.onStartClient();
-        checkClientAttached(testClient);
+        assertClientAttached(testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
         testClient.onStopClient();
-        checkClientDetached(testClient);
+        assertClientDetached(testClient);
 
     }
 
     @Test
     public void visumAndroidService() {
 
-        TestVisumAndroidService testClient = new TestVisumAndroidService();
+        ServiceController<TestVisumAndroidService> serviceController =
+                Robolectric.buildService(TestVisumAndroidService.class);
+        TestVisumAndroidService testClient = serviceController.get();
 
-        testClient.onCreate();
-        checkClientAttached(testClient);
+        serviceController.create();
+        assertClientAttached(testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
-        testClient.onDestroy();
-        checkClientDetached(testClient);
+        serviceController.destroy();
+        assertClientDetached(testClient);
 
     }
 
     @Test
     public void visumIntentService() {
 
-        TestVisumIntentService testClient = new TestVisumIntentService();
+        ServiceController<TestVisumIntentService> serviceController =
+                Robolectric.buildService(TestVisumIntentService.class);
+        TestVisumIntentService testClient = serviceController.get();
 
-        testClient.onCreate();
-        checkClientAttached(testClient);
+        serviceController.create();
+        assertClientAttached(testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
-        testClient.onDestroy();
-        checkClientDetached(testClient);
+        serviceController.destroy();
+        assertClientDetached(testClient);
 
     }
 
-    private static class TestVisumBaseClient extends VisumBaseClient {
+    public static class TestVisumBaseClient extends VisumBaseClient {
 
         public TestVisumBaseClient(Context context) {
             super(context);
@@ -92,7 +96,7 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
     }
 
-    private static class TestVisumAndroidService extends VisumAndroidService {
+    public static class TestVisumAndroidService extends VisumAndroidService {
 
         @Nullable
         @Override
@@ -107,7 +111,7 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
     }
 
-    private static class TestVisumIntentService extends VisumIntentService {
+    public static class TestVisumIntentService extends VisumIntentService {
 
         public TestVisumIntentService() {
             super(TestVisumIntentService.class.getSimpleName());
@@ -131,6 +135,21 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
         void inject(TestVisumIntentService testVisumIntentService);
 
+    }
+
+    @Before
+    public void start() throws Exception {
+        setUp();
+        register(
+                TestVisumBaseClient.class,
+                TestVisumAndroidService.class,
+                TestVisumIntentService.class
+        );
+    }
+
+    @After
+    public void finish() {
+        tearDown();
     }
 
 }

@@ -34,7 +34,7 @@ public abstract class VisumBaseClient implements VisumClient {
 
     @Override
     public final void onStopClient() {
-        helper.onDestroy();
+        helper.onDestroy(false);
     }
 
     @NonNull

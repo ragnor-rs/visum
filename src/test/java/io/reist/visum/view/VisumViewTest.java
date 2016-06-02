@@ -16,11 +16,9 @@ import android.widget.LinearLayout;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -31,6 +29,9 @@ import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
+import io.reist.visum.presenter.VisumPresenter;
+import rx.functions.Func0;
+import rx.functions.Func1;
 
 /**
  * Created by Reist on 26.05.16.
@@ -43,13 +44,52 @@ import io.reist.visum.presenter.TestPresenter;
 )
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
-    private TestPresenter testPresenter;
-
     private static final int VIEW_ID = 1;
 
-    public VisumViewTest() {
-        super(VisumViewTest.TestComponent.class);
-        register(
+    /**
+     * A presenter from a sub-component. It will be null after the sub-component is removed from the
+     * {@link io.reist.visum.ComponentCache}.
+     */
+    private TestPresenter testPresenter;
+
+    @Override
+    protected TestComponent createComponent() {
+        return new TestComponent() {
+
+            @Override
+            public TestSubComponent testSubComponent() {
+                testPresenter = null;
+                return new TestSubComponent() {
+
+                    TestPresenter testPresenter;
+
+                    @Override
+                    public void inject(TestVisumView testVisumView) {
+                        if (testPresenter == null) {
+                            testPresenter = new TestPresenter();
+                            VisumViewTest.this.testPresenter = testPresenter;
+                        }
+                        testVisumView.setPresenter(testPresenter);
+                    }
+
+                };
+            }
+
+        };
+    }
+
+    @Before
+    public void start() throws Exception {
+        setUp();
+        getComponentCache().register(
+                new Func0<Object>() {
+
+                    @Override
+                    public Object call() {
+                        return getComponent().testSubComponent();
+                    }
+
+                },
                 TestVisumBaseView.class,
                 TestVisumFragment.class,
                 TestVisumDialogFragment.class,
@@ -60,7 +100,8 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @After
-    public void tearDown() {
+    public void finish() {
+        tearDown();
         testPresenter = null;
     }
 
@@ -70,10 +111,10 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         TestVisumBaseView testView = new TestVisumBaseView(RuntimeEnvironment.application);
 
         testView.attachPresenter();
-        testPresenter.checkPresenterAttached(VIEW_ID, testView);
+        testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
         testView.detachPresenter();
-        testPresenter.checkPresenterDetached(VIEW_ID, testView);
+        testPresenter.assertPresenterDetached(VIEW_ID, testView);
 
     }
 
@@ -100,79 +141,99 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     @Test
     public void visumWidget() {
 
-        TestActivity testActivity = Robolectric.setupActivity(TestActivity.class);
+        FragmentContainerActivity fragmentContainerActivity = Robolectric.setupActivity(FragmentContainerActivity.class);
 
         TestVisumWidget testView = new TestVisumWidget(RuntimeEnvironment.application);
 
-        testActivity.view.addView(testView);
-        testPresenter.checkPresenterAttached(VIEW_ID, testView);
+        fragmentContainerActivity.view.addView(testView);
+        testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
-        testActivity.view.removeView(testView);
-        testPresenter.checkPresenterDetached(VIEW_ID, testView);
+        fragmentContainerActivity.view.removeView(testView);
+        testPresenter.assertPresenterDetached(VIEW_ID, testView);
 
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends Fragment & VisumView<TestPresenter>> void testFragment(V testView) {
+    protected <V extends Fragment & TestVisumView> void testFragment(V testView) {
 
-        ActivityController<TestActivity> activityController = Robolectric.buildActivity(TestActivity.class);
-        TestActivity testActivity = activityController.setup().get();
+        ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
+        FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
 
         // create
-        testActivity.getSupportFragmentManager()
+        fragmentContainerActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .add(TestActivity.CONTAINER_ID, testView)
+                .add(FragmentContainerActivity.CONTAINER_ID, testView)
                 .commit();
-        testPresenter.checkPresenterAttached(VIEW_ID, testView);
+        testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
         // hide
-        testActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
-        testPresenter.checkPresenterDetached(VIEW_ID, testView);
+        fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
+        testPresenter.assertPresenterDetached(VIEW_ID, testView);
 
         // show
-        testActivity.getSupportFragmentManager().beginTransaction().show(testView).commit();
-        testPresenter.checkPresenterAttached(VIEW_ID, testView);
+        fragmentContainerActivity.getSupportFragmentManager().beginTransaction().show(testView).commit();
+        testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
         // config change
-        testActivity = simulateConfigChange(activityController, TestActivity.class).get();
-        V newTestView = (V) testActivity
-                .getSupportFragmentManager()
-                .findFragmentById(TestActivity.CONTAINER_ID);
-        checkConfigChange(testView, newTestView);
-        testView = newTestView;
+        Func1<FragmentContainerActivity, V> viewFinder = new Func1<FragmentContainerActivity, V>() {
+
+            @Override
+            public V call(FragmentContainerActivity testActivity) {
+                return (V) testActivity
+                        .getSupportFragmentManager()
+                        .findFragmentById(FragmentContainerActivity.CONTAINER_ID);
+            }
+
+        };
+        fragmentContainerActivity = simulateConfigChange(activityController, FragmentContainerActivity.class, viewFinder).get();
+        testView = viewFinder.call(fragmentContainerActivity);
 
         // destroy
-        testActivity.getSupportFragmentManager().beginTransaction().remove(testView).commit();
-        testPresenter.checkPresenterDetached(VIEW_ID, testView);
+        fragmentContainerActivity.getSupportFragmentManager().beginTransaction().remove(testView).commit();
+        testPresenter.assertPresenterDetached(VIEW_ID, testView);
 
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends FragmentActivity & VisumView<TestPresenter>> void testActivity(Class<V> activityClass) {
+    protected <V extends FragmentActivity & TestVisumActivityView> void testActivity(Class<V> activityClass) {
 
         ActivityController<V> activityController = Robolectric.buildActivity(activityClass);
         V testView;
 
         // create
         testView = activityController.setup().get();
-        testPresenter.checkPresenterAttached(VIEW_ID, testView);
+        testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
         // config change
-        activityController = simulateConfigChange(activityController, activityClass);
-        V newTestView = activityController.get();
-        checkConfigChange(testView, newTestView);
-        testView = newTestView;
+        Func1<V, V> viewFinder = new Func1<V, V>() {
+
+            @Override
+            public V call(V v) {
+                return v;
+            }
+
+        };
+        activityController = simulateConfigChange(activityController, activityClass, viewFinder);
+        testView = viewFinder.call(activityController.get());
 
         // destroy
         activityController
                 .pause()
                 .stop()
                 .destroy();
-        testPresenter.checkPresenterDetached(VIEW_ID, testView);
+        testPresenter.assertPresenterDetached(VIEW_ID, testView);
 
     }
 
-    private <C extends FragmentActivity> ActivityController<C> simulateConfigChange(ActivityController<C> activityController, Class<C> activityClass) {
+    private <C extends FragmentActivity & TestActivity, V extends VisumView> ActivityController<C> simulateConfigChange(
+            ActivityController<C> activityController,
+            Class<C> activityClass,
+            Func1<C, V> viewFinder
+    ) {
+
+        C t = activityController.get();
+        t.setChangingConfigurations(true);
+        V oldView = viewFinder.call(t);
 
         Bundle bundle = new Bundle();
 
@@ -185,50 +246,30 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // Bring up a new activity
         activityController = Robolectric.buildActivity(activityClass)
-                .create(bundle)
-                .start()
-                .restoreInstanceState(bundle)
-                .resume()
-                .visible();
+                .setup(bundle);
+        V newView = viewFinder.call(activityController.get());
+
+        assertConfigChange(oldView, newView);
 
         return activityController;
 
     }
 
-    private <V extends VisumView<TestPresenter>> void checkConfigChange(V oldTestView, V newTestView) {
+    private void assertConfigChange(VisumView oldTestView, VisumView newTestView) {
+
         Assert.assertFalse("View has not been recreated", newTestView == oldTestView);
-        testPresenter.checkPresenterDetached(VIEW_ID, oldTestView);
-        testPresenter.checkPresenterAttached(VIEW_ID, newTestView);
-        Assert.assertNotNull("No presenter is attached to the former instance of the view", oldTestView.getPresenter());
-        Assert.assertTrue("Presenter didn't survive", oldTestView.getPresenter() == newTestView.getPresenter());
-    }
 
-    @Override
-    protected TestComponent mock() {
-
-        TestComponent component = super.mock();
-
-        Mockito.doAnswer(new Answer() {
-
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                Object[] arguments = invocation.getArguments();
-                TestVisumView view = (TestVisumView) arguments[0];
-                if (testPresenter == null) {
-                    testPresenter = new TestPresenter();
-                }
-                view.setPresenter(testPresenter);
-                return null;
-            }
-
-        }).when(component).inject(Mockito.any(TestVisumView.class));
-
-        return component;
+        VisumPresenter oldPresenter = oldTestView.getPresenter();
+        VisumPresenter newPresenter = newTestView.getPresenter();
+        Assert.assertNotNull("No presenter is attached to the new instance of the view", newPresenter);
+        Assert.assertTrue("Presenter didn't survive", oldPresenter == newPresenter);
 
     }
 
-    private interface TestVisumView {
+    private interface TestVisumView extends VisumView<TestPresenter> {
+
         void setPresenter(TestPresenter testPresenter);
+
     }
 
     private static class TestVisumBaseView extends VisumBaseView<TestPresenter> implements TestVisumView {
@@ -246,7 +287,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Override
@@ -276,7 +317,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Nullable
@@ -312,7 +353,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Nullable
@@ -328,9 +369,12 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    public static class TestVisumActivity extends VisumActivity<TestPresenter> implements TestVisumView {
+    public static class TestVisumActivity extends VisumActivity<TestPresenter>
+            implements TestVisumActivityView {
 
         private TestPresenter presenter;
+
+        private boolean changingConfigurations;
 
         public TestVisumActivity() {
             super(VIEW_ID);
@@ -348,7 +392,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Override
@@ -366,13 +410,34 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         public void onCreate(Bundle savedInstanceState) {
             setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
             super.onCreate(savedInstanceState);
+            changingConfigurations = false;
+        }
+
+        @Override
+        public boolean isChangingConfigurations() {
+            return changingConfigurations;
+        }
+
+        @Override
+        public void setChangingConfigurations(boolean changingConfigurations) {
+            this.changingConfigurations = changingConfigurations;
         }
 
     }
 
+    interface TestActivity {
+
+        void setChangingConfigurations(boolean changingConfigurations);
+
+    }
+
+    interface TestVisumActivityView extends TestVisumView, TestActivity {}
+
     public static class TestVisumAccountAuthenticatorActivity
             extends VisumAccountAuthenticatorActivity<TestPresenter>
-            implements TestVisumView {
+            implements TestVisumActivityView {
+
+        private boolean changingConfigurations;
 
         private TestPresenter presenter;
 
@@ -392,7 +457,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Override
@@ -410,6 +475,17 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         public void onCreate(Bundle savedInstanceState) {
             setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
             super.onCreate(savedInstanceState);
+            changingConfigurations = false;
+        }
+
+        @Override
+        public boolean isChangingConfigurations() {
+            return changingConfigurations;
+        }
+
+        @Override
+        public void setChangingConfigurations(boolean changingConfigurations) {
+            this.changingConfigurations = changingConfigurations;
         }
 
     }
@@ -434,7 +510,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         @Override
         public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
+            ((TestSubComponent) from).inject(this);
         }
 
         @Override
@@ -448,14 +524,21 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     protected interface TestComponent {
+        TestSubComponent testSubComponent();
+    }
+
+    protected interface TestSubComponent {
         void inject(TestVisumView testVisumView);
     }
 
-    private static class TestActivity extends FragmentActivity {
+    private static class FragmentContainerActivity extends FragmentActivity
+            implements TestActivity {
 
         private static final int CONTAINER_ID = 1;
 
         private LinearLayout view;
+
+        private boolean changingConfigurations;
 
         @SuppressWarnings("ResourceType")
         @Override
@@ -464,6 +547,16 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             view = new LinearLayout(this);
             view.setId(CONTAINER_ID);
             setContentView(view);
+        }
+
+        @Override
+        public boolean isChangingConfigurations() {
+            return changingConfigurations;
+        }
+
+        @Override
+        public void setChangingConfigurations(boolean changingConfigurations) {
+            this.changingConfigurations = changingConfigurations;
         }
 
     }

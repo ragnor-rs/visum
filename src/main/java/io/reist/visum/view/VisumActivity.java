@@ -101,6 +101,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
+        presenterAttachedOnActivityResult = false;
     }
 
     //endregion

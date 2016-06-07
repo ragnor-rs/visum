@@ -159,7 +159,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends Fragment & TestVisumView> void testFragment(V testView) {
+    protected <V extends Fragment & TestVisumResultReceiver> void testFragment(V testView) {
 
         ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
         FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
@@ -170,6 +170,15 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .add(FragmentContainerActivity.CONTAINER_ID, testView)
                 .commit();
         testPresenter.assertPresenterAttached(VIEW_ID, testView);
+
+        // on activity result
+        testView.startActivityForResult();
+        Shadows.shadowOf(fragmentContainerActivity).receiveResult(
+                new Intent(fragmentContainerActivity, SubActivity.class),
+                Activity.RESULT_OK,
+                new Intent()
+        );
+        assertPresenterAttachedBeforeOnActivityResult(testView);
 
         // hide
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
@@ -311,7 +320,12 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    public static class TestVisumFragment extends VisumFragment<TestPresenter> implements TestVisumView {
+    public static class TestVisumFragment extends VisumFragment<TestPresenter>
+            implements TestVisumResultReceiver {
+
+        private static final int REQUEST_CODE = 1;
+
+        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
 
         private TestPresenter presenter;
 
@@ -345,9 +359,39 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.presenter = presenter;
         }
 
+        @Override
+        public void startActivityForResult() {
+            startActivityForResult(new Intent(getActivity(), SubActivity.class), REQUEST_CODE);
+        }
+
+        @Override
+        public TestVisumResultReceiver getDummy() {
+            return dummy;
+        }
+
+        @Override
+        public void onActivityResult() {}
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult();
+        }
+
+        @Override
+        public void attachPresenter() {
+            super.attachPresenter();
+            dummy.attachPresenter();
+        }
+
     }
 
-    public static class TestVisumDialogFragment extends VisumDialogFragment<TestPresenter> implements TestVisumView {
+    public static class TestVisumDialogFragment extends VisumDialogFragment<TestPresenter>
+            implements TestVisumResultReceiver {
+
+        private static final int REQUEST_CODE = 1;
+
+        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
 
         private TestPresenter presenter;
 
@@ -381,6 +425,31 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.presenter = presenter;
         }
 
+        @Override
+        public void startActivityForResult() {
+            startActivityForResult(new Intent(getActivity(), SubActivity.class), REQUEST_CODE);
+        }
+
+        @Override
+        public TestVisumResultReceiver getDummy() {
+            return dummy;
+        }
+
+        @Override
+        public void onActivityResult() {}
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult();
+        }
+
+        @Override
+        public void attachPresenter() {
+            super.attachPresenter();
+            dummy.attachPresenter();
+        }
+
     }
 
     public static class TestVisumActivity extends VisumActivity<TestPresenter>
@@ -392,7 +461,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         private boolean changingConfigurations;
 
-        private final VisumActivity dummy = Mockito.mock(VisumActivity.class);
+        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
 
         public TestVisumActivity() {
             super(VIEW_ID);
@@ -447,14 +516,17 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         }
 
         @Override
-        public VisumActivity getDummy() {
+        public TestVisumResultReceiver getDummy() {
             return dummy;
         }
 
         @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        public void onActivityResult() {}
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult();
         }
 
         @Override
@@ -482,7 +554,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    interface TestVisumActivityView extends TestVisumView, TestActivity {
+    interface TestVisumResultReceiver extends TestVisumView {
 
         void startActivityForResult();
 
@@ -490,9 +562,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
          * Returns a delegate which is basically a mock of this view to count lifecycle
          * method calls
          */
-        VisumActivity getDummy();
+        TestVisumResultReceiver getDummy();
+
+        void onActivityResult();
 
     }
+
+    interface TestVisumActivityView extends TestActivity, TestVisumResultReceiver {}
 
     public static class TestVisumAccountAuthenticatorActivity
             extends VisumAccountAuthenticatorActivity<TestPresenter>
@@ -500,7 +576,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         private static final int REQUEST_CODE = 1;
 
-        private final VisumActivity dummy = Mockito.mock(VisumActivity.class);
+        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
 
         private boolean changingConfigurations;
 
@@ -559,14 +635,17 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         }
 
         @Override
-        public VisumActivity getDummy() {
+        public TestVisumResultReceiver getDummy() {
             return dummy;
         }
 
         @Override
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        public void onActivityResult() {}
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult();
         }
 
         @Override
@@ -648,11 +727,11 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    public static void assertPresenterAttachedBeforeOnActivityResult(TestVisumActivityView activityView) {
-        VisumActivity dummy = activityView.getDummy();
+    public static void assertPresenterAttachedBeforeOnActivityResult(TestVisumResultReceiver view) {
+        TestVisumResultReceiver dummy = view.getDummy();
         InOrder inOrder = Mockito.inOrder(dummy);
         inOrder.verify(dummy, Mockito.times(2)).attachPresenter(); // 2 because attachPresenter was already called after onCreate
-        inOrder.verify(dummy, Mockito.times(1)).onActivityResult(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(Intent.class));
+        inOrder.verify(dummy, Mockito.times(1)).onActivityResult();
     }
 
 }

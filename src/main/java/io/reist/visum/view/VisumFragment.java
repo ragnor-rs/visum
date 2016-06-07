@@ -152,6 +152,11 @@ public abstract class VisumFragment<P extends VisumPresenter>
         onStopClient();
     }
 
+    /**
+     * The client code must call this implementation via
+     * super.onActivityResult(requestCode, resultCode, data) before accessing a presenter.
+     */
+    @CallSuper
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

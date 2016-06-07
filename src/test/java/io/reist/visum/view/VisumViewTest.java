@@ -17,11 +17,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
@@ -34,9 +32,13 @@ import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
-import io.reist.visum.presenter.VisumPresenter;
 import rx.functions.Func0;
 import rx.functions.Func1;
+
+import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
+import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
+import static io.reist.visum.view.ViewAssert.assertPresenterAttachedBeforeOnActivityResult;
+import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 
 /**
  * Created by Reist on 26.05.16.
@@ -116,10 +118,10 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         TestVisumBaseView testView = new TestVisumBaseView(RuntimeEnvironment.application);
 
         testView.attachPresenter();
-        testPresenter.assertPresenterAttached(VIEW_ID, testView);
+        assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         testView.detachPresenter();
-        testPresenter.assertPresenterDetached(VIEW_ID, testView);
+        assertPresenterDetached(testPresenter, VIEW_ID, testView);
 
     }
 
@@ -151,10 +153,10 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         TestVisumWidget testView = new TestVisumWidget(RuntimeEnvironment.application);
 
         fragmentContainerActivity.view.addView(testView);
-        testPresenter.assertPresenterAttached(VIEW_ID, testView);
+        assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         fragmentContainerActivity.view.removeView(testView);
-        testPresenter.assertPresenterDetached(VIEW_ID, testView);
+        assertPresenterDetached(testPresenter, VIEW_ID, testView);
 
     }
 
@@ -169,7 +171,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .beginTransaction()
                 .add(FragmentContainerActivity.CONTAINER_ID, testView)
                 .commit();
-        testPresenter.assertPresenterAttached(VIEW_ID, testView);
+        assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         // on activity result
         testView.startActivityForResult();
@@ -182,11 +184,11 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // hide
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
-        testPresenter.assertPresenterDetached(VIEW_ID, testView);
+        assertPresenterDetached(testPresenter, VIEW_ID, testView);
 
         // show
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().show(testView).commit();
-        testPresenter.assertPresenterAttached(VIEW_ID, testView);
+        assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         // config change
         Func1<FragmentContainerActivity, V> viewFinder = new Func1<FragmentContainerActivity, V>() {
@@ -204,7 +206,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // destroy
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().remove(testView).commit();
-        testPresenter.assertPresenterDetached(VIEW_ID, testView);
+        assertPresenterDetached(testPresenter, VIEW_ID, testView);
 
     }
 
@@ -216,7 +218,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // create
         testView = activityController.setup().get();
-        testPresenter.assertPresenterAttached(VIEW_ID, testView);
+        assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         // on activity result
         testView.startActivityForResult();
@@ -244,7 +246,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .pause()
                 .stop()
                 .destroy();
-        testPresenter.assertPresenterDetached(VIEW_ID, testView);
+        assertPresenterDetached(testPresenter, VIEW_ID, testView);
 
     }
 
@@ -272,26 +274,9 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .setup(bundle);
         V newView = viewFinder.call(activityController.get());
 
-        assertConfigChange(oldView, newView);
+        assertPresenterReattached(oldView, newView);
 
         return activityController;
-
-    }
-
-    private void assertConfigChange(VisumView oldTestView, VisumView newTestView) {
-
-        Assert.assertFalse("View has not been recreated", newTestView == oldTestView);
-
-        VisumPresenter oldPresenter = oldTestView.getPresenter();
-        VisumPresenter newPresenter = newTestView.getPresenter();
-        Assert.assertNotNull("No presenter is attached to the new instance of the view", newPresenter);
-        Assert.assertTrue("Presenter didn't survive", oldPresenter == newPresenter);
-
-    }
-
-    private interface TestVisumView extends VisumView<TestPresenter> {
-
-        void setPresenter(TestPresenter testPresenter);
 
     }
 
@@ -554,20 +539,6 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    interface TestVisumResultReceiver extends TestVisumView {
-
-        void startActivityForResult();
-
-        /**
-         * Returns a delegate which is basically a mock of this view to count lifecycle
-         * method calls
-         */
-        TestVisumResultReceiver getDummy();
-
-        void onActivityResult();
-
-    }
-
     interface TestVisumActivityView extends TestActivity, TestVisumResultReceiver {}
 
     public static class TestVisumAccountAuthenticatorActivity
@@ -725,13 +696,6 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.changingConfigurations = changingConfigurations;
         }
 
-    }
-
-    public static void assertPresenterAttachedBeforeOnActivityResult(TestVisumResultReceiver view) {
-        TestVisumResultReceiver dummy = view.getDummy();
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(2)).attachPresenter(); // 2 because attachPresenter was already called after onCreate
-        inOrder.verify(dummy, Mockito.times(1)).onActivityResult();
     }
 
 }

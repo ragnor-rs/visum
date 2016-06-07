@@ -18,6 +18,9 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ServiceController;
 
+import static io.reist.visum.ClientAssert.assertClientAttached;
+import static io.reist.visum.ClientAssert.assertClientDetached;
+
 /**
  * Created by Reist on 26.05.16.
  */
@@ -40,12 +43,12 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         TestVisumBaseClient testClient = new TestVisumBaseClient(RuntimeEnvironment.application);
 
         testClient.onStartClient();
-        assertClientAttached(testClient);
+        assertClientAttached(getComponentCache(), testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
         testClient.onStopClient();
-        assertClientDetached(testClient);
+        assertClientDetached(getComponentCache(), testClient);
 
     }
 
@@ -57,12 +60,12 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         TestVisumAndroidService testClient = serviceController.get();
 
         serviceController.create();
-        assertClientAttached(testClient);
+        assertClientAttached(getComponentCache(), testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
         serviceController.destroy();
-        assertClientDetached(testClient);
+        assertClientDetached(getComponentCache(), testClient);
 
     }
 
@@ -74,12 +77,12 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         TestVisumIntentService testClient = serviceController.get();
 
         serviceController.create();
-        assertClientAttached(testClient);
+        assertClientAttached(getComponentCache(), testClient);
 
         Mockito.verify(getComponent(), Mockito.times(1)).inject(testClient);
 
         serviceController.destroy();
-        assertClientDetached(testClient);
+        assertClientDetached(getComponentCache(), testClient);
 
     }
 

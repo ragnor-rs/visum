@@ -10,6 +10,9 @@ import io.reist.visum.VisumTest;
 import io.reist.visum.view.TestView;
 import rx.functions.Func0;
 
+import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
+import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
+
 /**
  * Created by Reist on 26.05.16.
  */
@@ -61,10 +64,10 @@ public class VisumPresenterTest extends VisumTest<TestView> {
         TestView view = getClient();
 
         view.attachPresenter();
-        presenter.assertPresenterAttached(VIEW_ID, view);
+        assertPresenterAttached(presenter, VIEW_ID, view);
 
         view.detachPresenter();
-        presenter.assertPresenterDetached(VIEW_ID, view);
+        assertPresenterDetached(presenter, VIEW_ID, view);
 
     }
 
@@ -74,18 +77,18 @@ public class VisumPresenterTest extends VisumTest<TestView> {
         TestView viewOne = getClient();
 
         viewOne.attachPresenter();
-        presenter.assertPresenterAttached(VIEW_ID, viewOne);
+        assertPresenterAttached(presenter, VIEW_ID, viewOne);
 
         viewTwo.attachPresenter();
-        presenter.assertPresenterAttached(VIEW_ID_TWO, viewTwo);
+        assertPresenterAttached(presenter, VIEW_ID_TWO, viewTwo);
 
         Assert.assertEquals("Invalid view count", 2, presenter.getViewCount());
 
         viewOne.detachPresenter();
-        presenter.assertPresenterDetached(VIEW_ID, viewOne);
+        assertPresenterDetached(presenter, VIEW_ID, viewOne);
 
         viewTwo.detachPresenter();
-        presenter.assertPresenterDetached(VIEW_ID_TWO, viewTwo);
+        assertPresenterDetached(presenter, VIEW_ID_TWO, viewTwo);
 
     }
 

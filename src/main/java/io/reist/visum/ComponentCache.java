@@ -152,6 +152,10 @@ public class ComponentCache {
             this.componentFactory = componentFactory;
         }
 
+        Object getComponent() {
+            return component;
+        }
+
     }
 
     /**

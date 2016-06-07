@@ -1,13 +1,20 @@
 package io.reist.visum;
 
-import org.assertj.core.api.Assertions;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import rx.functions.Func0;
+
+import static io.reist.visum.ClientAssert.assertClientStarted;
+import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRemoved;
+import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRetained;
+import static org.assertj.core.api.Assertions.shouldHaveThrown;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by Reist on 26.05.16.
@@ -56,16 +63,16 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         TestClientFour client = new TestClientFour(getComponentCache());
 
         ComponentCache.ComponentEntry componentEntry = componentCache.findComponentEntryByClient(client);
-        Assert.assertNotEquals("A new entry should have been created for a new registration", getComponentEntry(), componentEntry);
+        assertNotEquals("A new entry should have been created for a new registration", getComponentEntry(), componentEntry);
 
         Object component = componentCache.start(client);
-        Assert.assertEquals("Invalid type of the created component", TestComponentTwo.class, component.getClass());
+        assertEquals("Invalid type of the created component", TestComponentTwo.class, component.getClass());
 
     }
 
     @Test
     public void testFindComponentOk() {
-        Assert.assertEquals(
+        assertEquals(
                 "Can't find a ComponentEntry for the client of a registered type",
                 getComponentEntry(),
                 getComponentCache().findComponentEntryByClientOrThrow(getClient())
@@ -100,22 +107,22 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         ComponentCache componentCache = getComponentCache();
 
         Object component = componentCache.start(client);
-        assertClientStarted();
+        assertClientStarted(componentCache, client);
 
         try {
             componentCache.start(client);
-            Assertions.shouldHaveThrown(IllegalStateException.class);
+            shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
-        Assert.assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
-        Assert.assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
+        assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
+        assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
 
         componentCache.stop(client, false);
-        assertClientStoppedAndComponentRemoved();
+        assertClientStoppedAndComponentRemoved(componentCache, client);
 
         try {
             componentCache.stop(client, false);
-            Assertions.shouldHaveThrown(IllegalStateException.class);
+            shouldHaveThrown(IllegalStateException.class);
         } catch (IllegalStateException ignored) {}
 
     }
@@ -126,17 +133,17 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         TestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
-        Object component = componentCache.start(client);
-        assertClientStarted();
+        componentCache.start(client);
+        assertClientStarted(componentCache, client);
 
         componentCache.stop(client, true);
-        assertClientStoppedAndComponentRetained(component);
+        assertClientStoppedAndComponentRetained(componentCache, client);
 
         componentCache.start(client);
-        assertClientStarted();
+        assertClientStarted(componentCache, client);
 
         componentCache.stop(client, false);
-        assertClientStoppedAndComponentRemoved();
+        assertClientStoppedAndComponentRemoved(componentCache, client);
 
     }
 
@@ -147,20 +154,20 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         ComponentCache componentCache = getComponentCache();
 
         Object component1 = componentCache.start(client);
-        Assert.assertNotNull("No component is returned for a client of a registered type", component1);
+        assertNotNull("No component is returned for a client of a registered type", component1);
 
         Object component3 = componentCache.start(clientThree);
-        Assert.assertEquals(
+        assertEquals(
                 "ComponentCache should have reused the existing component due to client registration data given during registration",
                 component1,
                 component3
         );
 
         componentCache.stop(client, false);
-        Assert.assertNotNull("The component is still in use", getComponentEntry().component);
+        assertNotNull("The component is still in use", getComponentEntry().component);
 
         componentCache.stop(clientThree, false);
-        Assert.assertNull("ComponentCache should have removed the unused component", getComponentEntry().component);
+        assertNull("ComponentCache should have removed the unused component", getComponentEntry().component);
 
     }
 

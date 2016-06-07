@@ -21,6 +21,7 @@
 package io.reist.visum.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
@@ -41,6 +42,12 @@ public abstract class VisumActivity<P extends VisumPresenter>
         implements VisumView<P> {
 
     private final VisumViewHelper<P> helper;
+
+    /**
+     * Used to ensure that {@link #attachPresenter()} is called before
+     * {@link #onActivityResult(int, int, Intent)}
+     */
+    private boolean presenterAttachedOnActivityResult;
 
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
@@ -111,7 +118,9 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @Override
     public void onResume() {
         super.onResume();
-        attachPresenter();
+        if (!presenterAttachedOnActivityResult) {
+            attachPresenter();
+        }
     }
 
     @Override
@@ -124,6 +133,13 @@ public abstract class VisumActivity<P extends VisumPresenter>
     public void onDestroy() {
         super.onDestroy();
         onStopClient();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        attachPresenter();
+        presenterAttachedOnActivityResult = true;
     }
 
     //endregion

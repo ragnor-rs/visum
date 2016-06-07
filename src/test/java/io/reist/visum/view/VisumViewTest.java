@@ -1,7 +1,9 @@
 package io.reist.visum.view;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -19,9 +21,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
@@ -204,6 +209,15 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         testView = activityController.setup().get();
         testPresenter.assertPresenterAttached(VIEW_ID, testView);
 
+        // on activity result
+        testView.startActivityForResult();
+        Shadows.shadowOf(testView).receiveResult(
+                new Intent(testView, SubActivity.class),
+                Activity.RESULT_OK,
+                new Intent()
+        );
+        assertPresenterAttachedBeforeOnActivityResult(testView);
+
         // config change
         Func1<V, V> viewFinder = new Func1<V, V>() {
 
@@ -372,9 +386,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     public static class TestVisumActivity extends VisumActivity<TestPresenter>
             implements TestVisumActivityView {
 
+        private static final int REQUEST_CODE = 1;
+
         private TestPresenter presenter;
 
         private boolean changingConfigurations;
+
+        private final VisumActivity dummy = Mockito.mock(VisumActivity.class);
 
         public TestVisumActivity() {
             super(VIEW_ID);
@@ -423,6 +441,39 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.changingConfigurations = changingConfigurations;
         }
 
+        @Override
+        public void startActivityForResult() {
+            startActivityForResult(new Intent(this, SubActivity.class), REQUEST_CODE);
+        }
+
+        @Override
+        public VisumActivity getDummy() {
+            return dummy;
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult(requestCode, resultCode, data);
+        }
+
+        @Override
+        public void attachPresenter() {
+            super.attachPresenter();
+            dummy.attachPresenter();
+        }
+
+    }
+
+    public static class SubActivity extends FragmentActivity {
+
+        @Override
+        protected void onStart() {
+            super.onStart();
+            setResult(RESULT_OK);
+            finish();
+        }
+
     }
 
     interface TestActivity {
@@ -431,11 +482,25 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    interface TestVisumActivityView extends TestVisumView, TestActivity {}
+    interface TestVisumActivityView extends TestVisumView, TestActivity {
+
+        void startActivityForResult();
+
+        /**
+         * Returns a delegate which is basically a mock of this view to count lifecycle
+         * method calls
+         */
+        VisumActivity getDummy();
+
+    }
 
     public static class TestVisumAccountAuthenticatorActivity
             extends VisumAccountAuthenticatorActivity<TestPresenter>
             implements TestVisumActivityView {
+
+        private static final int REQUEST_CODE = 1;
+
+        private final VisumActivity dummy = Mockito.mock(VisumActivity.class);
 
         private boolean changingConfigurations;
 
@@ -486,6 +551,28 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         @Override
         public void setChangingConfigurations(boolean changingConfigurations) {
             this.changingConfigurations = changingConfigurations;
+        }
+
+        @Override
+        public void startActivityForResult() {
+            startActivityForResult(new Intent(this, SubActivity.class), REQUEST_CODE);
+        }
+
+        @Override
+        public VisumActivity getDummy() {
+            return dummy;
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            dummy.onActivityResult(requestCode, resultCode, data);
+        }
+
+        @Override
+        public void attachPresenter() {
+            super.attachPresenter();
+            dummy.attachPresenter();
         }
 
     }
@@ -559,6 +646,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.changingConfigurations = changingConfigurations;
         }
 
+    }
+
+    public static void assertPresenterAttachedBeforeOnActivityResult(TestVisumActivityView activityView) {
+        VisumActivity dummy = activityView.getDummy();
+        InOrder inOrder = Mockito.inOrder(dummy);
+        inOrder.verify(dummy, Mockito.times(2)).attachPresenter(); // 2 because attachPresenter was already called after onCreate
+        inOrder.verify(dummy, Mockito.times(1)).onActivityResult(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(Intent.class));
     }
 
 }

@@ -2,7 +2,6 @@ package io.reist.visum.presenter;
 
 import android.support.annotation.NonNull;
 
-import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import io.reist.visum.view.VisumView;
@@ -36,20 +35,8 @@ public class TestPresenter extends VisumPresenter<VisumView> {
         dummy.onViewDetached(id, view);
     }
 
-    public void assertPresenterDetached(int viewId, VisumView view) {
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(viewId, view);
-        if (getViewCount() == 0) {
-            inOrder.verify(dummy, Mockito.times(1)).onStop();
-        }
-    }
-
-    public void assertPresenterAttached(int viewId, VisumView view) {
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
-        if (getViewCount() == 1) {
-            inOrder.verify(dummy, Mockito.times(1)).onStart();
-        }
+    public TestPresenter getDummy() {
+        return dummy;
     }
 
 }

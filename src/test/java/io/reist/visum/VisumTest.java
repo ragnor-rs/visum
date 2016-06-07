@@ -1,8 +1,12 @@
 package io.reist.visum;
 
-import org.junit.Assert;
-
 import rx.functions.Func0;
+
+import static io.reist.visum.ClientAssert.assertClientClassesRegistered;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A basic test for Visum clients. Unlike {@link VisumImplTest}, this test doesn't support
@@ -15,11 +19,6 @@ import rx.functions.Func0;
  * cases as well as the instance of {@link ComponentCache}. Also, a local component cache listener
  * is registered to intercept component fabrication events {@link #onComponentCreated(Object)}) and
  * {@link #onComponentDestroyed(Object)}.
- *
- * Use {@link #assertClientStarted()}, {@link #assertClientStoppedAndComponentRemoved()} and
- * {@link #assertClientStoppedAndComponentRetained(Object)} after
- * {@link ComponentCache#start(VisumClient)} and {@link ComponentCache#stop(VisumClient, boolean)}
- * to see if the client's lifecycle is correctly maintained by the {@link ComponentCache} class.
  *
  * Subclasses must call {@link #tearDown()} in tearDown methods to free resources.
  *
@@ -58,13 +57,13 @@ public abstract class VisumTest<C extends VisumClient> implements ComponentCache
         client = createClient();
         componentEntry = componentCache.findComponentEntryByClient(client);
 
-        assertClientClasses(clientClasses);
+        assertClientClassesRegistered(componentCache, clientClasses);
 
-        Assert.assertNotNull("ComponentEntry has not been created via ComponentCache.register()", componentEntry);
-        Assert.assertEquals("ComponentEntry factory doesn't match the supplied Func0", componentFactory, componentEntry.componentFactory);
+        assertNotNull("ComponentEntry has not been created via ComponentCache.register()", componentEntry);
+        assertEquals("ComponentEntry factory doesn't match the supplied Func0", componentFactory, componentEntry.componentFactory);
 
-        Assert.assertTrue("No clients should be attached till ComponentCache.start() is called", componentEntry.clients.isEmpty());
-        Assert.assertNull("No components should be created until the very first call of ComponentCache.start()", componentEntry.component);
+        assertTrue("No clients should be attached till ComponentCache.start() is called", componentEntry.clients.isEmpty());
+        assertNull("No components should be created until the very first call of ComponentCache.start()", componentEntry.component);
 
     }
 
@@ -75,44 +74,7 @@ public abstract class VisumTest<C extends VisumClient> implements ComponentCache
         componentEntry = null;
     }
 
-    private void assertClientClasses(Class<? extends C>[] clientClasses) {
-
-        if (clientClasses.length != componentEntry.clientClasses.size()) {
-            Assert.fail("ComponentEntry client classes don't match the supplied ones via ComponentCache.register()");
-        }
-
-        for (Class<? extends C> clientClass : clientClasses) {
-            if (!componentEntry.clientClasses.contains(clientClass)) {
-                Assert.fail("ComponentEntry client classes don't match the supplied ones via ComponentCache.register()");
-            }
-        }
-
-    }
-
     protected abstract C createClient();
-
-    private void assertClientStopped() {
-        Assert.assertTrue("Requested client stop but there are still some clients attached", componentEntry.clients.isEmpty());
-    }
-
-    protected void assertClientStoppedAndComponentRemoved() {
-        assertClientStopped();
-        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
-    }
-
-    protected void assertClientStoppedAndComponentRetained(Object component) {
-        assertClientStopped();
-        Assert.assertNotNull("The component is null", componentEntry.component);
-        Assert.assertEquals("The component should have been retained", componentEntry.component, component);
-    }
-
-    protected void assertClientStarted() {
-        Assert.assertTrue(
-                "Only one client should be registered here",
-                componentEntry.clients.size() == 1 && componentEntry.clients.contains(client)
-        );
-        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
-    }
 
     @Override
     public void onComponentDestroyed(Object component) {}

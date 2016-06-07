@@ -3,7 +3,6 @@ package io.reist.visum;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 
-import org.junit.Assert;
 import org.robolectric.RuntimeEnvironment;
 
 import rx.functions.Func0;
@@ -16,9 +15,6 @@ import rx.functions.Func0;
  * register component clients by calling {@link #register(Class[])} in the setUp method. A local
  * {@link io.reist.visum.ComponentCache.Listener} is registered and available via
  * {@link #onComponentCreated(Object)} and {@link #onComponentDestroyed(Object)}.
- *
- * Basic assertions include {@link #assertClientAttached(VisumClient)} and
- * {@link #assertClientDetached(VisumClient)} to check client lifecycle.
  *
  * Subclasses must call {@link #tearDown()} in tearDown methods to free resources.
  *
@@ -50,18 +46,6 @@ public abstract class VisumImplTest<C> implements ComponentCache.Listener {
     @SafeVarargs
     protected final void register(Class<? extends VisumClient>... clientClasses) {
         getComponentCache().register(componentFactory, clientClasses);
-    }
-
-    protected void assertClientDetached(VisumClient client) {
-        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertFalse("There are still some clients attached", componentEntry.clients.contains(client));
-        Assert.assertNull("ComponentCache should have removed the unused component", componentEntry.component);
-    }
-
-    protected void assertClientAttached(VisumClient client) {
-        ComponentCache.ComponentEntry componentEntry = getComponentCache().findComponentEntryByClient(client);
-        Assert.assertTrue("The client is not attached", componentEntry.clients.contains(client));
-        Assert.assertNotNull("No component has been created for the client", componentEntry.component);
     }
 
     public C getComponent() {

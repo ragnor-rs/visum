@@ -50,7 +50,7 @@ public final class VisumClientHelper<C extends VisumClient> {
             for (Method method : componentClass.getMethods()) {
                 Class types[] = method.getParameterTypes();
 
-                if (INJECT_METHOD_NAME.equals(method.getName()) &&
+                if (method.getName().startsWith(INJECT_METHOD_NAME) &&
                         types != null &&
                         types.length == 1 && clazz.isAssignableFrom(types[0])) {
                     method.invoke(component, client);

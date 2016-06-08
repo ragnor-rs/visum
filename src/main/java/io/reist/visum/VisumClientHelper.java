@@ -17,6 +17,8 @@ import java.util.Arrays;
  */
 public final class VisumClientHelper<C extends VisumClient> {
 
+    private static final String INJECT_METHOD_NAME = "inject";
+
     private static final String TAG = VisumClientHelper.class.getSimpleName();
 
     protected final C client;
@@ -40,11 +42,19 @@ public final class VisumClientHelper<C extends VisumClient> {
         Class clazz = client.getClass();
 
         try {
-            for (Method method : component.getClass().getMethods()) {
+            Class componentClass = component.getClass();
+
+            Log.d(TAG, String.format("onCreate: looking for '%s' methods in [%s] for [%s]",
+                    INJECT_METHOD_NAME, componentClass.getSimpleName(), clazz.getSimpleName()));
+
+            for (Method method : componentClass.getMethods()) {
                 Class types[] = method.getParameterTypes();
-                if (types != null && types.length == 1 && clazz.isAssignableFrom(types[0])) {
+
+                if (method.getName().startsWith(INJECT_METHOD_NAME) &&
+                        types != null &&
+                        types.length == 1 && clazz.isAssignableFrom(types[0])) {
                     method.invoke(component, client);
-                    Log.d(TAG, String.format("onCreate: client [%s] was injected by [%s] with [%s]",
+                    Log.d(TAG, String.format(" client [%s] was injected by [%s] with [%s]",
                             client.getClass().getSimpleName(),
                             component.getClass().getSimpleName(),
                             method.getName()));
@@ -57,7 +67,7 @@ public final class VisumClientHelper<C extends VisumClient> {
             Log.wtf(TAG, e);
         }
 
-        Log.d(TAG, "onCreate: client [" + client.getClass().getSimpleName() + "] fallback");
+        Log.d(TAG, " client [" + client.getClass().getSimpleName() + "] fallback");
 
         client.inject(component);
     }

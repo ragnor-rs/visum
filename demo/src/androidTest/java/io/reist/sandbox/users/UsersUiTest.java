@@ -45,6 +45,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static io.reist.sandbox.core.TestUtils.clickOnId;
+import static org.hamcrest.Matchers.allOf;
 
 /**
  * Created by m039 on 11/20/15.

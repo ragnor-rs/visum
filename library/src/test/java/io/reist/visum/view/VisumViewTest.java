@@ -63,7 +63,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                     TestPresenter testPresenter;
 
                     @Override
-                    public void inject(VisumViewWithPresenterSetter testVisumView) {
+                    public void inject(VisumDynamicPresenterView testVisumView) {
                         if (testPresenter == null) {
                             testPresenter = new TestPresenter();
                             VisumViewTest.this.testPresenter = testPresenter;
@@ -167,7 +167,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends Fragment & VisumViewWithPresenterSetter> void visumChildFragment(V parentView, V childView) {
+    protected <V extends Fragment & VisumDynamicPresenterView> void visumChildFragment(V parentView, V childView) {
 
         ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
         FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
@@ -360,7 +360,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     protected interface TestSubComponent {
-        void inject(VisumViewWithPresenterSetter testVisumView);
+        void inject(VisumDynamicPresenterView testVisumView);
     }
 
     private static class FragmentContainerActivity extends FragmentActivity

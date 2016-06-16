@@ -8,7 +8,7 @@ import io.reist.visum.presenter.TestPresenter;
 /**
  * Created by Reist on 16.06.16.
  */
-class TestVisumView extends VisumBaseView<TestPresenter> implements VisumViewWithPresenterSetter {
+class TestVisumView extends VisumBaseView<TestPresenter> implements VisumDynamicPresenterView {
 
     private TestPresenter presenter;
 

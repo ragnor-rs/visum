@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumTest;
-import io.reist.visum.view.TestView;
+import io.reist.visum.view.BaseTestView;
 import rx.functions.Func0;
 
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
@@ -16,7 +16,7 @@ import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
 /**
  * Created by Reist on 26.05.16.
  */
-public class VisumPresenterTest extends VisumTest<TestView> {
+public class VisumPresenterTest extends VisumTest<BaseTestView> {
 
     private static final int VIEW_ID = 1;
 
@@ -61,7 +61,7 @@ public class VisumPresenterTest extends VisumTest<TestView> {
     @Test
     public void testSetView() {
 
-        TestView view = getClient();
+        BaseTestView view = getClient();
 
         view.attachPresenter();
         assertPresenterAttached(presenter, VIEW_ID, view);
@@ -74,7 +74,7 @@ public class VisumPresenterTest extends VisumTest<TestView> {
     @Test
     public void testMultiViews() {
 
-        TestView viewOne = getClient();
+        BaseTestView viewOne = getClient();
 
         viewOne.attachPresenter();
         assertPresenterAttached(presenter, VIEW_ID, viewOne);
@@ -93,18 +93,18 @@ public class VisumPresenterTest extends VisumTest<TestView> {
     }
 
     @Override
-    protected TestView createClient() {
+    protected BaseTestView createClient() {
         viewTwo = new TestViewTwo(getComponentCache(), VIEW_ID_TWO);
         return new TestViewOne(getComponentCache(), VIEW_ID);
     }
 
-    private class TestViewOne extends TestView {
+    private class TestViewOne extends BaseTestView {
         protected TestViewOne(ComponentCache componentCache, int viewId) {
             super(componentCache, presenter, viewId);
         }
     }
 
-    private class TestViewTwo extends TestView {
+    private class TestViewTwo extends BaseTestView {
         protected TestViewTwo(ComponentCache componentCache, int viewId) {
             super(componentCache, presenter, viewId);
         }

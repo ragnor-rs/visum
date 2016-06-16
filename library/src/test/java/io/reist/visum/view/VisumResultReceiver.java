@@ -3,7 +3,7 @@ package io.reist.visum.view;
 /**
  * Created by Reist on 07.06.16.
  */
-interface VisumResultReceiver extends VisumViewWithPresenterSetter {
+interface VisumResultReceiver extends VisumDynamicPresenterView {
 
     void startActivityForResult();
 

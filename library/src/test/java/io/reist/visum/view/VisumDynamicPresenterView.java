@@ -5,7 +5,7 @@ import io.reist.visum.presenter.TestPresenter;
 /**
  * Created by Reist on 07.06.16.
  */
-interface VisumViewWithPresenterSetter extends VisumView<TestPresenter> {
+interface VisumDynamicPresenterView extends VisumView<TestPresenter> {
 
     void setPresenter(TestPresenter testPresenter);
 

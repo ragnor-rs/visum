@@ -1,19 +1,19 @@
 package io.reist.visum.view;
 
+import io.reist.visum.BaseTestClient;
 import io.reist.visum.ComponentCache;
-import io.reist.visum.TestClient;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.TestPresenter;
 
 /**
  * Created by Reist on 26.05.16.
  */
-public abstract class TestView extends TestClient implements VisumView<TestPresenter> {
+public abstract class BaseTestView extends BaseTestClient implements VisumView<TestPresenter> {
 
     private final TestPresenter presenter;
     private final VisumViewHelper<TestPresenter> helper;
 
-    protected TestView(ComponentCache componentCache, TestPresenter presenter, int viewId) {
+    protected BaseTestView(ComponentCache componentCache, TestPresenter presenter, int viewId) {
         super(componentCache);
         this.presenter = presenter;
         helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNull;
 /**
  * Created by Reist on 26.05.16.
  */
-public class ComponentCacheTest extends VisumTest<TestClient> {
+public class ComponentCacheTest extends VisumTest<BaseTestClient> {
 
     private TestClientThree clientThree;
     private TestClientTwo clientTwo;
@@ -40,7 +40,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
         dummyListener = Mockito.mock(ComponentCache.Listener.class);
     }
 
-    protected TestClient createClient() {
+    protected BaseTestClient createClient() {
         clientTwo = new TestClientTwo(getComponentCache());
         clientThree = new TestClientThree(getComponentCache());
         return new TestClientOne(getComponentCache());
@@ -87,7 +87,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @Test
     public void testComponentListener() {
 
-        TestClient client = getClient();
+        BaseTestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
         Object component = componentCache.start(client);
@@ -103,7 +103,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @Test
     public void testStartAndStop() {
 
-        TestClient client = getClient();
+        BaseTestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
         Object component = componentCache.start(client);
@@ -130,7 +130,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @Test
     public void testRetainComponent() {
 
-        TestClient client = getClient();
+        BaseTestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
         componentCache.start(client);
@@ -150,7 +150,7 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
     @Test
     public void testMultiClients() {
 
-        TestClient client = getClient();
+        BaseTestClient client = getClient();
         ComponentCache componentCache = getComponentCache();
 
         Object component1 = componentCache.start(client);
@@ -183,25 +183,25 @@ public class ComponentCacheTest extends VisumTest<TestClient> {
 
     }
 
-    private static class TestClientOne extends TestClient {
+    private static class TestClientOne extends BaseTestClient {
         private TestClientOne(ComponentCache componentCache) {
             super(componentCache);
         }
     }
 
-    private static class TestClientTwo extends TestClient {
+    private static class TestClientTwo extends BaseTestClient {
         private TestClientTwo(ComponentCache componentCache) {
             super(componentCache);
         }
     }
 
-    private static class TestClientThree extends TestClient {
+    private static class TestClientThree extends BaseTestClient {
         private TestClientThree(ComponentCache componentCache) {
             super(componentCache);
         }
     }
 
-    private static class TestClientFour extends TestClient {
+    private static class TestClientFour extends BaseTestClient {
         private TestClientFour(ComponentCache componentCache) {
             super(componentCache);
         }

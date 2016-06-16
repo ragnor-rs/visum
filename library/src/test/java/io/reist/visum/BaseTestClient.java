@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 /**
  * Created by Reist on 26.05.16.
  */
-public abstract class TestClient implements VisumClient {
+public abstract class BaseTestClient implements VisumClient {
 
     private final ComponentCache componentCache;
 
-    protected TestClient(ComponentCache componentCache) {
+    protected BaseTestClient(ComponentCache componentCache) {
         this.componentCache = componentCache;
     }
 

@@ -1,26 +1,17 @@
 package io.reist.visum.view;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -51,7 +42,8 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 )
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
-    private static final int VIEW_ID = 1;
+    static final int VIEW_ID = 1;
+    private static final int CHILD_VIEW_ID = 2;
 
     /**
      * A presenter from a sub-component. It will be null after the sub-component is removed from the
@@ -71,7 +63,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                     TestPresenter testPresenter;
 
                     @Override
-                    public void inject(TestVisumView testVisumView) {
+                    public void inject(VisumDynamicPresenterView testVisumView) {
                         if (testPresenter == null) {
                             testPresenter = new TestPresenter();
                             VisumViewTest.this.testPresenter = testPresenter;
@@ -97,9 +89,9 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                     }
 
                 },
-                TestVisumBaseView.class,
-                TestVisumFragment.class,
-                TestVisumDialogFragment.class,
+                TestVisumView.class,
+                BaseTestVisumFragment.class,
+                BaseTestVisumDialogFragment.class,
                 TestVisumActivity.class,
                 TestVisumAccountAuthenticatorActivity.class,
                 TestVisumWidget.class
@@ -115,7 +107,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     @Test
     public void visumBaseView() {
 
-        TestVisumBaseView testView = new TestVisumBaseView(RuntimeEnvironment.application);
+        TestVisumView testView = new TestVisumView(RuntimeEnvironment.application);
 
         testView.attachPresenter();
         assertPresenterAttached(testPresenter, VIEW_ID, testView);
@@ -161,7 +153,55 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends Fragment & TestVisumResultReceiver> void testFragment(V testView) {
+    @Test
+    public void visumChildFragment() {
+        visumChildFragment(new TestVisumFragment(), new TestVisumChildFragment());
+        visumChildFragment(new TestVisumFragment(), new TestVisumChildDialogFragment());
+    }
+
+    @SuppressWarnings({"ResourceType", "unchecked"})
+    @Test
+    public void visumChildDialogFragment() {
+        visumChildFragment(new TestVisumDialogFragment(), new TestVisumChildFragment());
+        visumChildFragment(new TestVisumDialogFragment(), new TestVisumChildDialogFragment());
+    }
+
+    @SuppressWarnings({"ResourceType", "unchecked"})
+    protected <V extends Fragment & VisumDynamicPresenterView> void visumChildFragment(V parentView, V childView) {
+
+        ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
+        FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
+
+        // create a parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .add(FragmentContainerActivity.CONTAINER_ID, parentView)
+                .commit();
+
+        // create a child fragment
+        parentView.getChildFragmentManager()
+                .beginTransaction()
+                .add(TestVisumFragment.CONTAINER_ID, childView)
+                .commit();
+
+        // hide the parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .hide(parentView)
+                .commit();
+        assertPresenterDetached(testPresenter, CHILD_VIEW_ID, childView);
+
+        // show the parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .show(parentView)
+                .commit();
+        assertPresenterAttached(testPresenter, CHILD_VIEW_ID, childView);
+
+    }
+
+    @SuppressWarnings({"ResourceType", "unchecked"})
+    protected <V extends Fragment & VisumResultReceiver> void testFragment(V testView) {
 
         ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
         FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
@@ -176,7 +216,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         // on activity result
         testView.startActivityForResult();
         Shadows.shadowOf(fragmentContainerActivity).receiveResult(
-                new Intent(fragmentContainerActivity, SubActivity.class),
+                new Intent(fragmentContainerActivity, ChildActivity.class),
                 Activity.RESULT_OK,
                 new Intent()
         );
@@ -211,7 +251,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
-    protected <V extends FragmentActivity & TestVisumActivityView> void testActivity(Class<V> activityClass) {
+    protected <V extends FragmentActivity & VisumConfigurableResultReceiver> void testActivity(Class<V> activityClass) {
 
         ActivityController<V> activityController = Robolectric.buildActivity(activityClass);
         V testView;
@@ -223,7 +263,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         // on activity result
         testView.startActivityForResult();
         Shadows.shadowOf(testView).receiveResult(
-                new Intent(testView, SubActivity.class),
+                new Intent(testView, ChildActivity.class),
                 Activity.RESULT_OK,
                 new Intent()
         );
@@ -250,7 +290,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    private <C extends FragmentActivity & TestActivity, V extends VisumView> ActivityController<C> simulateConfigChange(
+    private <C extends FragmentActivity & Configurable, V extends VisumView> ActivityController<C> simulateConfigChange(
             ActivityController<C> activityController,
             Class<C> activityClass,
             Func1<C, V> viewFinder
@@ -280,249 +320,31 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    private static class TestVisumBaseView extends VisumBaseView<TestPresenter> implements TestVisumView {
-
-        private TestPresenter presenter;
-
-        public TestVisumBaseView(Context context) {
-            super(VIEW_ID, context);
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-    }
-
-    public static class TestVisumFragment extends VisumFragment<TestPresenter>
-            implements TestVisumResultReceiver {
-
-        private static final int REQUEST_CODE = 1;
-
-        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
-
-        private TestPresenter presenter;
-
+    public static class TestVisumFragment extends BaseTestVisumFragment {
         public TestVisumFragment() {
             super(VIEW_ID);
         }
-
-        @Override
-        protected int getLayoutRes() {
-            return 0;
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return new View(getContext());
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void startActivityForResult() {
-            startActivityForResult(new Intent(getActivity(), SubActivity.class), REQUEST_CODE);
-        }
-
-        @Override
-        public TestVisumResultReceiver getDummy() {
-            return dummy;
-        }
-
-        @Override
-        public void onActivityResult() {}
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult();
-        }
-
-        @Override
-        public void attachPresenter() {
-            super.attachPresenter();
-            dummy.attachPresenter();
-        }
-
     }
 
-    public static class TestVisumDialogFragment extends VisumDialogFragment<TestPresenter>
-            implements TestVisumResultReceiver {
+    public static class TestVisumChildFragment extends BaseTestVisumFragment {
+        public TestVisumChildFragment() {
+            super(CHILD_VIEW_ID);
+        }
+    }
 
-        private static final int REQUEST_CODE = 1;
-
-        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
-
-        private TestPresenter presenter;
-
+    public static class TestVisumDialogFragment extends BaseTestVisumDialogFragment {
         public TestVisumDialogFragment() {
             super(VIEW_ID);
         }
-
-        @Override
-        protected int getLayoutRes() {
-            return 0;
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return new View(getContext());
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void startActivityForResult() {
-            startActivityForResult(new Intent(getActivity(), SubActivity.class), REQUEST_CODE);
-        }
-
-        @Override
-        public TestVisumResultReceiver getDummy() {
-            return dummy;
-        }
-
-        @Override
-        public void onActivityResult() {}
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult();
-        }
-
-        @Override
-        public void attachPresenter() {
-            super.attachPresenter();
-            dummy.attachPresenter();
-        }
-
     }
 
-    public static class TestVisumActivity extends VisumActivity<TestPresenter>
-            implements TestVisumActivityView {
-
-        private static final int REQUEST_CODE = 1;
-
-        private TestPresenter presenter;
-
-        private boolean changingConfigurations;
-
-        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
-
-        public TestVisumActivity() {
-            super(VIEW_ID);
+    public static class TestVisumChildDialogFragment extends BaseTestVisumDialogFragment {
+        public TestVisumChildDialogFragment() {
+            super(CHILD_VIEW_ID);
         }
-
-        @Override
-        protected int getLayoutRes() {
-            return 0;
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void setContentView(@LayoutRes int layoutResID) {
-            setContentView(new View(this));
-        }
-
-        @SuppressLint("PrivateResource")
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
-            super.onCreate(savedInstanceState);
-            changingConfigurations = false;
-        }
-
-        @Override
-        public boolean isChangingConfigurations() {
-            return changingConfigurations;
-        }
-
-        @Override
-        public void setChangingConfigurations(boolean changingConfigurations) {
-            this.changingConfigurations = changingConfigurations;
-        }
-
-        @Override
-        public void startActivityForResult() {
-            startActivityForResult(new Intent(this, SubActivity.class), REQUEST_CODE);
-        }
-
-        @Override
-        public TestVisumResultReceiver getDummy() {
-            return dummy;
-        }
-
-        @Override
-        public void onActivityResult() {}
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult();
-        }
-
-        @Override
-        public void attachPresenter() {
-            super.attachPresenter();
-            dummy.attachPresenter();
-        }
-
     }
 
-    public static class SubActivity extends FragmentActivity {
+    public static class ChildActivity extends FragmentActivity {
 
         @Override
         protected void onStart() {
@@ -533,143 +355,16 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    interface TestActivity {
-
-        void setChangingConfigurations(boolean changingConfigurations);
-
-    }
-
-    interface TestVisumActivityView extends TestActivity, TestVisumResultReceiver {}
-
-    public static class TestVisumAccountAuthenticatorActivity
-            extends VisumAccountAuthenticatorActivity<TestPresenter>
-            implements TestVisumActivityView {
-
-        private static final int REQUEST_CODE = 1;
-
-        private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
-
-        private boolean changingConfigurations;
-
-        private TestPresenter presenter;
-
-        public TestVisumAccountAuthenticatorActivity() {
-            super(VIEW_ID);
-        }
-
-        @Override
-        protected int getLayoutRes() {
-            return 0;
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        public void setContentView(@LayoutRes int layoutResID) {
-            setContentView(new View(this));
-        }
-
-        @SuppressLint("PrivateResource")
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
-            super.onCreate(savedInstanceState);
-            changingConfigurations = false;
-        }
-
-        @Override
-        public boolean isChangingConfigurations() {
-            return changingConfigurations;
-        }
-
-        @Override
-        public void setChangingConfigurations(boolean changingConfigurations) {
-            this.changingConfigurations = changingConfigurations;
-        }
-
-        @Override
-        public void startActivityForResult() {
-            startActivityForResult(new Intent(this, SubActivity.class), REQUEST_CODE);
-        }
-
-        @Override
-        public TestVisumResultReceiver getDummy() {
-            return dummy;
-        }
-
-        @Override
-        public void onActivityResult() {}
-
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            dummy.onActivityResult();
-        }
-
-        @Override
-        public void attachPresenter() {
-            super.attachPresenter();
-            dummy.attachPresenter();
-        }
-
-    }
-
-    public static class TestVisumWidget extends VisumWidget<TestPresenter> implements TestVisumView {
-
-        private TestPresenter presenter;
-
-        public TestVisumWidget(Context context) {
-            super(VIEW_ID, context);
-        }
-
-        @Override
-        protected int getLayoutRes() {
-            return 0;
-        }
-
-        @Override
-        public TestPresenter getPresenter() {
-            return presenter;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestSubComponent) from).inject(this);
-        }
-
-        @Override
-        public void setPresenter(TestPresenter presenter) {
-            this.presenter = presenter;
-        }
-
-        @Override
-        protected void inflate() {}
-
-    }
-
     protected interface TestComponent {
         TestSubComponent testSubComponent();
     }
 
     protected interface TestSubComponent {
-        void inject(TestVisumView testVisumView);
+        void inject(VisumDynamicPresenterView testVisumView);
     }
 
     private static class FragmentContainerActivity extends FragmentActivity
-            implements TestActivity {
+            implements Configurable {
 
         private static final int CONTAINER_ID = 1;
 

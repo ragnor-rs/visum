@@ -36,6 +36,9 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.VisumPresenter;
 
+import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
+import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
+
 /**
  * A {@link Fragment}-based implementation of {@link VisumView}
  *
@@ -133,10 +136,13 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+        FragmentManager childFragmentManager = getChildFragmentManager();
         if (hidden) {
-            helper.detachPresenter();
+            detachPresenter();
+            detachPresenterInChildFragments(childFragmentManager);
         } else {
-            helper.attachPresenter();
+            attachPresenter();
+            attachPresenterInChildFragments(childFragmentManager);
         }
     }
 

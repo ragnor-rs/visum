@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import org.junit.After;
@@ -52,6 +53,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     private static final int VIEW_ID = 1;
+    private static final int CHILD_VIEW_ID = 2;
 
     /**
      * A presenter from a sub-component. It will be null after the sub-component is removed from the
@@ -98,7 +100,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
                 },
                 TestVisumBaseView.class,
-                TestVisumFragment.class,
+                BaseTestVisumFragment.class,
                 TestVisumDialogFragment.class,
                 TestVisumActivity.class,
                 TestVisumAccountAuthenticatorActivity.class,
@@ -157,6 +159,44 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         fragmentContainerActivity.view.removeView(testView);
         assertPresenterDetached(testPresenter, VIEW_ID, testView);
+
+    }
+
+    @SuppressWarnings({"ResourceType", "unchecked"})
+    @Test
+    public void visumChildFragment() {
+
+        ActivityController<FragmentContainerActivity> activityController = Robolectric.buildActivity(FragmentContainerActivity.class);
+        FragmentContainerActivity fragmentContainerActivity = activityController.setup().get();
+
+        TestVisumFragment parentView = new TestVisumFragment();
+        TestVisumChildFragment childView = new TestVisumChildFragment();
+
+        // create a parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .add(FragmentContainerActivity.CONTAINER_ID, parentView)
+                .commit();
+
+        // create a child fragment
+        parentView.getChildFragmentManager()
+                .beginTransaction()
+                .add(TestVisumFragment.CONTAINER_ID, childView)
+                .commit();
+
+        // hide the parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .hide(parentView)
+                .commit();
+        assertPresenterDetached(testPresenter, CHILD_VIEW_ID, childView);
+
+        // show the parent fragment
+        fragmentContainerActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .show(parentView)
+                .commit();
+        assertPresenterAttached(testPresenter, CHILD_VIEW_ID, childView);
 
     }
 
@@ -305,17 +345,19 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    public static class TestVisumFragment extends VisumFragment<TestPresenter>
+    public static abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
             implements TestVisumResultReceiver {
 
         private static final int REQUEST_CODE = 1;
+
+        public static final int CONTAINER_ID = 1;
 
         private final TestVisumResultReceiver dummy = Mockito.mock(TestVisumResultReceiver.class);
 
         private TestPresenter presenter;
 
-        public TestVisumFragment() {
-            super(VIEW_ID);
+        public BaseTestVisumFragment(int viewId) {
+            super(viewId);
         }
 
         @Override
@@ -333,10 +375,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             ((TestSubComponent) from).inject(this);
         }
 
+        @SuppressWarnings("ResourceType")
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return new View(getContext());
+            FrameLayout frameLayout = new FrameLayout(getContext());
+            frameLayout.setId(CONTAINER_ID);
+            return frameLayout;
         }
 
         @Override
@@ -369,6 +414,18 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             dummy.attachPresenter();
         }
 
+    }
+
+    public static class TestVisumFragment extends BaseTestVisumFragment {
+        public TestVisumFragment() {
+            super(VIEW_ID);
+        }
+    }
+
+    public static class TestVisumChildFragment extends BaseTestVisumFragment {
+        public TestVisumChildFragment() {
+            super(CHILD_VIEW_ID);
+        }
     }
 
     public static class TestVisumDialogFragment extends VisumDialogFragment<TestPresenter>

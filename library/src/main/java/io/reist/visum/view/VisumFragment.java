@@ -134,9 +134,9 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onHiddenChanged(boolean hidden) {
         if (hidden) {
-            helper.detachPresenter();
+            detachPresenter();
         } else {
-            helper.attachPresenter();
+            attachPresenter();
         }
     }
 

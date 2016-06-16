@@ -8,12 +8,17 @@ import io.reist.visum.presenter.TestPresenter;
 /**
  * Created by Reist on 16.06.16.
  */
-class TestVisumView extends VisumBaseView<TestPresenter> implements VisumViewWithPresenterSetter {
+public class TestVisumWidget extends VisumWidget<TestPresenter> implements VisumViewWithPresenterSetter {
 
     private TestPresenter presenter;
 
-    public TestVisumView(Context context) {
+    public TestVisumWidget(Context context) {
         super(VisumViewTest.VIEW_ID, context);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return 0;
     }
 
     @Override
@@ -29,6 +34,10 @@ class TestVisumView extends VisumBaseView<TestPresenter> implements VisumViewWit
     @Override
     public void setPresenter(TestPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    protected void inflate() {
     }
 
 }

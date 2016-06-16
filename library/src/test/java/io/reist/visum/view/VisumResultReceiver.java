@@ -3,7 +3,7 @@ package io.reist.visum.view;
 /**
  * Created by Reist on 07.06.16.
  */
-interface TestVisumResultReceiver extends TestVisumView {
+interface VisumResultReceiver extends VisumViewWithPresenterSetter {
 
     void startActivityForResult();
 
@@ -11,7 +11,7 @@ interface TestVisumResultReceiver extends TestVisumView {
      * Returns a delegate which is basically a mock of this view to count lifecycle
      * method calls
      */
-    TestVisumResultReceiver getDummy();
+    VisumResultReceiver getDummy();
 
     void onActivityResult();
 

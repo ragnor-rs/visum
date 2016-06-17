@@ -9,7 +9,7 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
     - platform-tools
-    
+
 notifications:
   email: false
 

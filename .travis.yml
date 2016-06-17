@@ -9,12 +9,17 @@ android:
         - extra-google-m2repository
         - extra-android-m2repository
         - platform-tools
+        - sys-img-armeabi-v7a-android-21
 
 notifications:
     email: false
 
 script:
     - jdk_switcher use oraclejdk8
+    - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+    - emulator -avd test -no-skin -no-audio -no-window &
+    - android-wait-for-emulator
+    - adb shell input keyevent 82 &
     - export GRADLE_OPTS="-Xmx1536m -Xms768m -Xss32m"
     - curl http://safe-reaches-4393.herokuapp.com > /dev/null
     - ./gradlew clean build demo:connectedCheck

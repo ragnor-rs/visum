@@ -63,10 +63,6 @@ android {
         exclude "asm-license.txt"
     }
 
-    dataBinding {
-        enabled = false
-    }
-
 }
 
 def supportVersion = '24.0.0'

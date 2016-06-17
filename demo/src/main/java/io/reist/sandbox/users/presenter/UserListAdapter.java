@@ -30,7 +30,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.User;
@@ -98,7 +98,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.name)
+        @BindView(R.id.name)
         TextView name;
 
         ViewHolder(View view) {

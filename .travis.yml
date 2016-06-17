@@ -1,0 +1,25 @@
+language: android
+
+android:
+  components:
+    - tools
+    - build-tools-24.0.0
+    - android-24
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
+
+notifications:
+  email: false
+
+script:
+  - jdk_switcher use oraclejdk8
+  - ./gradlew clean build connectedCheck --stacktrace
+
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/

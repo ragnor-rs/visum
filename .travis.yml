@@ -14,8 +14,9 @@ notifications:
 
 script:
   - jdk_switcher use oraclejdk8
-  - export GRADLE_OPTS="-Xmx768m -Xms256m -Xss1m"
-  - ./gradlew clean build connectedCheck
+  - export GRADLE_OPTS="-Xmx1536m -Xms768m -Xss32m"
+  - ./gradlew clean build
+  - ./gradlew demo:connectedCheck
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

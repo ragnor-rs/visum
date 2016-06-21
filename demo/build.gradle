@@ -6,10 +6,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.google.guava:guava:19.0'
-        classpath 'com.android.tools.build:gradle:2.2.0-alpha3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.2'
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
     }
+
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
 
 }
 
@@ -19,7 +22,9 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.fernandocejas.frodo'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
@@ -40,10 +45,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-        jackOptions {
-            enabled true
-        }
 
     }
 
@@ -84,7 +85,7 @@ dependencies {
 
     // IoC
     compile "com.google.dagger:dagger:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    apt "com.google.dagger:dagger-compiler:$daggerVersion"
     provided 'javax.annotation:jsr250-api:1.0'
 
     // Network layer
@@ -95,11 +96,11 @@ dependencies {
     // Database layer
     compile "com.pushtorefresh.storio:sqlite:$storioVersion"
     compile "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
-    annotationProcessor "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
+    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
 
     // UI
     compile "com.jakewharton:butterknife:$butterknifeVersion"
-    annotationProcessor ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
+    apt ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
@@ -112,7 +113,7 @@ dependencies {
     testCompile 'org.assertj:assertj-core:2.2.0'
     testCompile "org.mockito:mockito-core:1.10.19"
 
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    testApt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // android tests
 

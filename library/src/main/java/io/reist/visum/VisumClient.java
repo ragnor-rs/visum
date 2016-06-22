@@ -25,8 +25,11 @@ import android.support.annotation.NonNull;
  * provided by local {@link android.app.Application} class. The client code also must provide Visum
  * with a singleton component and a singleton presenter (e.g, with means of Dagger framework).
  *
- * The component is passed to {@link VisumClient#inject(Object)} method to inject dependencies into
- * the view.
+ * Injection is handled automatically via reflection during {@link VisumClientHelper#onCreate}.
+ * A corresponding component must be public and declare a public 'inject' method which accepts this
+ * client as a parameter.
+ *
+ * @see VisumClientHelper#INJECT_METHOD_NAME
  *
  * Created by defuera on 02/02/2016.
  */
@@ -53,13 +56,8 @@ public interface VisumClient {
     void onStopClient();
 
     /**
-     * Implementations must inject dependencies to the view using the given component. E.g.:
-     * "((MyComponent) from).inject(this);"
-     *
-     * @param from  a component which provides the view with its own dependencies
+     * Returns Android app context
      */
-    void inject(@NonNull Object from);
-
     @NonNull
     Context getContext();
 

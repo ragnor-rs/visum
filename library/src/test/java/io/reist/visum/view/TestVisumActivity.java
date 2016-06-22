@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.view.View;
 
 import org.mockito.Mockito;
@@ -37,11 +36,6 @@ public class TestVisumActivity extends VisumActivity<TestPresenter>
     @Override
     public TestPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((VisumViewTest.TestSubComponent) from).inject(this);
     }
 
     @Override

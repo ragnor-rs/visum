@@ -34,40 +34,46 @@ public final class VisumClientHelper<C extends VisumClient> {
         return ((ComponentCacheProvider) client.getContext().getApplicationContext()).getComponentCache();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "TryWithIdenticalCatches"})
     public void onCreate() {
+
         Object component = client.getComponentCache().start(client);
-        Class clazz = client.getClass();
+
+        Class clientClass = client.getClass();
 
         try {
+
             Class componentClass = component.getClass();
 
-            Log.d(TAG, String.format("onCreate: looking for '%s' methods in [%s] for [%s]",
-                    INJECT_METHOD_NAME, componentClass.getSimpleName(), clazz.getSimpleName()));
+            Log.d(TAG, String.format(
+                    "onCreate: looking for '%s' methods in [%s] for [%s]",
+                    INJECT_METHOD_NAME, componentClass.getSimpleName(), clientClass.getSimpleName()
+            ));
 
             for (Method method : componentClass.getMethods()) {
                 Class types[] = method.getParameterTypes();
-
-                if (method.getName().startsWith(INJECT_METHOD_NAME) &&
-                        types != null &&
-                        types.length == 1 && clazz.isAssignableFrom(types[0])) {
+                if (
+                        method.getName().startsWith(INJECT_METHOD_NAME) &&
+                        types != null && types.length == 1 &&
+                        types[0].isAssignableFrom(clientClass)
+                ) {
                     method.invoke(component, client);
-                    Log.d(TAG, String.format(" client [%s] was injected by [%s] with [%s]",
-                            client.getClass().getSimpleName(),
-                            component.getClass().getSimpleName(),
-                            method.getName()));
+                    Log.d(TAG, String.format(
+                            "onCreate: client [%s] was injected by [%s] with [%s]",
+                            clientClass.getSimpleName(), componentClass.getSimpleName(), method.getName()
+                    ));
                     return; // all ok
                 }
             }
+
         } catch (IllegalAccessException e) {
-            Log.wtf(TAG, e);
+            throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
-            Log.wtf(TAG, e);
+            throw new RuntimeException(e);
         }
 
-        Log.d(TAG, " client [" + client.getClass().getSimpleName() + "] fallback");
+        Log.w(TAG, "No inject methods for client [" + clientClass.getSimpleName() + "]");
 
-        client.inject(component);
     }
 
     public void onDestroy(boolean retainComponent) {

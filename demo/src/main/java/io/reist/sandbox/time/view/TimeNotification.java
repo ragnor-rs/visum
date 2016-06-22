@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.NotificationCompat;
 
 import java.util.Date;
@@ -14,7 +13,6 @@ import javax.inject.Inject;
 
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.MainActivity;
-import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.time.presenter.TimePresenter;
 import io.reist.visum.view.VisumBaseView;
 
@@ -60,11 +58,6 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
     @Override
     public TimePresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((TimeComponent) from).inject(this);
     }
 
     @Override

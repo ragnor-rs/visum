@@ -92,11 +92,6 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
             super(context);
         }
 
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
-        }
-
     }
 
     public static class TestVisumAndroidService extends VisumAndroidService {
@@ -105,11 +100,6 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         @Override
         public IBinder onBind(Intent intent) {
             return null;
-        }
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
         }
 
     }
@@ -122,11 +112,6 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
         @Override
         protected void onHandleIntent(Intent intent) {}
-
-        @Override
-        public void inject(@NonNull Object from) {
-            ((TestComponent) from).inject(this);
-        }
 
     }
 

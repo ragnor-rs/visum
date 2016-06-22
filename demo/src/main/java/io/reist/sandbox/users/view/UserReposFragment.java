@@ -36,7 +36,6 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.users.UsersComponent;
 import io.reist.sandbox.users.presenter.UserReposPresenter;
 
 /**
@@ -99,11 +98,6 @@ public class UserReposFragment extends BaseFragment<UserReposPresenter> implemen
 
         loaderView.setOnRetryClickListener(v -> presenter.loadData(getUserId()));
 
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((UsersComponent) from).inject(this);
     }
 
     @NonNull

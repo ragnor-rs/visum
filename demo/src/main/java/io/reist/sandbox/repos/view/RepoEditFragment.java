@@ -21,7 +21,6 @@
 package io.reist.sandbox.repos.view;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -36,7 +35,6 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.repos.ReposComponent;
 import io.reist.sandbox.repos.presenter.RepoEditPresenter;
 import io.reist.visum.view.VisumFragment;
 
@@ -75,11 +73,6 @@ public class RepoEditFragment extends BaseFragment<RepoEditPresenter> implements
         bundle.putLong(EXTRA_REPO_ID, repoId);
         fragment.setArguments(bundle);
         return fragment;
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((ReposComponent) from).inject(this);
     }
 
     @Override

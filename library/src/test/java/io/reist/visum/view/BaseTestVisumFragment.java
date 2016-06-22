@@ -2,7 +2,6 @@ package io.reist.visum.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +38,6 @@ public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
     @Override
     public TestPresenter getPresenter() {
         return presenter;
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((VisumViewTest.TestSubComponent) from).inject(this);
     }
 
     @SuppressWarnings("ResourceType")

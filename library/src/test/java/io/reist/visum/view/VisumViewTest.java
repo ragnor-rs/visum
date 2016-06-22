@@ -43,7 +43,8 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     static final int VIEW_ID = 1;
-    static final int CHILD_VIEW_ID = 2;
+    static final int CHILD_ONE_VIEW_ID = 2;
+    static final int CHILD_TWO_VIEW_ID = 3;
 
     /**
      * A presenter from a sub-component. It will be null after the sub-component is removed from the
@@ -71,7 +72,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 TestVisumView.class,
                 BaseTestVisumFragment.class,
                 BaseTestVisumDialogFragment.class,
-                TestVisumActivity.class,
+                BaseTestVisumActivity.class,
                 TestVisumAccountAuthenticatorActivity.class,
                 TestVisumWidget.class
         );
@@ -104,6 +105,32 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     @Test
     public void visumActivity() {
         testActivity(TestVisumActivity.class);
+    }
+
+    @Test
+    public void visumActivityWithFragment() {
+        testDetachFragmentOnDetachActivity(
+                TestVisumActivity.class,
+                TestVisumActivity.CONTAINER_ID,
+                new TestVisumChildFragment());
+    }
+
+    @SuppressWarnings("ResourceType")
+    private <A extends FragmentActivity & VisumConfigurableResultReceiver, F extends Fragment & VisumResultReceiver>
+    void testDetachFragmentOnDetachActivity(Class<A> activityClass, int containerId, F fragment) {
+        ActivityController<A> activityController = Robolectric.buildActivity(activityClass);
+
+        // create
+        A testActivity = activityController.setup().get();
+
+        testActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerId, fragment)
+                .commit();
+
+        activityController.pause().stop();
+
+        assertPresenterDetached(testPresenter, CHILD_ONE_VIEW_ID, fragment);
     }
 
     @Test
@@ -168,14 +195,14 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .beginTransaction()
                 .hide(parentView)
                 .commit();
-        assertPresenterDetached(testPresenter, CHILD_VIEW_ID, childView);
+        assertPresenterDetached(testPresenter, CHILD_ONE_VIEW_ID, childView);
 
         // show the parent fragment
         fragmentContainerActivity.getSupportFragmentManager()
                 .beginTransaction()
                 .show(parentView)
                 .commit();
-        assertPresenterAttached(testPresenter, CHILD_VIEW_ID, childView);
+        assertPresenterAttached(testPresenter, CHILD_ONE_VIEW_ID, childView);
 
     }
 
@@ -307,7 +334,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     public static class TestVisumChildFragment extends BaseTestVisumFragment {
         public TestVisumChildFragment() {
-            super(CHILD_VIEW_ID);
+            super(CHILD_ONE_VIEW_ID);
+        }
+    }
+
+    public static class TestVisumChildTwoFragment extends BaseTestVisumFragment {
+        public TestVisumChildTwoFragment() {
+            super(CHILD_TWO_VIEW_ID);
         }
     }
 
@@ -319,7 +352,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     public static class TestVisumChildDialogFragment extends BaseTestVisumDialogFragment {
         public TestVisumChildDialogFragment() {
-            super(CHILD_VIEW_ID);
+            super(CHILD_ONE_VIEW_ID);
+        }
+    }
+
+    public static class TestVisumChildTwoDialogFragment extends BaseTestVisumDialogFragment {
+        public TestVisumChildTwoDialogFragment() {
+            super(CHILD_TWO_VIEW_ID);
         }
     }
 
@@ -398,4 +437,19 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
+    public static class TestVisumChildActivity extends BaseTestVisumActivity {
+
+        public TestVisumChildActivity() {
+            super(CHILD_ONE_VIEW_ID);
+        }
+
+    }
+
+    public static class TestVisumChildTwoActivity extends BaseTestVisumActivity {
+
+        public TestVisumChildTwoActivity() {
+            super(CHILD_TWO_VIEW_ID);
+        }
+
+    }
 }

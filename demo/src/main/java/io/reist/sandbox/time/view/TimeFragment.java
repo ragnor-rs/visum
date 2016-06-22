@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
@@ -21,7 +21,7 @@ import io.reist.sandbox.time.presenter.TimePresenter;
  */
 public class TimeFragment extends BaseFragment<TimePresenter> implements TimeView {
 
-    @Bind(R.id.time_text)
+    @BindView(R.id.time_text)
     TextView timeText;
 
     @Inject

@@ -29,7 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.User;
@@ -46,10 +46,10 @@ public class UserListFragment extends BaseFragment<UserListPresenter> implements
     @Inject
     UserListPresenter mPresenter;
 
-    @Bind(R.id.recycler)
+    @BindView(R.id.recycler)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.loader)
+    @BindView(R.id.loader)
     LoaderView mLoaderView;
 
     UserListAdapter mAdapter;

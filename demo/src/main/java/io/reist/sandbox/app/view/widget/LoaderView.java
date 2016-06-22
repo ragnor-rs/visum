@@ -28,7 +28,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reist.sandbox.R;
 
@@ -37,10 +37,10 @@ import io.reist.sandbox.R;
  */
 public class LoaderView extends FrameLayout {
 
-    @Bind(R.id.progress_bar)
+    @BindView(R.id.progress_bar)
     View progressBar;
 
-    @Bind(R.id.message)
+    @BindView(R.id.message)
     View message;
 
     private OnClickListener retryClickListener;

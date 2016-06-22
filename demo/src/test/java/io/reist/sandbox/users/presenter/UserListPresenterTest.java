@@ -32,11 +32,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
+import android.os.Build;
+
 /**
  * Created by m039 on 11/25/15.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class UserListPresenterTest extends RobolectricTestCase {
 
     @Inject

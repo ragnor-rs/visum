@@ -29,7 +29,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.Repo;
@@ -76,7 +76,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.daggertest_repo_item_text_view)
+        @BindView(R.id.daggertest_repo_item_text_view)
         TextView textView;
 
         ViewHolder(View itemView) {

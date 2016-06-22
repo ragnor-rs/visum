@@ -34,11 +34,13 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import android.os.Build;
+
 /**
  * Created by m039 on 11/27/15.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class ReposPresentersTest extends RobolectricTestCase {
 
     @Inject

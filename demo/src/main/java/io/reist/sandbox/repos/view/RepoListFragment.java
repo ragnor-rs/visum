@@ -29,7 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.Repo;
@@ -44,10 +44,10 @@ import io.reist.sandbox.repos.presenter.RepoListPresenter;
  */
 public class RepoListFragment extends BaseFragment<RepoListPresenter> implements RepoListView {
 
-    @Bind(R.id.daggertest_repo_recycler_view)
+    @BindView(R.id.daggertest_repo_recycler_view)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.loader)
+    @BindView(R.id.loader)
     LoaderView loaderView;
 
     @Inject

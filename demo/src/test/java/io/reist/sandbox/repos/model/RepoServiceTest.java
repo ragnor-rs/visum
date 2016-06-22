@@ -32,6 +32,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import android.os.Build;
+
 
 /**
  * Created by m039 on 11/19/15.
@@ -40,7 +42,7 @@ import static org.mockito.Mockito.when;
  *
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class RepoServiceTest extends RobolectricTestCase {
 
     @Inject

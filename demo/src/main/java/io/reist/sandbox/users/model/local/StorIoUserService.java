@@ -44,7 +44,7 @@ public class StorIoUserService extends StorIoService<User> implements UserServic
     @Override
     public Observable<SandboxResponse<User>> byId(Long id) {
         return unique(User.class, UserTable.NAME, id)
-                .map(SandboxResponse<User>::new);
+                .map(SandboxResponse::new);
     }
 
     @Override

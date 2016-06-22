@@ -30,7 +30,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
@@ -45,10 +45,10 @@ public class UserReposFragment extends BaseFragment<UserReposPresenter> implemen
 
     private static final String ARG_USER = "arg_user";
 
-    @Bind(R.id.recycler)
+    @BindView(R.id.recycler)
     RecyclerView mRecyclerView;
 
-    @Bind(R.id.loader)
+    @BindView(R.id.loader)
     LoaderView loaderView;
 
     @Inject

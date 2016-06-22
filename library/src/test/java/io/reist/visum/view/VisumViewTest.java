@@ -37,7 +37,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(
         constants = BuildConfig.class,
-        sdk = {Build.VERSION_CODES.JELLY_BEAN},
+        sdk = Build.VERSION_CODES.LOLLIPOP,
         application = TestApplication.class
 )
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {

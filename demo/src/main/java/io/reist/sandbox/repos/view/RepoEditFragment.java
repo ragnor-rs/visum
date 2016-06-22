@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.Repo;
@@ -45,19 +45,19 @@ public class RepoEditFragment extends BaseFragment<RepoEditPresenter> implements
 
     private static final String EXTRA_REPO_ID = "io.reist.sandbox.extra_repo_id";
 
-    @Bind(R.id.repo_name)
+    @BindView(R.id.repo_name)
     TextView repoName;
 
-    @Bind(R.id.author_name)
+    @BindView(R.id.author_name)
     TextView authorName;
 
-    @Bind(R.id.repo_url)
+    @BindView(R.id.repo_url)
     TextView repoUrl;
 
-    @Bind(R.id.loader)
+    @BindView(R.id.loader)
     LoaderView loaderView;
 
-    @Bind(R.id.repo_container)
+    @BindView(R.id.repo_container)
     ViewGroup repoContainer;
 
     @Inject

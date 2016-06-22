@@ -35,7 +35,6 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.users.UsersComponent;
 import io.reist.sandbox.users.presenter.UserListAdapter;
 import io.reist.sandbox.users.presenter.UserListPresenter;
 
@@ -78,11 +77,6 @@ public class UserListFragment extends BaseFragment<UserListPresenter> implements
     @Override
     public UserListPresenter getPresenter() {
         return mPresenter;
-    }
-
-    @Override
-    public void inject(@NonNull Object from) {
-        ((UsersComponent) from).inject(this);
     }
 
     @Override

@@ -65,6 +65,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
         this(VisumPresenter.VIEW_ID_DEFAULT);
     }
 
+    // todo add javadoc for viewId
     public VisumFragment(int viewId) {
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }

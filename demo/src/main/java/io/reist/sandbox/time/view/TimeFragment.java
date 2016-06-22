@@ -1,6 +1,6 @@
 package io.reist.sandbox.time.view;
 
-import android.support.annotation.NonNull;
+import android.annotation.SuppressLint;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -9,7 +9,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
-import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.time.presenter.TimePresenter;
 
 /**
@@ -37,11 +36,7 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
         return presenter;
     }
 
-    @Override
-    public void inject(@NonNull Object from) {
-        ((TimeComponent) from).inject(this);
-    }
-
+    @SuppressLint("SetTextI18n")
     @Override
     public void showTime(Long t) {
         timeText.setText(Long.toString(t));

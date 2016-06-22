@@ -43,7 +43,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     static final int VIEW_ID = 1;
-    private static final int CHILD_VIEW_ID = 2;
+    static final int CHILD_VIEW_ID = 2;
 
     /**
      * A presenter from a sub-component. It will be null after the sub-component is removed from the
@@ -53,28 +53,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     @Override
     protected TestComponent createComponent() {
-        return new TestComponent() {
-
-            @Override
-            public TestSubComponent testSubComponent() {
-                testPresenter = null;
-                return new TestSubComponent() {
-
-                    TestPresenter testPresenter;
-
-                    @Override
-                    public void inject(VisumDynamicPresenterView testVisumView) {
-                        if (testPresenter == null) {
-                            testPresenter = new TestPresenter();
-                            VisumViewTest.this.testPresenter = testPresenter;
-                        }
-                        testVisumView.setPresenter(testPresenter);
-                    }
-
-                };
-            }
-
-        };
+        return new TestComponent(this);
     }
 
     @Before
@@ -355,12 +334,18 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     }
 
-    protected interface TestComponent {
-        TestSubComponent testSubComponent();
-    }
+    public static class TestComponent {
 
-    protected interface TestSubComponent {
-        void inject(VisumDynamicPresenterView testVisumView);
+        private final VisumViewTest visumViewTest;
+
+        public TestComponent(VisumViewTest visumViewTest) {
+            this.visumViewTest = visumViewTest;
+        }
+
+        public TestSubComponent testSubComponent() {
+            return new TestSubComponent(visumViewTest);
+        }
+
     }
 
     private static class FragmentContainerActivity extends FragmentActivity
@@ -389,6 +374,26 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         @Override
         public void setChangingConfigurations(boolean changingConfigurations) {
             this.changingConfigurations = changingConfigurations;
+        }
+
+    }
+
+    public static class TestSubComponent {
+
+        private TestPresenter testPresenter;
+
+        private final VisumViewTest visumViewTest;
+
+        public TestSubComponent(VisumViewTest visumViewTest) {
+            this.visumViewTest = visumViewTest;
+        }
+
+        public void inject(VisumDynamicPresenterView testVisumView) {
+            if (testPresenter == null) {
+                testPresenter = new TestPresenter();
+                visumViewTest.testPresenter = testPresenter;
+            }
+            testVisumView.setPresenter(testPresenter);
         }
 
     }

@@ -65,8 +65,7 @@ public abstract class BaseTestVisumDialogFragment extends VisumDialogFragment<Te
     }
 
     @Override
-    public void onActivityResult() {
-    }
+    public void onActivityResult() {}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

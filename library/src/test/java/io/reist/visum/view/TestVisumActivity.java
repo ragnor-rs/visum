@@ -5,8 +5,6 @@ package io.reist.visum.view;
  */
 public class TestVisumActivity extends BaseTestVisumActivity {
 
-    public static final int BUTTON_ID = 1001;
-
     public TestVisumActivity() {
         super(VisumViewTest.VIEW_ID);
     }

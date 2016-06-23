@@ -50,10 +50,10 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     private final VisumViewHelper<P> helper;
 
     /**
-     * Used to ensure that {@link #attachPresenter()} is called before
+     * Used to ensure that {@link #attachPresenter()} and {@link #detachPresenter()} is called once
      * {@link #onActivityResult(int, int, Intent)}
      */
-    private boolean presenterAttachedOnActivityResult;
+    private boolean presenterAttached = false;
 
     /**
      * @deprecated use {@link #VisumDialogFragment(int)} instead
@@ -64,6 +64,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         this(VisumPresenter.VIEW_ID_DEFAULT);
     }
 
+    // todo add javadoc for viewId
     public VisumDialogFragment(int viewId) {
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
@@ -72,18 +73,21 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     //region VisumClient implementation
 
     @Override
-    public final void onStartClient() {
+    @CallSuper
+    public void onStartClient() {
         helper.onCreate();
     }
 
     @NonNull
     @Override
-    public final ComponentCache getComponentCache() {
+    @CallSuper
+    public ComponentCache getComponentCache() {
         return helper.getComponentCache();
     }
 
     @Override
-    public final void onStopClient() {
+    @CallSuper
+    public void onStopClient() {
         helper.onDestroy(getActivity().isChangingConfigurations());
     }
 
@@ -96,13 +100,14 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @CallSuper
     public void attachPresenter() {
         helper.attachPresenter();
+        presenterAttached = true;
     }
 
     @Override
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
-        presenterAttachedOnActivityResult = false;
+        presenterAttached = false;
     }
 
     //endregion
@@ -125,7 +130,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!presenterAttachedOnActivityResult) {
+        if (!presenterAttached) {
             attachPresenter();
         }
     }
@@ -139,6 +144,22 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         } else {
             attachPresenter();
             attachPresenterInChildFragments(childFragmentManager);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!presenterAttached) {
+            attachPresenter();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (presenterAttached) {
+            detachPresenter();
         }
     }
 
@@ -163,7 +184,6 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         attachPresenter();
-        presenterAttachedOnActivityResult = true;
     }
 
     //endregion

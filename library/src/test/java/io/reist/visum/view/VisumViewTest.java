@@ -71,8 +71,8 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 TestVisumView.class,
                 BaseTestVisumFragment.class,
                 BaseTestVisumDialogFragment.class,
-                TestVisumActivity.class,
-                TestVisumAccountAuthenticatorActivity.class,
+                BaseTestVisumActivity.class,
+                BaseTestVisumAccountAuthenticatorActivity.class,
                 TestVisumWidget.class
         );
     }
@@ -104,6 +104,59 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     @Test
     public void visumActivity() {
         testActivity(TestVisumActivity.class);
+    }
+
+    @Test
+    public void visumActivityWithFragment() {
+
+        testDetachFragmentOnDetachActivity(
+                TestVisumActivity.class,
+                TestVisumActivity.CONTAINER_ID,
+                new TestVisumChildFragment()
+        );
+
+        testDetachFragmentOnDetachActivity(
+                TestVisumActivity.class,
+                TestVisumActivity.CONTAINER_ID,
+                new TestVisumChildDialogFragment()
+        );
+
+    }
+
+    @Test
+    public void visumAccountAuthenticatorActivityWithFragment() {
+
+        testDetachFragmentOnDetachActivity(
+                TestVisumAccountAuthenticatorActivity.class,
+                TestVisumAccountAuthenticatorActivity.CONTAINER_ID,
+                new TestVisumChildFragment()
+        );
+
+        testDetachFragmentOnDetachActivity(
+                TestVisumAccountAuthenticatorActivity.class,
+                TestVisumAccountAuthenticatorActivity.CONTAINER_ID,
+                new TestVisumChildDialogFragment()
+        );
+
+    }
+
+    @SuppressWarnings("ResourceType")
+    private <A extends FragmentActivity & VisumConfigurableResultReceiver, F extends Fragment & VisumResultReceiver>
+    void testDetachFragmentOnDetachActivity(Class<A> activityClass, int containerId, F fragment) {
+
+        ActivityController<A> activityController = Robolectric.buildActivity(activityClass);
+
+        // create an activity and add a fragment
+        A testActivity = activityController.setup().get();
+        testActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerId, fragment)
+                .commit();
+
+        // emulates a part of new activity start process
+        activityController.pause().stop();
+        assertPresenterDetached(testPresenter, CHILD_VIEW_ID, fragment);
+
     }
 
     @Test
@@ -283,8 +336,8 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // Destroy the original activity
         activityController
-                .saveInstanceState(bundle)
                 .pause()
+                .saveInstanceState(bundle)
                 .stop()
                 .destroy();
 
@@ -388,6 +441,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
             this.visumViewTest = visumViewTest;
         }
 
+        @SuppressWarnings("unused")
         public void inject(VisumDynamicPresenterView testVisumView) {
             if (testPresenter == null) {
                 testPresenter = new TestPresenter();

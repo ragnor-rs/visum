@@ -1,4 +1,7 @@
-Visum - Android reactive MVP stack
+# Visum
+[![Build Status](https://travis-ci.org/ragnor-rs/visum.svg?branch=develop)](https://travis-ci.org/ragnor-rs/visum)
+
+Android reactive MVP stack
 
 The library encourages developers to use Android Clean MVP architecture pattern (http://fernandocejas.com/2015/07/18/architecting-android-the-evolution/).
 

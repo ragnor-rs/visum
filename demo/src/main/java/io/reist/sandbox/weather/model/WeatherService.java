@@ -3,7 +3,7 @@ package io.reist.sandbox.weather.model;
 import javax.inject.Inject;
 
 import io.reist.sandbox.weather.model.local.WeatherEntity;
-import io.reist.sandbox.weather.model.remote.WeatherAPI;
+import io.reist.sandbox.weather.model.remote.WeatherApi;
 import rx.Single;
 
 /**
@@ -16,14 +16,14 @@ public class WeatherService {
 
     private String API_KEY = "74b3cd81c3dd453d9cf141407162507";
 
-    WeatherAPI weatherAPI;
+    WeatherApi weatherApi;
 
     @Inject
-    public WeatherService(WeatherAPI api) {
-        this.weatherAPI = api;
+    public WeatherService(WeatherApi api) {
+        this.weatherApi = api;
     }
 
     public Single<WeatherEntity> getWeatherForCity(String city) {
-        return weatherAPI.loadWeather(API_KEY, city);
+        return weatherApi.loadWeather(API_KEY, city);
     }
 }

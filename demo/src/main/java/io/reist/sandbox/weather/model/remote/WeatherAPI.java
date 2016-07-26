@@ -11,7 +11,7 @@ import rx.Single;
  * @author Timofey Plotnikov <timofey.plot@gmail.com>
  */
 
-public interface WeatherAPI {
+public interface WeatherApi {
 
     @GET("current.json")
     Single<WeatherEntity> loadWeather(@Query("key") String key,

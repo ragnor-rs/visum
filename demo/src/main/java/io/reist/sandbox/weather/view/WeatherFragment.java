@@ -26,22 +26,22 @@ import io.reist.sandbox.weather.presenter.WeatherPresenter;
 
 public class WeatherFragment extends BaseFragment<WeatherPresenter> implements WeatherView {
 
-    @BindView(R.id.cityText)
+    @BindView(R.id.city_text)
     EditText city;
 
-    @BindView(R.id.findButton)
+    @BindView(R.id.find)
     Button findButton;
 
-    @BindView(R.id.tempText)
+    @BindView(R.id.temp_text)
     TextView temp;
 
-    @BindView(R.id.loadingProgress)
+    @BindView(R.id.loading_progress)
     ProgressBar loadingProgress;
 
-    @BindView(R.id.tempLayout)
+    @BindView(R.id.temp_layout)
     RelativeLayout results;
 
-    @BindView(R.id.pressureText)
+    @BindView(R.id.pressure_text)
     TextView pressure;
 
     @Inject
@@ -84,7 +84,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
         return presenter;
     }
 
-    @OnClick(R.id.findButton)
+    @OnClick(R.id.find)
     void onFindClick() {
         presenter.loadData(city.getText().toString().trim());
     }

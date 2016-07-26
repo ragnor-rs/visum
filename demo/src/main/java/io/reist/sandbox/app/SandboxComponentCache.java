@@ -29,6 +29,7 @@ import io.reist.sandbox.time.view.TimeFragment;
 import io.reist.sandbox.time.view.TimeNotification;
 import io.reist.sandbox.users.view.UserListFragment;
 import io.reist.sandbox.users.view.UserReposFragment;
+import io.reist.sandbox.weather.view.WeatherFragment;
 import io.reist.visum.ComponentCache;
 
 /**
@@ -60,6 +61,11 @@ public class SandboxComponentCache extends ComponentCache {
         register(
                 sandboxComponent::resultComponent,
                 ResultActivity.class
+        );
+
+        register(
+                sandboxComponent::weatherComponent,
+                WeatherFragment.class
         );
 
     }

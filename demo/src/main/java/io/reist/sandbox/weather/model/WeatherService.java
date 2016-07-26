@@ -1,14 +1,10 @@
 package io.reist.sandbox.weather.model;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import io.reist.sandbox.app.model.SandboxResponse;
-import io.reist.sandbox.app.model.SandboxService;
 import io.reist.sandbox.weather.model.local.WeatherEntity;
 import io.reist.sandbox.weather.model.remote.WeatherAPI;
-import rx.Observable;
+import rx.Single;
 
 /**
  * Created on 25.07.16.
@@ -16,9 +12,9 @@ import rx.Observable;
  * @author Timofey Plotnikov <timofey.plot@gmail.com>
  */
 
-public class WeatherService implements SandboxService<WeatherEntity> {
+public class WeatherService {
 
-    private static final String API_KEY = "74b3cd81c3dd453d9cf141407162507";
+    private String API_KEY = "74b3cd81c3dd453d9cf141407162507";
 
     WeatherAPI weatherAPI;
 
@@ -27,42 +23,7 @@ public class WeatherService implements SandboxService<WeatherEntity> {
         this.weatherAPI = api;
     }
 
-    public Observable<WeatherEntity> getWeatherForCity(String city) {
+    public Single<WeatherEntity> getWeatherForCity(String city) {
         return weatherAPI.loadWeather(API_KEY, city);
-    }
-
-    @Override
-    public Observable<SandboxResponse<List<WeatherEntity>>> list() {
-        return null;
-    }
-
-    @Override
-    public Observable<SandboxResponse<WeatherEntity>> byId(Long id) {
-        return null;
-    }
-
-    @Override
-    public Observable<SandboxResponse<List<WeatherEntity>>> save(List<WeatherEntity> list) {
-        return null;
-    }
-
-    @Override
-    public Observable<SandboxResponse<WeatherEntity>> save(WeatherEntity weatherEntity) {
-        return null;
-    }
-
-    @Override
-    public Observable<SandboxResponse<Integer>> delete(Long id) {
-        return null;
-    }
-
-    @Override
-    public SandboxResponse<List<WeatherEntity>> saveSync(List<WeatherEntity> list) {
-        return null;
-    }
-
-    @Override
-    public SandboxResponse<WeatherEntity> saveSync(WeatherEntity weatherEntity) {
-        return null;
     }
 }

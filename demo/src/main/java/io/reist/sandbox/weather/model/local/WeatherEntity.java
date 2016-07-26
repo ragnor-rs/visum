@@ -1,5 +1,7 @@
 package io.reist.sandbox.weather.model.local;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created on 25.07.16.
  *
@@ -8,15 +10,18 @@ package io.reist.sandbox.weather.model.local;
 
 public class WeatherEntity {
 
+    @SerializedName("location")
     private LocationData location;
-    private WeatherData current;
+
+    @SerializedName("current")
+    private WeatherData weatherData;
 
     public void setLocation(LocationData location) {
         this.location = location;
     }
 
-    public void setCurrent(WeatherData current) {
-        this.current = current;
+    public void setWeatherData(WeatherData weatherData) {
+        this.weatherData = weatherData;
     }
 
     public String getAddress() {
@@ -24,16 +29,21 @@ public class WeatherEntity {
     }
 
     public double getTemperature() {
-        return current.temp_c;
+        return weatherData.tempC;
     }
 
     public double getPressure() {
-        return current.pressure_mb;
+        return weatherData.pressure;
     }
 
-    private class LocationData {
+    public class LocationData {
+        @SerializedName("name")
         private String name;
+
+        @SerializedName("region")
         private String region;
+
+        @SerializedName("country")
         private String country;
 
         public String getName() {
@@ -61,24 +71,27 @@ public class WeatherEntity {
         }
     }
 
-    private class WeatherData {
-        private double temp_c;
-        private double pressure_mb;
+    public class WeatherData {
+        @SerializedName("temp_c")
+        private double tempC;
 
-        public double getTemp_c() {
-            return temp_c;
+        @SerializedName("pressure_mb")
+        private double pressure;
+
+        public double getTempC() {
+            return tempC;
         }
 
-        public void setTemp_c(double temp_c) {
-            this.temp_c = temp_c;
+        public void setTempC(double tempC) {
+            this.tempC = tempC;
         }
 
-        public double getPressure_mb() {
-            return pressure_mb;
+        public double getPressure() {
+            return pressure;
         }
 
-        public void setPressure_mb(double pressure_mb) {
-            this.pressure_mb = pressure_mb;
+        public void setPressure(double pressure) {
+            this.pressure = pressure;
         }
     }
 }

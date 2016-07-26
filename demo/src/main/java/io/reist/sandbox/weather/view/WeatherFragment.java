@@ -27,13 +27,13 @@ import io.reist.sandbox.weather.presenter.WeatherPresenter;
 public class WeatherFragment extends BaseFragment<WeatherPresenter> implements WeatherView {
 
     @BindView(R.id.cityText)
-    EditText cityText;
+    EditText city;
 
     @BindView(R.id.findButton)
     Button findButton;
 
     @BindView(R.id.tempText)
-    TextView tempText;
+    TextView temp;
 
     @BindView(R.id.loadingProgress)
     ProgressBar loadingProgress;
@@ -42,7 +42,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     RelativeLayout results;
 
     @BindView(R.id.pressureText)
-    TextView pressureText;
+    TextView pressure;
 
     @Inject
     WeatherPresenter presenter;
@@ -63,24 +63,20 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
 
     @Override
     public void showError(SandboxError error) {
-        String errorMessage = error.getMessage() == null ? "Error occured" : error.getMessage();
+        String errorMessage = error.getMessage() == null ? getString(R.string.weather_error) : error.getMessage();
         Snackbar.make(this.getView(), errorMessage , Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void showData(WeatherEntity entity) {
-        tempText.setText(String.valueOf(entity.getTemperature()));
-        pressureText.setText(String.valueOf(entity.getPressure()));
+        temp.setText(String.valueOf(entity.getTemperature()));
+        pressure.setText(String.valueOf(entity.getPressure()));
     }
 
     @Override
     public void showLoading(boolean enabled) {
         loadingProgress.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
         results.setVisibility(!enabled ? View.VISIBLE : View.INVISIBLE);
-    }
-
-    private boolean isLoading() {
-        return loadingProgress.getVisibility() == View.VISIBLE;
     }
 
     @Override
@@ -90,8 +86,6 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
 
     @OnClick(R.id.findButton)
     void onFindClick() {
-        if (isLoading()) return;
-
-        presenter.loadData(cityText.getText().toString().trim());
+        presenter.loadData(city.getText().toString().trim());
     }
 }

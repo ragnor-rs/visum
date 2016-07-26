@@ -3,7 +3,7 @@ package io.reist.sandbox.weather.model.remote;
 import io.reist.sandbox.weather.model.local.WeatherEntity;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
+import rx.Single;
 
 /**
  * Created on 25.07.16.
@@ -14,6 +14,7 @@ import rx.Observable;
 public interface WeatherAPI {
 
     @GET("current.json")
-    Observable<WeatherEntity> loadWeather(@Query("key") String key,
-                                                           @Query("q") String query);
+    Single<WeatherEntity> loadWeather(@Query("key") String key,
+                                      @Query("q") String query);
+
 }

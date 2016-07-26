@@ -36,4 +36,6 @@
     <string name="no_pressure_label">no pressure</string>
     <string name="pressure_label">Pressure:</string>
 
+    <string name="weather_error">Some error occurred, try again</string>
+
 </resources>

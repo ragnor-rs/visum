@@ -5,7 +5,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import io.reist.sandbox.weather.model.WeatherService;
-import io.reist.sandbox.weather.model.remote.WeatherApi;
+import io.reist.sandbox.weather.model.remote.WeatherServerApi;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,19 +23,19 @@ public class WeatherModule {
 
     @Provides
     @Singleton
-    WeatherApi weatherAPI() {
+    WeatherServerApi weatherAPI() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
-        return retrofit.create(WeatherApi.class);
+        return retrofit.create(WeatherServerApi.class);
     }
 
     @Provides
     @Singleton
-    WeatherService weatherService(WeatherApi api) {
+    WeatherService weatherService(WeatherServerApi api) {
         return new WeatherService(api);
     }
 }

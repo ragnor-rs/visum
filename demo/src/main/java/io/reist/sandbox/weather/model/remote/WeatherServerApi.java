@@ -11,10 +11,12 @@ import rx.Single;
  * @author Timofey Plotnikov <timofey.plot@gmail.com>
  */
 
-public interface WeatherApi {
+public interface WeatherServerApi {
 
+    //Hello
     @GET("current.json")
     Single<WeatherEntity> loadWeather(@Query("key") String key,
                                       @Query("q") String query);
+
 
 }

@@ -41,6 +41,9 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     @BindView(R.id.tempLayout)
     RelativeLayout results;
 
+    @BindView(R.id.pressureText)
+    TextView pressureText;
+
     @Inject
     WeatherPresenter presenter;
 
@@ -67,6 +70,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     @Override
     public void showData(WeatherEntity entity) {
         tempText.setText(String.valueOf(entity.getTemperature()));
+        pressureText.setText(String.valueOf(entity.getPressure()));
     }
 
     @Override

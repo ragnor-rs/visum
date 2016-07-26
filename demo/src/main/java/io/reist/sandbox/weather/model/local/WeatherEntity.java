@@ -11,27 +11,12 @@ public class WeatherEntity {
     private LocationData location;
     private WeatherData current;
 
-    private String address;
-    private double temperature;
-    private double pressure;
-
-    public LocationData getLocation() {
-        return location;
-    }
-
     public void setLocation(LocationData location) {
         this.location = location;
-        this.address = String.format("%s, %s, %s", location.country, location.region, location.name);
-    }
-
-    public WeatherData getCurrent() {
-        return current;
     }
 
     public void setCurrent(WeatherData current) {
         this.current = current;
-        this.temperature = current.temp_c;
-        this.pressure = current.pressure_mb;
     }
 
     public String getAddress() {

@@ -8,7 +8,6 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.SandboxService;
 import io.reist.sandbox.weather.model.local.WeatherEntity;
 import io.reist.sandbox.weather.model.remote.WeatherAPI;
-import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -19,7 +18,7 @@ import rx.Observable;
 
 public class WeatherService implements SandboxService<WeatherEntity> {
 
-    private static final String API_KEY = "74b3cd81c3dd453d9cf141407162507"; //TODO: ключ для апи, хреново тут его хранить
+    private static final String API_KEY = "74b3cd81c3dd453d9cf141407162507";
 
     WeatherAPI weatherAPI;
 
@@ -30,10 +29,6 @@ public class WeatherService implements SandboxService<WeatherEntity> {
 
     public Observable<WeatherEntity> getWeatherForCity(String city) {
         return weatherAPI.loadWeather(API_KEY, city);
-    }
-
-    public Call<WeatherEntity> getWeatherCall(String city) {
-        return weatherAPI.loadWeatherCall(API_KEY, city);
     }
 
     @Override

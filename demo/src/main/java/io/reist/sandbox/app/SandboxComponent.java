@@ -27,6 +27,7 @@ import io.reist.sandbox.repos.ReposComponent;
 import io.reist.sandbox.result.ResultComponent;
 import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.users.UsersComponent;
+import io.reist.sandbox.weather.WeatherComponent;
 
 @Singleton
 @Component(modules = SandboxModule.class)
@@ -39,5 +40,7 @@ public interface SandboxComponent {
     TimeComponent timeComponent();
 
     ResultComponent resultComponent();
+
+    WeatherComponent weatherComponent();
 
 }

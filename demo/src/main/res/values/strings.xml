@@ -28,5 +28,9 @@
     <string name="menu_result">Result</string>
     <string name="start_and_receive">Start and receive</string>
     <string name="return_btn">Return result</string>
+    <string name="get_weather">Get weather</string>
+    <string name="enter_city">Enter city</string>
+    <string name="weather_nav_title">Weather</string>
+    <string name="temperature">Temperature:</string>
 
 </resources>

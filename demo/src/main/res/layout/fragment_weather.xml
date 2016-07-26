@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/cityText"
+        android:hint="@string/enter_city"
+        android:layout_margin="8dp" />
+
+    <Button
+        android:text="@string/get_weather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cityText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/findButton"
+        android:layout_margin="8dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/findButton"
+        android:layout_centerHorizontal="true"
+        android:padding="8dp"
+        android:id="@+id/frameLayout">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loadingProgress"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tempLayout">
+
+
+            <TextView
+                android:text="@string/temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tempLabel"
+                android:textSize="18sp" />
+
+            <TextView
+                android:text="no degrees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/frameLayout"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/tempText"
+                android:textStyle="normal|bold"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</RelativeLayout>

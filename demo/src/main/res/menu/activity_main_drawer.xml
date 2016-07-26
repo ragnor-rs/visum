@@ -18,4 +18,8 @@
         android:icon="@android:drawable/ic_menu_revert"
         android:title="@string/menu_result" />
 
+    <item
+        android:id="@+id/nav_weather"
+        android:title="@string/weather_nav_title" />
+
 </menu>

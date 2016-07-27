@@ -13,7 +13,7 @@ import rx.Single;
 
 public interface WeatherServerApi {
 
-    //Hello
+
     @GET("current.json")
     Single<WeatherEntity> loadWeather(@Query("key") String key,
                                       @Query("q") String query);

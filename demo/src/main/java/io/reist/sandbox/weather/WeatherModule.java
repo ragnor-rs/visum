@@ -23,7 +23,7 @@ public class WeatherModule {
 
     @Provides
     @Singleton
-    WeatherServerApi weatherAPI() {
+    WeatherServerApi weatherApi() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

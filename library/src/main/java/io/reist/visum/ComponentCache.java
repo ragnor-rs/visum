@@ -55,6 +55,11 @@ public class ComponentCache {
         return entry.component;
     }
 
+    public boolean isClientAttached(@NonNull VisumClient client) {
+        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
+        return entry.clients.contains(client);
+    }
+
     protected final ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
         return findComponentEntryByClientClass(client.getClass());
     }

@@ -46,6 +46,7 @@
 -keep interface okhttp3.** { *; }
 -dontwarn okhttp3.**
 -dontnote okhttp3.internal.Platform
+-dontnote okhttp3.internal.AndroidPlatform
 
 # Butterknife
 -keep class butterknife.** { *; }
@@ -84,6 +85,7 @@
 -dontnote android.support.v4.media.IMediaBrowserServiceCallbacksAdapterApi21
 -dontnote android.support.v4.media.IMediaBrowserServiceCallbacksAdapterApi21$Stub
 -dontnote android.support.v4.media.ParceledListSliceAdapterApi21
+-dontnote android.support.v4.app.NotificationManagerCompatKitKat
 
 # Gson
 -keep class com.google.gson.**

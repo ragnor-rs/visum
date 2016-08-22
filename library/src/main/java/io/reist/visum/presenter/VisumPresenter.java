@@ -20,7 +20,6 @@
 
 package io.reist.visum.presenter;
 
-import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -99,9 +98,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @param id        an id used by the presenter to distinguish the view from the others
      * @param view      a MVP view; use null to stop the view with the given id
      */
-    public final boolean setView(int id, @Nullable V view) {
-
-        boolean didChange = false;
+    public final void setView(int id, @Nullable V view) {
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
 
@@ -109,43 +106,42 @@ public abstract class VisumPresenter<V extends VisumView> {
 
             // remove the old view
             viewHolder.subscriptions.unsubscribe();
+            viewHolder.subscriptions = null;
             onViewDetached(id, viewHolder.view);
             viewHolders.remove(viewHolder);
 
-            didChange = true;
+            if (getViewCount() == 0) {
+                subscriptions.unsubscribe();
+                subscriptions = null;
+                onStop();
+            }
 
         }
 
         if (view != null) {
 
+            if (getViewCount() == 0) {
+                subscriptions = new CompositeSubscription();
+                onStart();
+            }
+
             // start the given view
             viewHolders.add(new ViewHolder<>(id, view));
             onViewAttached(id, view);
 
-            didChange = true;
-
         }
 
-        return didChange;
-
     }
 
-    @CallSuper
-    public void onStop() {
-        subscriptions.unsubscribe();
-        subscriptions = null;
-    }
+    public void onStop() {}
 
-    @CallSuper
-    public void onStart() {
-        subscriptions = new CompositeSubscription();
-    }
+    public void onStart() {}
 
     @NonNull
     private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
         if (viewHolder == null) {
-            throw new IllegalStateException("No view with id = " + id);
+            throw new ViewNotFoundException(id);
         }
         return viewHolder;
     }
@@ -328,8 +324,36 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
     }
 
-    public int getViewCount() {
+    public final int getViewCount() {
         return viewHolders.size();
+    }
+
+    public final boolean hasSubscriptions() {
+        return subscriptions != null && subscriptions.hasSubscriptions();
+    }
+
+    public final boolean hasSubscriptions(int viewId) {
+        try {
+            ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+            return viewHolder.subscriptions != null && viewHolder.subscriptions.hasSubscriptions();
+        } catch (ViewNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static class ViewNotFoundException extends RuntimeException {
+
+        private final int viewId;
+
+        public ViewNotFoundException(int viewId) {
+            super("No view with id = " + viewId);
+            this.viewId = viewId;
+        }
+
+        public int getViewId() {
+            return viewId;
+        }
+
     }
 
 }

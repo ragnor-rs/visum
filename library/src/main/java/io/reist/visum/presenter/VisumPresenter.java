@@ -141,7 +141,7 @@ public abstract class VisumPresenter<V extends VisumView> {
     private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
         if (viewHolder == null) {
-            throw new IllegalStateException("No view with id = " + id);
+            throw new ViewNotFoundException(id);
         }
         return viewHolder;
     }
@@ -326,6 +326,34 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     public final int getViewCount() {
         return viewHolders.size();
+    }
+
+    public final boolean hasSubscriptions() {
+        return subscriptions != null && subscriptions.hasSubscriptions();
+    }
+
+    public final boolean hasSubscriptions(int viewId) {
+        try {
+            ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+            return viewHolder.subscriptions != null && viewHolder.subscriptions.hasSubscriptions();
+        } catch (ViewNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static class ViewNotFoundException extends RuntimeException {
+
+        private final int viewId;
+
+        public ViewNotFoundException(int viewId) {
+            super("No view with id = " + viewId);
+            this.viewId = viewId;
+        }
+
+        public int getViewId() {
+            return viewId;
+        }
+
     }
 
 }

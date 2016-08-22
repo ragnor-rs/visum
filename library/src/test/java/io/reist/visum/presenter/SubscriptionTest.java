@@ -13,6 +13,8 @@ import rx.functions.Func0;
 
 import static io.reist.visum.presenter.PresenterAssert.assertGlobalSubscribe;
 import static io.reist.visum.presenter.PresenterAssert.assertViewSubscribe;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Reist on 22.08.16.
@@ -30,30 +32,54 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
 
             @Override
             public void onStart() {
+
                 super.onStart();
+
                 assertViewSubscribe(VIEW_ID, this, false);
                 assertGlobalSubscribe(this, true);
+
+                assertTrue(presenter.hasSubscriptions());
+                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+
             }
 
             @Override
             protected void onViewAttached(int id, @NonNull VisumView view) {
+
                 super.onViewAttached(id, view);
+
                 assertViewSubscribe(VIEW_ID, this, true);
                 assertGlobalSubscribe(this, true);
+
+                assertTrue(presenter.hasSubscriptions());
+                assertTrue(presenter.hasSubscriptions(VIEW_ID));
+
             }
 
             @Override
             protected void onViewDetached(int id, @NonNull VisumView view) {
+
                 super.onViewDetached(id, view);
+
                 assertViewSubscribe(VIEW_ID, this, false);
                 assertGlobalSubscribe(this, true);
+
+                assertTrue(presenter.hasSubscriptions());
+                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+
             }
 
             @Override
             public void onStop() {
+
                 super.onStop();
+
                 assertViewSubscribe(VIEW_ID, this, false);
                 assertGlobalSubscribe(this, false);
+
+                assertFalse(presenter.hasSubscriptions());
+                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+
             }
 
         };

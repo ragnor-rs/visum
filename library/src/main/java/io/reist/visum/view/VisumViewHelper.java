@@ -36,9 +36,7 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
-            if (presenter.setView(viewId, view) && presenter.getViewCount() == 1) {
-                presenter.onStart();
-            }
+            presenter.setView(viewId, view);
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }
@@ -49,9 +47,7 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
-            if (presenter.setView(viewId, null) && presenter.getViewCount() == 0) {
-                presenter.onStop();
-            }
+            presenter.setView(viewId, null);
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }

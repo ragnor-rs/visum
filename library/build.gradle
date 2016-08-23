@@ -54,7 +54,7 @@ android {
 
 }
 
-def supportVersion = '24.0.0'
+def supportVersion = '24.2.0'
 def robolectricVersion = '3.1'
 
 dependencies {

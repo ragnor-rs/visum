@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.junit.After;
@@ -13,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ServiceController;
@@ -24,10 +22,10 @@ import static io.reist.visum.ClientAssert.assertClientDetached;
 /**
  * Created by Reist on 26.05.16.
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricGradle3TestRunner.class)
 @Config(
         constants = BuildConfig.class,
-        sdk = {Build.VERSION_CODES.JELLY_BEAN},
+        sdk = Build.VERSION_CODES.JELLY_BEAN,
         application = TestApplication.class
 )
 public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {

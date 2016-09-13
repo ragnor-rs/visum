@@ -66,7 +66,7 @@ android {
 
 }
 
-def supportVersion = '24.2.0'
+def supportVersion = '24.2.1'
 def retrofitVersion = '2.1.0'
 def storioVersion = '1.5.0'
 def daggerVersion = '2.5'

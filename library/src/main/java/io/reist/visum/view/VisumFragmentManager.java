@@ -1,5 +1,6 @@
 package io.reist.visum.view;
 
+import android.support.annotation.AnimRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,20 @@ public class VisumFragmentManager {
         replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive);
     }
 
+    public static void showFragment (
+            FragmentManager fragmentManager,
+            VisumFragment fragment,
+            @IdRes int resId,
+            boolean remove,
+            boolean popBackStackInclusive,
+            @AnimRes int animEnter,
+            @AnimRes int animExit
+
+    ) {
+        Fragment topmostFragment = findTopmostFragment(fragmentManager);
+        replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive,animEnter,animExit);
+    }
+
     private static void replace(
             FragmentManager fragmentManager,
             @Nullable Fragment what,
@@ -56,6 +71,37 @@ public class VisumFragmentManager {
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+        commitFragmentTransaction(what, with, resId, remove, popBackStackInclusive, transaction);
+    }
+
+    private static void replace(
+            FragmentManager fragmentManager,
+            @Nullable Fragment what,
+            VisumFragment with,
+            @IdRes int resId,
+            boolean remove,
+            boolean popBackStackInclusive,
+            @AnimRes int animEnter,
+            @AnimRes int animExit
+    ) {
+
+        if (popBackStackInclusive && fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStackImmediate(fragmentManager.getBackStackEntryAt(0).getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(animEnter, animExit);
+
+        commitFragmentTransaction(what, with, resId, remove, popBackStackInclusive, transaction);
+    }
+
+    private static void commitFragmentTransaction(@Nullable Fragment what,
+                                                  VisumFragment with,
+                                                  @IdRes int resId,
+                                                  boolean remove,
+                                                  boolean popBackStackInclusive,
+                                                  FragmentTransaction transaction
+    ) {
         if (what != null && !popBackStackInclusive) {
             if (remove) {
                 transaction = transaction.remove(what);

@@ -194,7 +194,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
      * @return a name used to identify this fragment in the back-stack
      * @see VisumFragmentManager#replace(FragmentManager, Fragment, VisumFragment, int, boolean, boolean)
      */
-    public final String getName() {
+    public String getName() {
         return getClass().getName();
     }
 

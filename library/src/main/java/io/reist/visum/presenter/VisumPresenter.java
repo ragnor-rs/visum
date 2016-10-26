@@ -147,26 +147,38 @@ public abstract class VisumPresenter<V extends VisumView> {
     }
 
     @SuppressWarnings("unused")
-    public final <T> void subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
+    public final <T> Subscription subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        viewHolder.subscriptions.add(startSubscription(observable, observer));
+        Subscription subscription = startSubscription(observable, observer);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
     }
 
     @SuppressWarnings("unused")
-    public final <T> void subscribe(int viewId, Single<T> single, Action1<T> action) {
+    public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        viewHolder.subscriptions.add(startSubscription(single, action));
+        Subscription subscription = startSubscription(single, action);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
     }
 
     @SuppressWarnings("unused")
-    public final <T> void subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
+    public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        viewHolder.subscriptions.add(startSubscription(single, subscriber));
+        Subscription subscription = startSubscription(single, subscriber);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
     }
 
     @SuppressWarnings("unused")
-    public final <T> void subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        subscriptions.add(startSubscription(observable, new Observer<T>() {
+    public final <T> Subscription subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
+        Subscription subscription = startSubscription(observable, new Observer<T>() {
 
             @Override
             public void onCompleted() {
@@ -183,12 +195,16 @@ public abstract class VisumPresenter<V extends VisumView> {
                 notifyResult(viewNotifier, t);
             }
 
-        }));
+        });
+
+        subscriptions.add(subscription);
+
+        return subscription;
     }
 
     @SuppressWarnings("unused")
-    public final <T> void subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        subscriptions.add(startSubscription(single, new SingleSubscriber<T>() {
+    public final <T> Subscription subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
+        Subscription subscription = startSubscription(single, new SingleSubscriber<T>() {
 
             @Override
             public void onSuccess(T t) {
@@ -200,7 +216,11 @@ public abstract class VisumPresenter<V extends VisumView> {
                 notifyError(viewNotifier, e);
             }
 
-        }));
+        });
+
+        subscriptions.add(subscription);
+
+        return subscription;
     }
 
     private <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {
@@ -278,8 +298,8 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     @Deprecated
     @SuppressWarnings({"unused", "deprecation"})
-    public final <T> void subscribe(Observable<T> observable, Observer<? super T> observer) {
-        subscribe(VIEW_ID_DEFAULT, observable, observer);
+    public final <T> Subscription subscribe(Observable<T> observable, Observer<? super T> observer) {
+        return subscribe(VIEW_ID_DEFAULT, observable, observer);
     }
 
     /**
@@ -287,16 +307,16 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     @Deprecated
     @SuppressWarnings({"unused", "deprecation"})
-    public final <T> void subscribe(Single<T> single, Action1<T> action) {
-        subscribe(VIEW_ID_DEFAULT, single, action);
+    public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
+        return subscribe(VIEW_ID_DEFAULT, single, action);
     }
     /**
      * @deprecated use {@link #subscribe(int, Single, SingleSubscriber)} instead
      */
     @Deprecated
     @SuppressWarnings({"unused", "deprecation"})
-    public final <T> void subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        subscribe(VIEW_ID_DEFAULT, single, subscriber);
+    public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
+        return subscribe(VIEW_ID_DEFAULT, single, subscriber);
     }
 
     @SuppressWarnings("unused")

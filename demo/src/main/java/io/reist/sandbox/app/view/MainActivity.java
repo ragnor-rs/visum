@@ -168,7 +168,11 @@ public class MainActivity extends AppCompatActivity
                 fragment,
                 R.id.fragment_container,
                 remove,
-                popBackStack
+                popBackStack,
+                R.anim.fade_in,
+                R.anim.fade_out,
+                0,
+                0
         );
     }
 

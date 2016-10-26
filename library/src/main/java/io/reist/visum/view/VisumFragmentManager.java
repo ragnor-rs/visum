@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentTransaction;
 
 /**
  * Use this class to manage your {@link VisumFragment}s.
- *
+ * <p>
  * Created by defuera on 29/01/2016.
- *
+ * <p>
  * TODO perhaps it should be removed from Visum
  */
 public class VisumFragmentManager {
@@ -37,23 +37,23 @@ public class VisumFragmentManager {
             boolean remove,
             boolean popBackStackInclusive
     ) {
-
-        Fragment topmostFragment = findTopmostFragment(fragmentManager);
-        replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive);
+        showFragment(fragmentManager, fragment, resId, remove, popBackStackInclusive, 0, 0, 0, 0);
     }
 
-    public static void showFragment (
+    public static void showFragment(
             FragmentManager fragmentManager,
             VisumFragment fragment,
             @IdRes int resId,
             boolean remove,
             boolean popBackStackInclusive,
             @AnimRes int animEnter,
-            @AnimRes int animExit
+            @AnimRes int animExit,
+            @AnimRes int animPopEnter,
+            @AnimRes int animPopExit
 
     ) {
         Fragment topmostFragment = findTopmostFragment(fragmentManager);
-        replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive,animEnter,animExit);
+        replace(fragmentManager, topmostFragment, fragment, resId, remove, popBackStackInclusive, animEnter, animExit, animPopEnter, animPopExit);
     }
 
     private static void replace(
@@ -64,14 +64,7 @@ public class VisumFragmentManager {
             boolean remove,
             boolean popBackStackInclusive
     ) {
-
-        if (popBackStackInclusive && fragmentManager.getBackStackEntryCount() > 0) {
-            fragmentManager.popBackStackImmediate(fragmentManager.getBackStackEntryAt(0).getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        }
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        commitFragmentTransaction(what, with, resId, remove, popBackStackInclusive, transaction);
+        replace(fragmentManager, what, with, resId, remove, popBackStackInclusive, 0, 0, 0, 0);
     }
 
     private static void replace(
@@ -82,15 +75,16 @@ public class VisumFragmentManager {
             boolean remove,
             boolean popBackStackInclusive,
             @AnimRes int animEnter,
-            @AnimRes int animExit
+            @AnimRes int animExit,
+            @AnimRes int animPopEnter,
+            @AnimRes int animPopExit
     ) {
-
         if (popBackStackInclusive && fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStackImmediate(fragmentManager.getBackStackEntryAt(0).getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(animEnter, animExit);
+        transaction.setCustomAnimations(animEnter, animExit, animPopEnter, animPopExit);
 
         commitFragmentTransaction(what, with, resId, remove, popBackStackInclusive, transaction);
     }

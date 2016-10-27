@@ -20,14 +20,17 @@
 
 package io.reist.visum.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,10 +125,21 @@ public abstract class VisumFragment<P extends VisumPresenter>
         onStartClient();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutRes(), container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        int customTheme = getCustomTheme();
+        if (customTheme != 0) {
+            // create ContextThemeWrapper from the original Activity Context with the custom theme
+            final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), customTheme);
+
+            // clone the inflater using the ContextThemeWrapper
+            LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+            return localInflater.inflate(getLayoutRes(), container, false);
+        } else {
+            return inflater.inflate(getLayoutRes(), container, false);
+        }
+
     }
 
     @Override
@@ -200,5 +214,10 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    @StyleRes
+    protected int getCustomTheme(){
+        return 0;
+    }
 
 }

@@ -85,6 +85,11 @@ public abstract class VisumWidget<P extends VisumPresenter>
         helper.detachPresenter();
     }
 
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
+    }
+
     //endregion
 
 

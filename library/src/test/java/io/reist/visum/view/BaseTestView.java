@@ -34,4 +34,9 @@ public abstract class BaseTestView extends BaseTestClient implements VisumView<T
         helper.detachPresenter();
     }
 
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
+    }
+
 }

@@ -110,6 +110,11 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
         presenterAttached = false;
     }
 
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
+    }
+
     //endregion
 
 

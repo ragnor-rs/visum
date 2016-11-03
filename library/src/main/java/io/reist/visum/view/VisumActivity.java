@@ -34,7 +34,7 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Extend your activities with this class to take advantage of Visum MVP.
- *
+ * <p>
  * Created by Defuera on 29/01/16.
  */
 public abstract class VisumActivity<P extends VisumPresenter>
@@ -42,12 +42,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
         implements VisumView<P> {
 
     private final VisumViewHelper<P> helper;
-
-    /**
-     * Used to ensure that {@link #attachPresenter()} is called before
-     * {@link #onActivityResult(int, int, Intent)}
-     */
-    private boolean presenterAttachedOnActivityResult;
 
     /**
      * @deprecated use {@link #VisumActivity(int)} instead
@@ -95,13 +89,18 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @CallSuper
     public void attachPresenter() {
         helper.attachPresenter();
+
     }
 
     @Override
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
-        presenterAttachedOnActivityResult = false;
+    }
+
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
     }
 
     //endregion
@@ -117,11 +116,15 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        attachPresenter();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        if (!presenterAttachedOnActivityResult) {
-            attachPresenter();
-        }
+        attachPresenter();
     }
 
     @Override
@@ -145,7 +148,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         attachPresenter();
-        presenterAttachedOnActivityResult = true;
     }
 
     //endregion

@@ -49,6 +49,11 @@ public abstract class VisumBaseView<P extends VisumPresenter>
         onStopClient();
     }
 
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
+    }
+
     //endregion
 
 

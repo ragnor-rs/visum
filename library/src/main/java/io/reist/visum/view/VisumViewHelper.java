@@ -36,7 +36,9 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, view);
+            if (!isPresenterAttached()) {
+                presenter.setView(viewId, view);
+            }
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }
@@ -47,7 +49,9 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         VisumView<P> view = helper.getClient();
         VisumPresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, null);
+            if (isPresenterAttached()) {
+                presenter.setView(viewId, null);
+            }
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }
@@ -70,4 +74,9 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         return helper.getContext();
     }
 
+    @SuppressWarnings("ConstantConditions")
+    public boolean isPresenterAttached() {
+        P presenter = getPresenter();
+        return presenter != null && presenter.view() != null;
+    }
 }

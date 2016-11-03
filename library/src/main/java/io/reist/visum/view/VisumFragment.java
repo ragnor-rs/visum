@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,12 +51,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
         implements VisumView<P> {
 
     private final VisumViewHelper<P> helper;
-
-    /**
-     * Used to ensure that {@link #attachPresenter()} and {@link #detachPresenter()} is called once
-     * {@link #onActivityResult(int, int, Intent)}
-     */
-    private boolean presenterAttached = false;
 
     /**
      * @deprecated use {@link #VisumFragment(int)} instead
@@ -104,14 +97,17 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @CallSuper
     public void attachPresenter() {
         helper.attachPresenter();
-        presenterAttached = true;
     }
 
     @Override
     @CallSuper
     public void detachPresenter() {
         helper.detachPresenter();
-        presenterAttached = false;
+    }
+
+    @Override
+    public boolean isPresenterAttached() {
+        return helper.isPresenterAttached();
     }
 
     //endregion
@@ -145,9 +141,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!presenterAttached) {
-            attachPresenter();
-        }
+        attachPresenter();
     }
 
     @Override
@@ -165,17 +159,13 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onResume() {
         super.onResume();
-        if (!presenterAttached) {
-            attachPresenter();
-        }
+        attachPresenter();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
-        }
+        detachPresenter();
     }
 
     @Override
@@ -216,7 +206,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     protected abstract int getLayoutRes();
 
     @StyleRes
-    protected int getCustomTheme(){
+    protected int getCustomTheme() {
         return 0;
     }
 

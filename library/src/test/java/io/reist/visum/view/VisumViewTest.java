@@ -247,11 +247,13 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // on activity result
         testView.startActivityForResult();
+        activityController.pause();
         Shadows.shadowOf(fragmentContainerActivity).receiveResult(
                 new Intent(fragmentContainerActivity, ChildActivity.class),
                 Activity.RESULT_OK,
                 new Intent()
         );
+        activityController.resume();
         assertPresenterAttachedBeforeOnActivityResult(testView);
 
         // hide
@@ -294,11 +296,14 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
         // on activity result
         testView.startActivityForResult();
+        activityController.pause();
         Shadows.shadowOf(testView).receiveResult(
                 new Intent(testView, ChildActivity.class),
                 Activity.RESULT_OK,
                 new Intent()
         );
+        activityController.resume();
+
         assertPresenterAttachedBeforeOnActivityResult(testView);
 
         // config change

@@ -24,11 +24,13 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     public VisumWidget(int viewId, Context context) {
         super(context);
+        inflate();
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
     public VisumWidget(int viewId, Context context, AttributeSet attrs) {
         super(context, attrs);
+        inflate();
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
@@ -93,7 +95,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        inflate();
         if (!isInEditMode()){
             onStartClient();
         }

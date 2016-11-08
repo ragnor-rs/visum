@@ -18,32 +18,26 @@
  * along with MVP-Sandbox.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.reist.sandbox.app;
+package io.reist.sandbox.feed.view;
 
-import javax.inject.Singleton;
+import io.reist.sandbox.app.model.SandboxError;
+import io.reist.sandbox.feed.model.local.Post;
+import io.reist.sandbox.feed.presenter.FeedDetailPresenter;
+import io.reist.visum.view.VisumView;
 
-import dagger.Component;
-import io.reist.sandbox.feed.FeedComponent;
-import io.reist.sandbox.repos.ReposComponent;
-import io.reist.sandbox.result.ResultComponent;
-import io.reist.sandbox.time.TimeComponent;
-import io.reist.sandbox.users.UsersComponent;
-import io.reist.sandbox.weather.WeatherComponent;
+/**
+ * Created by 4xes on 8/11/16.
+ */
+public interface FeedDetailView extends VisumView<FeedDetailPresenter> {
 
-@Singleton
-@Component(modules = SandboxModule.class)
-public interface SandboxComponent {
+    void displayError(SandboxError error);
 
-    ReposComponent reposComponent();
+    void displayData(Post post);
 
-    UsersComponent usersComponent();
+    void displayLoader(boolean show);
 
-    TimeComponent timeComponent();
+    void back();
 
-    ResultComponent resultComponent();
-
-    WeatherComponent weatherComponent();
-
-    FeedComponent feedComponent();
+    long getPostId();
 
 }

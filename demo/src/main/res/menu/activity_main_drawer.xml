@@ -3,20 +3,25 @@
 
     <item
         android:id="@+id/nav_repos"
-        android:icon="@android:drawable/ic_menu_camera"
+        android:icon="@drawable/ic_list"
         android:title="@string/menu_repos" />
     <item
         android:id="@+id/nav_users"
-        android:icon="@android:drawable/ic_menu_gallery"
+        android:icon="@drawable/ic_users"
         android:title="@string/menu_users" />
     <item
         android:id="@+id/nav_time"
-        android:icon="@android:drawable/ic_menu_agenda"
+        android:icon="@drawable/ic_time"
         android:title="@string/menu_time" />
     <item
         android:id="@+id/nav_result"
-        android:icon="@android:drawable/ic_menu_revert"
+        android:icon="@drawable/ic_replay"
         android:title="@string/menu_result" />
+
+    <item
+        android:id="@+id/nav_feed"
+        android:icon="@drawable/ic_rss_feed"
+        android:title="Feed" />
 
     <item
         android:id="@+id/nav_weather"

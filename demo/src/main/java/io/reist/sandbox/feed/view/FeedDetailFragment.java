@@ -43,13 +43,13 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
 
     private static final String EXTRA_POST_ID = "io.reist.sandbox.extra_post_id";
 
-    @BindView(R.id.post_title)
+    @BindView(R.id.post_detail_title)
     TextView title;
 
-    @BindView(R.id.post_body)
+    @BindView(R.id.post_detail_body)
     TextView body;
 
-    @BindView(R.id.post_container)
+    @BindView(R.id.post_detail_container)
     ViewGroup postContainer;
 
     @BindView(R.id.loader)

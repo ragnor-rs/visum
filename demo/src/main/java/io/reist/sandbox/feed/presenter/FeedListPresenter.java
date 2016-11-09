@@ -1,7 +1,5 @@
 package io.reist.sandbox.feed.presenter;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +33,6 @@ public class FeedListPresenter extends VisumPresenter<FeedListView> {
     protected void onViewAttached() {
         FeedListView view = view();
         view.showLoader(true);
-        Log.d("WTF", feedService.toString());
         loadData();
     }
 

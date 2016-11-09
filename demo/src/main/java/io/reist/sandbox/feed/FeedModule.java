@@ -36,7 +36,7 @@ public class FeedModule {
 
     @Provides
     @Singleton
-    protected FeedService repoService(FeedServerApi feedApi, StorIOSQLite storIOSQLite) {
+    protected FeedService feedService(FeedServerApi feedApi, StorIOSQLite storIOSQLite) {
         return new CachedFeedService(new StorIoPostService(storIOSQLite), new RetrofitFeedService(feedApi));
     }
 }

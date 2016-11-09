@@ -5,6 +5,8 @@ import org.robolectric.shadows.ShadowLog;
 import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
 import rx.android.plugins.RxAndroidSchedulersHook;
+import rx.plugins.RxJavaPlugins;
+import rx.plugins.RxJavaSchedulersHook;
 import rx.schedulers.Schedulers;
 
 /**
@@ -12,18 +14,34 @@ import rx.schedulers.Schedulers;
  */
 public class RobolectricTestCase {
 
+    private final RxJavaSchedulersHook rxJavaSchedulersHook = new RxJavaSchedulersHook() {
+        @Override
+        public Scheduler getIOScheduler() {
+            return Schedulers.immediate();
+        }
+
+        @Override
+        public Scheduler getNewThreadScheduler() {
+            return Schedulers.immediate();
+        }
+    };
+
+    private final RxAndroidSchedulersHook rxAndroidSchedulersHook = new RxAndroidSchedulersHook() {
+        @Override
+        public Scheduler getMainThreadScheduler() {
+            return Schedulers.immediate();
+        }
+    };
+
     public void setUp() {
         ShadowLog.stream = System.out;
 
-        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
-            @Override
-            public Scheduler getMainThreadScheduler() {
-                return Schedulers.immediate();
-            }
-        });
+        RxAndroidPlugins.getInstance().registerSchedulersHook(rxAndroidSchedulersHook);
+        RxJavaPlugins.getInstance().registerSchedulersHook(rxJavaSchedulersHook);
     }
 
     public void tearDown() {
         RxAndroidPlugins.getInstance().reset();
+        RxJavaPlugins.getInstance().reset();
     }
 }

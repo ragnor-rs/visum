@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void syncBackStack(){
+    public void syncBackStack() {
         boolean showBurger = fragmentManager.getBackStackEntryCount() == 1;
         drawerToggle.setDrawerIndicatorEnabled(showBurger);
         getSupportActionBar().setDisplayHomeAsUpEnabled(!showBurger);

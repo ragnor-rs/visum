@@ -4,7 +4,6 @@ import android.os.Build;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,18 +65,10 @@ public class FeedServiceTest extends RobolectricTestCase {
         assertThat(feedService).isNotNull();
     }
 
-    @After
-    @Override
-    public void tearDown() {
-        super.tearDown();
-    }
-
     @Singleton
     @Component(modules = SandboxModule.class)
     public interface TestComponent {
-
         void inject(FeedServiceTest userServiceTest);
-
     }
 
     public static class TestFeedModule extends FeedModule {
@@ -114,7 +105,6 @@ public class FeedServiceTest extends RobolectricTestCase {
         testPosts();
 
         testPostById();
-
     }
 
     void testPostById() {

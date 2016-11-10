@@ -2,7 +2,6 @@ package io.reist.sandbox.feed.presenter;
 
 import android.os.Build;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,18 +50,11 @@ public class FeedListPresenterTest extends RobolectricTestCase {
                 .inject(this);
     }
 
-    @After
-    @Override
-    public void tearDown() {
-        super.tearDown();
-    }
-
     @Singleton
     @Component(modules = SandboxModule.class)
     public interface TestComponent {
         void inject(FeedListPresenterTest feedListPresenterTest);
     }
-
 
     @Test
     public void testPresenter() throws InterruptedException {

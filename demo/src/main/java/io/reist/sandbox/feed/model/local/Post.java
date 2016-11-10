@@ -14,9 +14,11 @@ public class Post {
     @SerializedName("id")
     @StorIOSQLiteColumn(name = PostTable.Column.ID, key = true)
     public Long id;
+
     @StorIOSQLiteColumn(name = PostTable.Column.TITLE)
     @SerializedName("title")
     public String title;
+
     @SerializedName("body")
     @StorIOSQLiteColumn(name = PostTable.Column.BODY)
     public String body;

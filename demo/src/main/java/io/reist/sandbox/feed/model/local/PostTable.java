@@ -4,11 +4,12 @@ import io.reist.sandbox.app.model.local.BaseTable;
 
 public class PostTable extends BaseTable {
     public static final String NAME = "post";
-    private static final String CREATE_TABLE = "create table " + NAME + "(" +
+    private static final String CREATE_TABLE =
+        "create table " + NAME + "(" +
             Column.ID + " integer not null primary key, " +
             Column.TITLE + " text, " +
             Column.BODY + " text" +
-            ")";
+        ")";
 
     @Override
     public String getCreateTableQuery() {
@@ -19,7 +20,7 @@ public class PostTable extends BaseTable {
     public String[] getUpgradeTableQueries(int oldVersion) {
         switch (oldVersion) {
             case 3:
-                return new String[]{CREATE_TABLE};
+                return new String[] {CREATE_TABLE};
             default:
                 return null;
         }
@@ -29,6 +30,7 @@ public class PostTable extends BaseTable {
         public static final String ID = "_id";
         public static final String TITLE = "title";
         public static final String BODY = "body";
+
         private Column() {
         }
     }

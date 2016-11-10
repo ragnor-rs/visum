@@ -83,6 +83,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
 
         @BindView(R.id.post_title)
         TextView title;
+
         @BindView(R.id.post_body)
         TextView body;
 

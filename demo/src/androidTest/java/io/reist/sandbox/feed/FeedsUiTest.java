@@ -37,6 +37,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -81,10 +82,8 @@ public class FeedsUiTest extends ActivityInstrumentationTestCase<MainActivity> {
         onView(isRoot())
                 .perform(TestUtils.waitId(R.id.post_detail_container, TestUtils.ACTION_TIMEOUT));
 
-        onView(withId(R.id.post_detail_title));
-        onView(withId(R.id.post_detail_body));
-
-        onView(withId(R.id.post_detail_title)).check(matches(withText("sunt aut facere repellat provident occaecati excepturi optio reprehenderit")));
+        onView(withId(R.id.post_detail_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.post_detail_body)).check(matches(isDisplayed()));
     }
 
 

@@ -52,8 +52,8 @@ public class FeedServiceTest extends RobolectricTestCase {
 
     @Before
     @Override
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
         SandboxApplication sandboxApplication = (SandboxApplication) RuntimeEnvironment.application;
         testComponent = DaggerFeedServiceTest_TestComponent
                 .builder()

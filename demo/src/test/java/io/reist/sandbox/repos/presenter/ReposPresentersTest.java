@@ -1,5 +1,7 @@
 package io.reist.sandbox.repos.presenter;
 
+import android.os.Build;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +36,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import android.os.Build;
-
 /**
  * Created by m039 on 11/27/15.
  */
@@ -51,8 +51,8 @@ public class ReposPresentersTest extends RobolectricTestCase {
 
     @Before
     @Override
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
 
         DaggerReposPresentersTest_TestComponent
                 .builder()
@@ -64,8 +64,8 @@ public class ReposPresentersTest extends RobolectricTestCase {
 
     @After
     @Override
-    public void tearDown() {
-        super.tearDown();
+    public void end() {
+        super.end();
     }
 
     @Singleton

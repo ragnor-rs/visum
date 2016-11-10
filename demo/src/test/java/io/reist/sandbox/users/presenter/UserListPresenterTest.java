@@ -1,5 +1,7 @@
 package io.reist.sandbox.users.presenter;
 
+import android.os.Build;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import org.junit.After;
@@ -32,8 +34,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-import android.os.Build;
-
 /**
  * Created by m039 on 11/25/15.
  */
@@ -46,8 +46,8 @@ public class UserListPresenterTest extends RobolectricTestCase {
 
     @Before
     @Override
-    public void setUp() {
-        super.setUp();
+    public void setup() {
+        super.setup();
         DaggerUserListPresenterTest_TestComponent
                 .builder()
                 .usersModule(new TestUsersModule())
@@ -58,8 +58,8 @@ public class UserListPresenterTest extends RobolectricTestCase {
 
     @After
     @Override
-    public void tearDown() {
-        super.tearDown();
+    public void end() {
+        super.end();
     }
 
     @Singleton

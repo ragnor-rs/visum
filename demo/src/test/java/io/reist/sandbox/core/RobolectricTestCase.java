@@ -33,14 +33,17 @@ public class RobolectricTestCase {
         }
     };
 
-    public void setUp() {
+    public void setup() {
         ShadowLog.stream = System.out;
 
+        RxAndroidPlugins.getInstance().reset();
         RxAndroidPlugins.getInstance().registerSchedulersHook(rxAndroidSchedulersHook);
+
+        RxJavaPlugins.getInstance().reset();
         RxJavaPlugins.getInstance().registerSchedulersHook(rxJavaSchedulersHook);
     }
 
-    public void tearDown() {
+    public void end() {
         RxAndroidPlugins.getInstance().reset();
         RxJavaPlugins.getInstance().reset();
     }

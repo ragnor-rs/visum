@@ -21,6 +21,7 @@
     <string name="menu_repos">Repos</string>
     <string name="menu_users">Users</string>
     <string name="menu_time">Time</string>
+    <string name="menu_feed">Feed</string>
     <string name="current_time">Current time: %s</string>
     <string name="go_to_app">Go to the app</string>
     <string name="show_time">Show</string>

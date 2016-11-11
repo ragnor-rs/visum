@@ -1,7 +1,7 @@
 package io.reist.sandbox.repos.model;
 
+import android.os.Build;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,8 +32,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import android.os.Build;
-
 
 /**
  * Created by m039 on 11/19/15.
@@ -49,10 +47,7 @@ public class RepoServiceTest extends RobolectricTestCase {
     RepoService repoService;
 
     @Before
-    @Override
-    public void setUp() {
-        super.setUp();
-
+    public void initComponents() {
         TestComponent modelComponent = DaggerRepoServiceTest_TestComponent
                 .builder()
                 .reposModule(new TestReposModule())
@@ -62,11 +57,6 @@ public class RepoServiceTest extends RobolectricTestCase {
         modelComponent.inject(this);
     }
 
-    @After
-    @Override
-    public void tearDown() {
-        super.tearDown();
-    }
 
     @Singleton
     @Component(modules = SandboxModule.class)

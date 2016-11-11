@@ -22,6 +22,8 @@ package io.reist.sandbox.app;
 
 import android.content.Context;
 
+import io.reist.sandbox.feed.view.FeedDetailFragment;
+import io.reist.sandbox.feed.view.FeedListFragment;
 import io.reist.sandbox.repos.view.RepoEditFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
@@ -66,6 +68,11 @@ public class SandboxComponentCache extends ComponentCache {
         register(
                 sandboxComponent::weatherComponent,
                 WeatherFragment.class
+        );
+
+        register(
+                sandboxComponent::feedComponent,
+                FeedListFragment.class, FeedDetailFragment.class
         );
 
     }

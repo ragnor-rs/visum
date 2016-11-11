@@ -23,6 +23,7 @@ package io.reist.sandbox.app.view;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.reist.sandbox.R;
+import io.reist.sandbox.feed.view.FeedListFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
 import io.reist.sandbox.time.view.TimeFragment;
@@ -73,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         );
 
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerToggle.syncState();
         drawerToggle.setToolbarNavigationClickListener(v -> fragmentManager.popBackStackImmediate());
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -85,14 +86,14 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             showFragment(new RepoListFragment(), false);
         }
+        syncBackStack();
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else if (fragmentManager.getBackStackEntryCount() > 1) {
             super.onBackPressed();
         }
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.nav_repos:
@@ -133,6 +134,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_result:
                 startActivity(new Intent(this, ResultActivity.class));
+                break;
+            case R.id.nav_feed:
+                showFragment(new FeedListFragment(), true, true);
                 break;
             case R.id.nav_weather:
                 showFragment(new WeatherFragment(), true, true);
@@ -150,13 +154,17 @@ public class MainActivity extends AppCompatActivity
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @Override
-    public void onBackStackChanged() {
+    public void syncBackStack() {
         boolean showBurger = fragmentManager.getBackStackEntryCount() == 1;
         drawerToggle.setDrawerIndicatorEnabled(showBurger);
         getSupportActionBar().setDisplayHomeAsUpEnabled(!showBurger);
         drawerToggle.syncState();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public void onBackStackChanged() {
+        syncBackStack();
     }
 
     @Override

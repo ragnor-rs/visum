@@ -18,32 +18,24 @@
  * along with MVP-Sandbox.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package io.reist.sandbox.app;
+package io.reist.sandbox.feed.model;
 
-import javax.inject.Singleton;
+import io.reist.sandbox.app.model.CachedService;
+import io.reist.sandbox.feed.model.local.Post;
 
-import dagger.Component;
-import io.reist.sandbox.feed.FeedComponent;
-import io.reist.sandbox.repos.ReposComponent;
-import io.reist.sandbox.result.ResultComponent;
-import io.reist.sandbox.time.TimeComponent;
-import io.reist.sandbox.users.UsersComponent;
-import io.reist.sandbox.weather.WeatherComponent;
+/**
+ * Created by 4xes on 7/11/16.
+ */
+public class CachedFeedService extends CachedService<Post> implements FeedService {
 
-@Singleton
-@Component(modules = SandboxModule.class)
-public interface SandboxComponent {
+    protected final FeedService local;
+    protected final FeedService remote;
 
-    ReposComponent reposComponent();
+    public CachedFeedService(FeedService local, FeedService remote) {
+        super(local, remote);
 
-    UsersComponent usersComponent();
-
-    TimeComponent timeComponent();
-
-    ResultComponent resultComponent();
-
-    WeatherComponent weatherComponent();
-
-    FeedComponent feedComponent();
+        this.local = local;
+        this.remote = remote;
+    }
 
 }

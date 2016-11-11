@@ -42,6 +42,11 @@ import io.reist.sandbox.app.model.UserStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.local.DbOpenHelper;
 import io.reist.sandbox.app.model.remote.NestedFieldNameAdapter;
 import io.reist.sandbox.app.model.remote.SandboxApi;
+import io.reist.sandbox.feed.FeedModule;
+import io.reist.sandbox.feed.model.local.Post;
+import io.reist.sandbox.feed.model.local.PostStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.feed.model.local.PostStorIOSQLiteGetResolver;
+import io.reist.sandbox.feed.model.local.PostStorIOSQLitePutResolver;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -61,7 +66,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
         ReposModule.class,
         TimeModule.class,
         ResultModule.class,
-        WeatherModule.class
+        WeatherModule.class,
+        FeedModule.class
 })
 public class SandboxModule {
 
@@ -101,6 +107,14 @@ public class SandboxModule {
                                 .getResolver(new UserStorIOSQLiteGetResolver())
                                 .deleteResolver(new UserStorIOSQLiteDeleteResolver())
                                 .build()
+                )
+                .addTypeMapping(
+                        Post.class,
+                        SQLiteTypeMapping.<Post>builder()
+                        .putResolver(new PostStorIOSQLitePutResolver())
+                        .getResolver(new PostStorIOSQLiteGetResolver())
+                        .deleteResolver(new PostStorIOSQLiteDeleteResolver())
+                        .build()
                 )
                 .build();
 

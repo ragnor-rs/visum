@@ -23,18 +23,20 @@ package io.reist.sandbox.app.model.local;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import io.reist.sandbox.feed.model.local.PostTable;
 import io.reist.sandbox.repos.model.local.RepoTable;
 import io.reist.sandbox.users.model.local.UserTable;
 
 public class DbOpenHelper extends BaseDbHelper {
 
     private static final String DATABASE_NAME = "sandbox";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public DbOpenHelper(@NonNull Context context) {
         super(context, DATABASE_NAME, DATABASE_VERSION);
         addTable(RepoTable.class);
         addTable(UserTable.class);
+        addTable(PostTable.class);
     }
 
 }

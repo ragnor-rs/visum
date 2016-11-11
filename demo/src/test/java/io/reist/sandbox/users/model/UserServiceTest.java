@@ -1,8 +1,9 @@
 package io.reist.sandbox.users.model;
 
+import android.os.Build;
+
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,8 +40,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import android.os.Build;
-
 /**
  * Created by m039 on 11/27/15.
  */
@@ -54,9 +53,7 @@ public class UserServiceTest extends RobolectricTestCase {
     TestComponent testComponent;
 
     @Before
-    @Override
-    public void setUp() {
-        super.setUp();
+    public void initComponents() {
         SandboxApplication sandboxApplication = (SandboxApplication) RuntimeEnvironment.application;
 
         testComponent = DaggerUserServiceTest_TestComponent
@@ -67,12 +64,6 @@ public class UserServiceTest extends RobolectricTestCase {
 
         testComponent.inject(this);
         assertThat(userService).isNotNull();
-    }
-
-    @After
-    @Override
-    public void tearDown() {
-        super.tearDown();
     }
 
     @Singleton

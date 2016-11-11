@@ -23,11 +23,14 @@ package io.reist.sandbox.feed.view;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reist.dali.Dali;
+import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
@@ -42,6 +45,9 @@ import io.reist.visum.view.VisumFragment;
 public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implements FeedDetailView {
 
     private static final String EXTRA_POST_ID = "io.reist.sandbox.extra_post_id";
+
+    @BindView(R.id.post_detail_image)
+    ImageView image;
 
     @BindView(R.id.post_detail_title)
     TextView title;
@@ -84,6 +90,11 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
     public void displayData(Post post) {
         title.setText(post.title);
         body.setText(post.body);
+
+        Dali.with(this)
+            .load("file:///android_asset/post_detail_image.jpg")
+            .scaleMode(ScaleMode.CENTER_CROP)
+            .into(image, false);
     }
 
     @Override
@@ -101,6 +112,5 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
     public long getPostId() {
         return getArguments().getLong(EXTRA_POST_ID);
     }
-
 
 }

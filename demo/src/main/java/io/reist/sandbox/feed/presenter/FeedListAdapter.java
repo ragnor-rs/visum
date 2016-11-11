@@ -25,12 +25,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reist.dali.Dali;
+import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
 import io.reist.sandbox.feed.model.local.Post;
 
@@ -63,6 +66,12 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
                 itemClickListener.itemClicked(posts.get(position));
             }
         });
+
+        Dali.with(vh.itemView)
+            .load("file:///android_asset/post_image.jpg")
+            .inCircle(true)
+            .scaleMode(ScaleMode.CENTER_CROP)
+            .into(vh.image, false);
     }
 
     public void setItemClickListener(FeedListAdapter.ItemClickListener itemClickListener) {
@@ -80,6 +89,9 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.post_image)
+        ImageView image;
 
         @BindView(R.id.post_title)
         TextView title;

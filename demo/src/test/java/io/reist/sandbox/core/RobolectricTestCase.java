@@ -1,5 +1,7 @@
 package io.reist.sandbox.core;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.robolectric.shadows.ShadowLog;
 
 import rx.Scheduler;
@@ -14,36 +16,37 @@ import rx.schedulers.Schedulers;
  */
 public class RobolectricTestCase {
 
-    private final RxJavaSchedulersHook rxJavaSchedulersHook = new RxJavaSchedulersHook() {
-        @Override
-        public Scheduler getIOScheduler() {
-            return Schedulers.immediate();
-        }
-
-        @Override
-        public Scheduler getNewThreadScheduler() {
-            return Schedulers.immediate();
-        }
-    };
-
-    private final RxAndroidSchedulersHook rxAndroidSchedulersHook = new RxAndroidSchedulersHook() {
-        @Override
-        public Scheduler getMainThreadScheduler() {
-            return Schedulers.immediate();
-        }
-    };
-
-    public void setup() {
+    @BeforeClass
+    public static void setLogs(){
         ShadowLog.stream = System.out;
-
-        RxAndroidPlugins.getInstance().reset();
-        RxAndroidPlugins.getInstance().registerSchedulersHook(rxAndroidSchedulersHook);
-
-        RxJavaPlugins.getInstance().reset();
-        RxJavaPlugins.getInstance().registerSchedulersHook(rxJavaSchedulersHook);
     }
 
-    public void end() {
+    @BeforeClass
+    public static void registerRxHooks() {
+        RxAndroidPlugins.getInstance().reset();
+        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
+            @Override
+            public Scheduler getMainThreadScheduler() {
+                return Schedulers.immediate();
+            }
+        });
+
+        RxJavaPlugins.getInstance().reset();
+        RxJavaPlugins.getInstance().registerSchedulersHook(new RxJavaSchedulersHook() {
+            @Override
+            public Scheduler getIOScheduler() {
+                return Schedulers.immediate();
+            }
+
+            @Override
+            public Scheduler getNewThreadScheduler() {
+                return Schedulers.immediate();
+            }
+        });
+    }
+
+    @AfterClass
+    public static void resetRxHooks() {
         RxAndroidPlugins.getInstance().reset();
         RxJavaPlugins.getInstance().reset();
     }

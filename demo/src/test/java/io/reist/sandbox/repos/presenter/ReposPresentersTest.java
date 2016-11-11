@@ -2,7 +2,6 @@ package io.reist.sandbox.repos.presenter;
 
 import android.os.Build;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,22 +49,13 @@ public class ReposPresentersTest extends RobolectricTestCase {
     RepoEditPresenter mRepoEditPresenter;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
-
+    public void initComponents() {
         DaggerReposPresentersTest_TestComponent
                 .builder()
                 .reposModule(new TestReposModule())
                 .sandboxModule(new SandboxModule(RuntimeEnvironment.application))
                 .build()
                 .inject(this);
-    }
-
-    @After
-    @Override
-    public void end() {
-        super.end();
     }
 
     @Singleton

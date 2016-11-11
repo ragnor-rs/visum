@@ -2,7 +2,6 @@ package io.reist.sandbox.feed.presenter;
 
 import android.os.Build;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,21 +39,13 @@ public class FeedListPresenterTest extends RobolectricTestCase {
     FeedListPresenter feedListPresenter;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
+    public void initComponents() {
         DaggerFeedListPresenterTest_TestComponent
                 .builder()
                 .feedModule(new FeedServiceTest.TestFeedModule())
                 .sandboxModule(new SandboxModule(RuntimeEnvironment.application))
                 .build()
                 .inject(this);
-    }
-
-    @After
-    @Override
-    public void end() {
-        super.end();
     }
 
     @Singleton

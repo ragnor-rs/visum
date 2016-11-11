@@ -4,7 +4,6 @@ import android.os.Build;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,21 +44,13 @@ public class UserListPresenterTest extends RobolectricTestCase {
     UserListPresenter mUserListPresenter;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
+    public void initComponents() {
         DaggerUserListPresenterTest_TestComponent
                 .builder()
                 .usersModule(new TestUsersModule())
                 .sandboxModule(new SandboxModule(RuntimeEnvironment.application))
                 .build()
                 .inject(this);
-    }
-
-    @After
-    @Override
-    public void end() {
-        super.end();
     }
 
     @Singleton

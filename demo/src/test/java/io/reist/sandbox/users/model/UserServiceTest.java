@@ -4,7 +4,6 @@ import android.os.Build;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,9 +53,7 @@ public class UserServiceTest extends RobolectricTestCase {
     TestComponent testComponent;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
+    public void initComponents() {
         SandboxApplication sandboxApplication = (SandboxApplication) RuntimeEnvironment.application;
 
         testComponent = DaggerUserServiceTest_TestComponent
@@ -67,12 +64,6 @@ public class UserServiceTest extends RobolectricTestCase {
 
         testComponent.inject(this);
         assertThat(userService).isNotNull();
-    }
-
-    @After
-    @Override
-    public void end() {
-        super.end();
     }
 
     @Singleton

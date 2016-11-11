@@ -2,7 +2,6 @@ package io.reist.sandbox.repos.model;
 
 import android.os.Build;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,10 +47,7 @@ public class RepoServiceTest extends RobolectricTestCase {
     RepoService repoService;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
-
+    public void initComponents() {
         TestComponent modelComponent = DaggerRepoServiceTest_TestComponent
                 .builder()
                 .reposModule(new TestReposModule())
@@ -61,11 +57,6 @@ public class RepoServiceTest extends RobolectricTestCase {
         modelComponent.inject(this);
     }
 
-    @After
-    @Override
-    public void end() {
-        super.end();
-    }
 
     @Singleton
     @Component(modules = SandboxModule.class)

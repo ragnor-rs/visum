@@ -51,9 +51,7 @@ public class FeedServiceTest extends RobolectricTestCase {
     TestComponent testComponent;
 
     @Before
-    @Override
-    public void setup() {
-        super.setup();
+    public void initComponents() {
         SandboxApplication sandboxApplication = (SandboxApplication) RuntimeEnvironment.application;
         testComponent = DaggerFeedServiceTest_TestComponent
                 .builder()
@@ -101,13 +99,7 @@ public class FeedServiceTest extends RobolectricTestCase {
     public static final long POST_ID = (new Random().nextLong());
 
     @Test
-    public void testPostService() {
-        testPosts();
-
-        testPostById();
-    }
-
-    void testPostById() {
+    public void testPostById() {
         TestSubscriber<SandboxResponse<Post>> testSubscriber = new TestSubscriber<>();
         feedService.byId(POST_ID).subscribe(testSubscriber);
 
@@ -118,7 +110,8 @@ public class FeedServiceTest extends RobolectricTestCase {
         assertThat(testSubscriber.getOnNextEvents().get(0).getResult().id).isEqualTo(POST_ID);
     }
 
-    void testPosts() {
+    @Test
+    public void testPosts() {
         TestSubscriber<SandboxResponse<List<Post>>> testSubscriber = new TestSubscriber<>();
         feedService.list().subscribe(testSubscriber);
 

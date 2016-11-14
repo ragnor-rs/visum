@@ -92,7 +92,7 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
         body.setText(post.body);
 
         Dali.with(this)
-            .load("file:///android_asset/post_detail_image.jpg")
+            .load(post.image)
             .scaleMode(ScaleMode.CENTER_CROP)
             .into(image, false);
     }

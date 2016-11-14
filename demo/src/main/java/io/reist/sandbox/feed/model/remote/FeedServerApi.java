@@ -12,9 +12,9 @@ import rx.Observable;
  */
 public interface FeedServerApi {
 
-    @GET("/posts")
+    @GET("/json/feed.json")
     Observable<List<Post>> posts();
 
-    @GET("/posts/{postId}")
+    @GET("/json/{postId}.json")
     Observable<Post> post(@Path("postId") long postId);
 }

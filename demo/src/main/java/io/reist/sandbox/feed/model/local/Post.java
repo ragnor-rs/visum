@@ -23,12 +23,17 @@ public class Post {
     @StorIOSQLiteColumn(name = PostTable.Column.BODY)
     public String body;
 
+    @SerializedName("image")
+    @StorIOSQLiteColumn(name = PostTable.Column.IMAGE)
+    public String image;
+
     @Override
     public String toString() {
         return Post.class.getSimpleName() + "{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

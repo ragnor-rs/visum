@@ -68,7 +68,7 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.ViewHo
         });
 
         Dali.with(vh.itemView)
-            .load("file:///android_asset/post_image.jpg")
+            .load(posts.get(position).image)
             .inCircle(true)
             .scaleMode(ScaleMode.CENTER_CROP)
             .into(vh.image, false);

@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import io.reist.dali.Dali;
 import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
-import io.reist.sandbox.feed.model.local.Post;
+import io.reist.sandbox.app.model.Post;
 
 /**
  * Created by 4xes on 7/11/16.

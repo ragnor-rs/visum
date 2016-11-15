@@ -20,8 +20,8 @@
 
 package io.reist.sandbox.feed.model;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxService;
-import io.reist.sandbox.feed.model.local.Post;
 
 /**
  * Created by 4xes on 7/11/16.

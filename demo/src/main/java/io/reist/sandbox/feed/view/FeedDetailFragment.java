@@ -32,10 +32,10 @@ import butterknife.BindView;
 import io.reist.dali.Dali;
 import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.feed.model.local.Post;
 import io.reist.sandbox.feed.presenter.FeedDetailPresenter;
 import io.reist.visum.view.VisumFragment;
 

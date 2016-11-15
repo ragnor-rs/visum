@@ -1,9 +1,11 @@
-package io.reist.sandbox.feed.model.local;
+package io.reist.sandbox.app.model;
 
 
 import com.google.gson.annotations.SerializedName;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
+
+import io.reist.sandbox.feed.model.local.PostTable;
 
 /**
  * Created by 4xes on 8/11/16.

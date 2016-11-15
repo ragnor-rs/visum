@@ -6,10 +6,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.feed.model.FeedService;
-import io.reist.sandbox.feed.model.local.Post;
 import io.reist.sandbox.feed.view.FeedListView;
 import io.reist.visum.presenter.VisumPresenter;
 import rx.Observer;

@@ -8,7 +8,8 @@ public class PostTable extends BaseTable {
         "create table " + NAME + "(" +
             Column.ID + " integer not null primary key, " +
             Column.TITLE + " text, " +
-            Column.BODY + " text" +
+            Column.BODY + " text, " +
+            Column.IMAGE + " text" +
         ")";
 
     @Override
@@ -30,6 +31,7 @@ public class PostTable extends BaseTable {
         public static final String ID = "_id";
         public static final String TITLE = "title";
         public static final String BODY = "body";
+        public static final String IMAGE = "image";
 
         private Column() {
         }

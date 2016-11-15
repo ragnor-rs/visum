@@ -20,8 +20,8 @@
 
 package io.reist.sandbox.feed.view;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
-import io.reist.sandbox.feed.model.local.Post;
 import io.reist.sandbox.feed.presenter.FeedDetailPresenter;
 import io.reist.visum.view.VisumView;
 

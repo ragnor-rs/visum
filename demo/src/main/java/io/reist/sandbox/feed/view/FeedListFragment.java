@@ -23,18 +23,24 @@ package io.reist.sandbox.feed.view;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.m039.el_adapter.ListItemAdapter;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import io.reist.dali.Dali;
+import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.feed.presenter.FeedListAdapter;
 import io.reist.sandbox.feed.presenter.FeedListPresenter;
 
 /**
@@ -51,14 +57,10 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
     @Inject
     FeedListPresenter presenter;
 
-    private FeedListAdapter adapter;
+    private ListItemAdapter listAdapter;
 
     public FeedListFragment() {
         super(R.layout.fragment_feed);
-    }
-
-    public static FeedListFragment newInstance() {
-        return new FeedListFragment();
     }
 
     @Override
@@ -73,6 +75,27 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
         // setView a linear layout manager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        listAdapter = new ListItemAdapter();
+        listAdapter
+                .addViewCreator(Post.class, parent -> LayoutInflater.from(getActivity()).inflate(R.layout.item_post, parent, false))
+                .addViewBinder((view, item) -> {
+                    ((TextView) view.findViewById(R.id.post_title)).setText(item.title);
+                    ((TextView) view.findViewById(R.id.post_body)).setText(item.body);
+
+                    ImageView postImage = ((ImageView) view.findViewById(R.id.post_image));
+                    Dali.with(postImage)
+                            .load(item.image)
+                            .inCircle(true)
+                            .scaleMode(ScaleMode.CENTER_CROP)
+                            .into(postImage, false);
+
+                })
+                .addOnItemViewClickListener((view, item) -> {
+                    getFragmentController().showFragment(FeedDetailFragment.newInstance(item.id), false);
+                })
+        ;
+        recyclerView.setAdapter(listAdapter);
 
         loaderView.setOnRetryClickListener(v -> presenter.loadData());
 
@@ -90,7 +113,7 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
 
     @Override
     public void displayError(SandboxError error) {
-        if (adapter == null || adapter.getItemCount() == 0) {
+        if (listAdapter == null || listAdapter.getItemCount() == 0) {
             loaderView.showNetworkError();
         } else {
             Snackbar
@@ -103,10 +126,9 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
     @Override
     public void displayData(List<Post> data) {
         loaderView.hide();
-        adapter = new FeedListAdapter(data);
-        adapter.setItemClickListener(post ->
-                getFragmentController().showFragment(FeedDetailFragment.newInstance(post.id), false));
-        recyclerView.setAdapter(adapter);
+        listAdapter.addItems(data);
+        listAdapter.notifyDataSetChanged();
+
     }
 
 }

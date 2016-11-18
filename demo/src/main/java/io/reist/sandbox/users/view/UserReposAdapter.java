@@ -20,7 +20,6 @@
 
 package io.reist.sandbox.users.view;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -81,9 +80,7 @@ public class UserReposAdapter extends RecyclerView.Adapter<UserReposAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
-        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = layoutInflater.inflate(R.layout.user_repos_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_repos_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
 
         vh.like.setOnClickListener(this);

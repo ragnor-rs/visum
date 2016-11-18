@@ -35,8 +35,6 @@ import dagger.Module;
 import dagger.Provides;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.PostStorIOSQLiteDeleteResolver;
-import io.reist.sandbox.app.model.PostStorIOSQLiteGetResolver;
-import io.reist.sandbox.app.model.PostStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.RepoStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.User;
@@ -47,6 +45,8 @@ import io.reist.sandbox.app.model.local.DbOpenHelper;
 import io.reist.sandbox.app.model.remote.NestedFieldNameAdapter;
 import io.reist.sandbox.app.model.remote.SandboxApi;
 import io.reist.sandbox.feed.FeedModule;
+import io.reist.sandbox.feed.model.local.PostGetResolver;
+import io.reist.sandbox.feed.model.local.PostPutResolver;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -111,8 +111,8 @@ public class SandboxModule {
                 .addTypeMapping(
                         Post.class,
                         SQLiteTypeMapping.<Post>builder()
-                        .putResolver(new PostStorIOSQLitePutResolver())
-                        .getResolver(new PostStorIOSQLiteGetResolver())
+                        .putResolver(new PostPutResolver())
+                        .getResolver(new PostGetResolver())
                         .deleteResolver(new PostStorIOSQLiteDeleteResolver())
                         .build()
                 )

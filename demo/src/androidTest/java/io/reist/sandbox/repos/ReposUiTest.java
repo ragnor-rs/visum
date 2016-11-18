@@ -40,6 +40,7 @@ import io.reist.sandbox.core.TestUtils;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -95,7 +96,7 @@ public class ReposUiTest extends ActivityInstrumentationTestCase<MainActivity> {
                 .perform(clearText())
                 .perform(typeText(generatedRepoName));
 
-        onView(withId(R.id.save)).perform(click());
+        onView(withId(R.id.save)).perform(closeSoftKeyboard(),click());
 
         onView(withContentDescription(android.support.v7.appcompat.R.string.abc_action_bar_up_description))
                 .perform(click());

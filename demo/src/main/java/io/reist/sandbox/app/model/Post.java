@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
+import java.util.List;
+
 import io.reist.sandbox.feed.model.local.PostTable;
 
 /**
@@ -28,6 +30,9 @@ public class Post {
     @SerializedName("image")
     @StorIOSQLiteColumn(name = PostTable.Column.IMAGE)
     public String image;
+
+    @SerializedName("comments")
+    public List<Comment> comments;
 
     @Override
     public String toString() {

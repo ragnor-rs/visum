@@ -23,6 +23,7 @@ package io.reist.sandbox.feed.view;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,8 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
 import io.reist.sandbox.feed.presenter.FeedListPresenter;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by 4xes on 7/11/16.
@@ -82,6 +85,8 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
                 .addViewBinder((view, item) -> {
                     ((TextView) view.findViewById(R.id.post_title)).setText(item.title);
                     ((TextView) view.findViewById(R.id.post_body)).setText(item.body);
+
+                    Log.d(TAG, "attachPresenter: " + item.comments);
 
                     ImageView postImage = ((ImageView) view.findViewById(R.id.post_image));
                     Dali.with(postImage)

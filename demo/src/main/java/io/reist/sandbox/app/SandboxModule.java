@@ -33,6 +33,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reist.sandbox.app.model.Comment;
+import io.reist.sandbox.app.model.CommentStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.app.model.CommentStorIOSQLiteGetResolver;
+import io.reist.sandbox.app.model.CommentStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.PostStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.Repo;
@@ -111,10 +115,18 @@ public class SandboxModule {
                 .addTypeMapping(
                         Post.class,
                         SQLiteTypeMapping.<Post>builder()
-                        .putResolver(new PostPutResolver())
-                        .getResolver(new PostGetResolver())
-                        .deleteResolver(new PostStorIOSQLiteDeleteResolver())
-                        .build()
+                                .putResolver(new PostPutResolver())
+                                .getResolver(new PostGetResolver())
+                                .deleteResolver(new PostStorIOSQLiteDeleteResolver())
+                                .build()
+                )
+                .addTypeMapping(
+                        Comment.class,
+                        SQLiteTypeMapping.<Comment>builder()
+                                .putResolver(new CommentStorIOSQLitePutResolver())
+                                .getResolver(new CommentStorIOSQLiteGetResolver())
+                                .deleteResolver(new CommentStorIOSQLiteDeleteResolver())
+                                .build()
                 )
                 .build();
 

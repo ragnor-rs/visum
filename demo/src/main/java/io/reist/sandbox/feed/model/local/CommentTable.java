@@ -3,11 +3,25 @@ package io.reist.sandbox.feed.model.local;
 import io.reist.sandbox.app.model.local.BaseTable;
 
 public class CommentTable extends BaseTable {
+
     public static final String NAME = "comment";
+
+    public static final class Column {
+        public static final String ID = "_id";
+        public static final String POST_ID = "post_id";
+        public static final String MESSAGE = "message";
+        public static final String EMAIL = "email";
+
+        private Column() {
+        }
+    }
+
     private static final String CREATE_TABLE =
         "create table " + NAME + "(" +
             Column.ID + " integer not null primary key, " +
-            Column.MESSAGE + " text, " +
+            Column.EMAIL + " text no null, " +
+            Column.MESSAGE + " text not null, " +
+            Column.POST_ID + " integer not null, " +
             "FOREIGN KEY (" + Column.POST_ID + ") " +
             "REFERENCES " + PostTable.NAME + "(" + PostTable.Column.ID + ")" +
         ")";
@@ -24,15 +38,6 @@ public class CommentTable extends BaseTable {
                 return new String[] {CREATE_TABLE};
             default:
                 return null;
-        }
-    }
-
-    public static final class Column {
-        public static final String ID = "_id";
-        public static final String POST_ID = "post_id";
-        public static final String MESSAGE = "message";
-
-        private Column() {
         }
     }
 }

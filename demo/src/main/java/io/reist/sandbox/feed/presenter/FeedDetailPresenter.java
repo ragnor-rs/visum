@@ -37,7 +37,6 @@ import io.reist.visum.presenter.VisumPresenter;
 public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
 
     private final FeedService feedService;
-    private Post post;
 
     @Inject
     public FeedDetailPresenter(FeedService feedService) {
@@ -68,7 +67,6 @@ public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
         protected void onSuccess(Post result) {
             FeedDetailView view = view();
             view.displayLoader(false);
-            post = result;
             view.displayData(result);
         }
     }

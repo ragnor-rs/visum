@@ -17,8 +17,12 @@ public class Comment {
     @StorIOSQLiteColumn(name = CommentTable.Column.ID, key = true)
     public Long id;
 
+    @StorIOSQLiteColumn(name = CommentTable.Column.EMAIL)
+    @SerializedName("email")
+    public String email;
+
     @SerializedName("post_id")
-    @StorIOSQLiteColumn(name = CommentTable.Column.POST_ID, key = true)
+    @StorIOSQLiteColumn(name = CommentTable.Column.POST_ID)
     public Long post_id;
 
     @StorIOSQLiteColumn(name = CommentTable.Column.MESSAGE)

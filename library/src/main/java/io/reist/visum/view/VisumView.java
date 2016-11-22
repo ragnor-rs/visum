@@ -21,7 +21,7 @@
 package io.reist.visum.view;
 
 import io.reist.visum.VisumClient;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumBasePresenter;
 
 /**
  * A MVP view which is capable of handling presenters' lifecycle.
@@ -30,25 +30,32 @@ import io.reist.visum.presenter.VisumPresenter;
  *
  * @param <P>   a class of a MVP presenter to be attached
  */
-public interface VisumView<P extends VisumPresenter> extends VisumClient {
+public interface VisumView<P extends VisumBasePresenter> extends VisumClient {
+
+    int DEFAULT_ID = 0;
 
     /**
-     * @return  an injected presenter
+     * @return an injected presenter
      */
     P getPresenter();
 
     /**
      * Attaches a view to a presenter returned with {@link #getPresenter()}.
-     *
+     * <p>
      * TODO should accept the presenter as a parameter
      */
     void attachPresenter();
 
     /**
      * Detaches a view from a presenter returned with {@link #getPresenter()}.
-     *
+     * <p>
      * TODO should accept the presenter as a parameter
      */
     void detachPresenter();
+
+    /**
+     * id used by the presenter to distinguish the view from the others
+     */
+    int getViewId();
 
 }

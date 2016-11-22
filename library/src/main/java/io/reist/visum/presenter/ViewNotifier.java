@@ -7,21 +7,18 @@ import rx.Single;
 
 /**
  * A notifier which updates multiple views on various events.
- *
+ * <p>
  * Passes items emitted by {@link rx.Observable}s and {@link rx.Single}s to every view attached
  * to a presenter. Implement this interface in your method and pass the implementation to
- * subscription methods in {@link VisumPresenter}. For every view attached to the presenter, a
+ * subscription methods in {@link VisumViewPresenter} and {@link VisumViewsPresenter}. For every view attached to the presenter, a
  * corresponding ViewNotifier method will be called.
- *
- * @param <V>   a type of receiving views
- * @param <T>   a type of emitted items
- *
- * @see VisumPresenter#subscribe(Observable, ViewNotifier)
- * @see VisumPresenter#subscribe(Single, ViewNotifier)
- *
+ * @param <V> a type of receiving views
+ * @param <T> a type of emitted items
+ * @see VisumViewPresenter#subscribe(Observable, ViewNotifier)
+ * @see VisumViewPresenter#subscribe(Single, ViewNotifier)
  * Created by Reist on 25.05.16.
  */
-public interface ViewNotifier<V extends VisumView, T> {
+interface ViewNotifier<V extends VisumView, T> {
 
     /**
      * Updates the given view on completion.

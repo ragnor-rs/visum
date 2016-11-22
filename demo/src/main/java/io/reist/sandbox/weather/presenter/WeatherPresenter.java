@@ -1,5 +1,7 @@
 package io.reist.sandbox.weather.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -7,7 +9,7 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.weather.model.WeatherService;
 import io.reist.sandbox.weather.model.local.WeatherEntity;
 import io.reist.sandbox.weather.view.WeatherView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumViewPresenter;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -19,12 +21,10 @@ import rx.schedulers.Schedulers;
  */
 
 @Singleton
-public class WeatherPresenter extends VisumPresenter<WeatherView> {
+public class WeatherPresenter extends VisumViewPresenter<WeatherView> {
 
-    public static final int WEATHER_CODE = 1001;
-
-    private String TAG = WeatherPresenter.class.getName();
     private WeatherService weatherService;
+    private WeatherEntity weatherEntity;
     private boolean isLoading;
 
     @Inject
@@ -33,15 +33,17 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
     }
 
     @Override
-    protected void onViewAttached() {
-        super.onViewAttached();
+    protected void onViewAttached(@NonNull WeatherView view) {
+        if (weatherEntity != null) {
+            view.showData(weatherEntity);
+        }
     }
 
     public void loadData(String query) {
         if (isLoading) return;
 
         isLoading = true;
-        view(WEATHER_CODE).showLoading(true);
+        view().showLoading(true);
 
         weatherService.getWeatherForCity(query)
                 .subscribeOn(Schedulers.io())
@@ -57,17 +59,17 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
                 onError(new NullPointerException("Entity is null"));
                 return;
             }
-
-            view(WEATHER_CODE).showLoading(false);
-            view(WEATHER_CODE).showData(value);
+            weatherEntity = value;
+            view().showLoading(false);
+            view().showData(value);
             isLoading = false;
         }
 
         @Override
         public void onError(Throwable e) {
             SandboxError error = new SandboxError(e);
-            view(WEATHER_CODE).showError(error);
-            view(WEATHER_CODE).showLoading(false);
+            view().showError(error);
+            view().showLoading(false);
             isLoading = false;
         }
     };

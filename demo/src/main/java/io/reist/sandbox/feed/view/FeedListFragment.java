@@ -57,10 +57,6 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
         super(R.layout.fragment_feed);
     }
 
-    public static FeedListFragment newInstance() {
-        return new FeedListFragment();
-    }
-
     @Override
     public void attachPresenter() {
 

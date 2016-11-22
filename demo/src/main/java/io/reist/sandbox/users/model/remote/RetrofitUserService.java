@@ -72,5 +72,5 @@ public class RetrofitUserService extends RetrofitService<User> implements UserSe
     public Observable<SandboxResponse<User>> save(User t) {
         throw new UnsupportedOperationException("Unsupported");
     }
-    
+
 }

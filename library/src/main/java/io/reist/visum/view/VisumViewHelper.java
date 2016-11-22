@@ -6,7 +6,9 @@ import android.util.Log;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumBasePresenter;
+import io.reist.visum.presenter.VisumViewPresenter;
+import io.reist.visum.presenter.VisumViewsPresenter;
 
 /**
  * A helper class for implementations of {@link VisumView}. It provides callback for
@@ -15,15 +17,13 @@ import io.reist.visum.presenter.VisumPresenter;
  * <p>
  * Created by Reist on 19.05.16.
  */
-public final class VisumViewHelper<P extends VisumPresenter> {
+public final class VisumViewHelper<P extends VisumBasePresenter> {
 
     private static final String LOG_TAG = VisumViewHelper.class.getSimpleName();
 
-    private final int viewId;
     private final VisumClientHelper<? extends VisumView<P>> helper;
 
-    public VisumViewHelper(int viewId, @NonNull VisumClientHelper<? extends VisumView<P>> helper) {
-        this.viewId = viewId;
+    public VisumViewHelper(@NonNull VisumClientHelper<? extends VisumView<P>> helper) {
         this.helper = helper;
     }
 
@@ -34,9 +34,14 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     @SuppressWarnings("unchecked") // todo setView should be checked call
     public void attachPresenter() {
         VisumView<P> view = helper.getClient();
-        VisumPresenter presenter = view.getPresenter();
+        VisumBasePresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, view);
+            if (presenter instanceof VisumViewsPresenter) {
+                ((VisumViewsPresenter) presenter).setView(view.getViewId(), view);
+            }
+            if (presenter instanceof VisumViewPresenter) {
+                ((VisumViewPresenter) presenter).setView(view);
+            }
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }
@@ -45,9 +50,14 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     @SuppressWarnings("unchecked") // todo setView should be checked call
     public void detachPresenter() {
         VisumView<P> view = helper.getClient();
-        VisumPresenter presenter = view.getPresenter();
+        VisumBasePresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, null);
+            if (presenter instanceof VisumViewsPresenter) {
+                ((VisumViewsPresenter) presenter).setView(view.getViewId(), null);
+            }
+            if (presenter instanceof VisumViewPresenter) {
+                ((VisumViewPresenter) presenter).setView(null);
+            }
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }

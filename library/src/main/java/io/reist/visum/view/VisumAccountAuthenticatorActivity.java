@@ -5,7 +5,7 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumBasePresenter;
 
 /**
  * This class provides functionality of {@link AccountAuthenticatorActivity} but extends VisumActivity,
@@ -13,23 +13,10 @@ import io.reist.visum.presenter.VisumPresenter;
  *
  * Created by defuera on 01/02/2016.
  */
-public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
+public abstract class VisumAccountAuthenticatorActivity<P extends VisumBasePresenter> extends VisumActivity<P> {
 
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
-
-    /**
-     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
-     */
-    @SuppressWarnings({"unused", "deprecation"})
-    @Deprecated
-    public VisumAccountAuthenticatorActivity() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
-    }
-
-    public VisumAccountAuthenticatorActivity(int viewId) {
-        super(viewId);
-    }
 
     /**
      * Set the result that is to be sent as the result of the request that caused this
@@ -44,7 +31,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     }
 
     /**
-     * Retreives the AccountAuthenticatorResponse from either the intent of the icicle, if the
+     * Retrieves the AccountAuthenticatorResponse from either the intent of the icicle, if the
      * icicle is non-zero.
      *
      * @param icicle the save instance data of this Activity, may be null

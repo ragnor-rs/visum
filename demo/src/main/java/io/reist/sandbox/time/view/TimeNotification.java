@@ -26,13 +26,11 @@ import io.reist.visum.view.VisumBaseView;
  */
 public class TimeNotification extends VisumBaseView<TimePresenter> implements TimeView {
 
-    private static final int NOTIFICATION_ID = 1;
-
     @Inject
     TimePresenter presenter;
 
     public TimeNotification(Context context) {
-        super(TimePresenter.VIEW_ID_NOTIFICATION, context);
+        super(context);
     }
 
     @Override
@@ -51,7 +49,7 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
                 .setOngoing(true)
                 .setSmallIcon(android.R.drawable.ic_menu_agenda)
                 .build();
-        notificationManager.notify(NOTIFICATION_ID, notification);
+        notificationManager.notify(getViewId(), notification);
 
     }
 
@@ -62,13 +60,16 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
 
     @Override
     public void detachPresenter() {
-
         super.detachPresenter();
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.cancel(NOTIFICATION_ID);
+        notificationManager.cancel(getViewId());
 
     }
 
+    @Override
+    public int getViewId() {
+        return TimeView.ID_NOTIFICATION;
+    }
 }

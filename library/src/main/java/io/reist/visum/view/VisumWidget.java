@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumBasePresenter;
 
 /**
  * Extend your {@link FrameLayout}s with this class to take advantage of Visum MVP.
@@ -16,40 +16,22 @@ import io.reist.visum.presenter.VisumPresenter;
  * Created by Defuera on 29/01/16.
  */
 @SuppressWarnings("unused")
-public abstract class VisumWidget<P extends VisumPresenter>
+public abstract class VisumWidget<P extends VisumBasePresenter>
         extends FrameLayout
         implements VisumView<P> {
 
     private final VisumViewHelper<P> helper;
 
-    public VisumWidget(int viewId, Context context) {
+    public VisumWidget(Context context) {
         super(context);
         inflate();
-        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
-    public VisumWidget(int viewId, Context context, AttributeSet attrs) {
+    public VisumWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
         inflate();
-        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
-    }
-
-    /**
-     * @deprecated use {@link #VisumWidget(int, Context)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public VisumWidget(Context context) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context);
-    }
-
-    /**
-     * @deprecated use {@link #VisumWidget(int, Context, AttributeSet)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public VisumWidget(Context context, AttributeSet attrs) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context, attrs);
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
 
@@ -95,7 +77,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (!isInEditMode()){
+        if (!isInEditMode()) {
             onStartClient();
         }
         attachPresenter();

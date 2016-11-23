@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 
 import io.reist.visum.VisumBaseClient;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewVisumPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -24,7 +25,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @SuppressWarnings({"deprecation", "unused"})
     @Deprecated
     public VisumBaseView(Context context) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context);
+        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context);
     }
 
     public VisumBaseView(int viewId, Context context) {

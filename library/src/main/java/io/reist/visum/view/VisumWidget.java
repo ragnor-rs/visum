@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewVisumPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -40,7 +41,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context);
+        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context);
     }
 
     /**
@@ -49,7 +50,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context, attrs);
+        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context, attrs);
     }
 
 

@@ -30,6 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewVisumPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -55,7 +56,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumActivity() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumActivity(int viewId) {

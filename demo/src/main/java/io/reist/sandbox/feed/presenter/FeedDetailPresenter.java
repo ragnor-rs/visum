@@ -28,16 +28,15 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.feed.model.FeedService;
 import io.reist.sandbox.feed.view.FeedDetailView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewVisumPresenter;
 
 /**
  * Created by defuera on 10/11/2015.
  */
 @Singleton
-public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
+public class FeedDetailPresenter extends SingleViewVisumPresenter<FeedDetailView> {
 
     private final FeedService feedService;
-    private Post post;
 
     @Inject
     public FeedDetailPresenter(FeedService feedService) {
@@ -46,9 +45,7 @@ public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
 
     @Override
     protected void onViewAttached() {
-
         FeedDetailView view = view();
-
         long postId = view.getPostId();
         view.displayLoader(true);
         subscribe(feedService.byId(postId), new FeedPostObserver());
@@ -68,7 +65,6 @@ public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
         protected void onSuccess(Post result) {
             FeedDetailView view = view();
             view.displayLoader(false);
-            post = result;
             view.displayData(result);
         }
     }

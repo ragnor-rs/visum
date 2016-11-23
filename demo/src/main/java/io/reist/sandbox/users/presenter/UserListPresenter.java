@@ -29,14 +29,14 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.users.model.UserService;
 import io.reist.sandbox.users.view.UserListView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewVisumPresenter;
 import rx.Observer;
 
 /**
  * Created by m039 on 11/12/15.
  */
 @Singleton
-public class UserListPresenter extends VisumPresenter<UserListView> {
+public class UserListPresenter extends SingleViewVisumPresenter<UserListView> {
 
     UserService mUserService;
     private boolean mIsDataLoaded = false;

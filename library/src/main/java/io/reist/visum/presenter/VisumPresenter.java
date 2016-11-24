@@ -103,15 +103,15 @@ public abstract class VisumPresenter<V extends VisumView> extends BasePresenter<
     }
 
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
-        return subscribe(findViewHolderByViewId(viewId), observable, observer);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), observable, observer);
     }
 
     public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
-        return subscribe(findViewHolderByViewId(viewId), single, action);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), single, action);
     }
 
     public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
-        return subscribe(findViewHolderByViewId(viewId), single, subscriber);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), single, subscriber);
     }
 
 

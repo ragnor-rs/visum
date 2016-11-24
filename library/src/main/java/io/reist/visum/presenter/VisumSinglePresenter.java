@@ -105,15 +105,15 @@ public abstract class VisumSinglePresenter<V extends VisumView> extends BasePres
     }
 
     public final <T> Subscription subscribe(Observable<T> observable, Observer<? super T> observer) {
-        return subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), observable, observer);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), observable, observer);
     }
 
     public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
-        return subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), single, action);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), single, action);
     }
 
     public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        return subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), single, subscriber);
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), single, subscriber);
     }
 
     public final boolean hasViewSubscriptions() {

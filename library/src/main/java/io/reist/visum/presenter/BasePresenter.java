@@ -11,9 +11,6 @@ import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -56,30 +53,6 @@ public abstract class BasePresenter<V extends VisumView> {
 
     public void onStart() {}
 
-    protected final <T> Subscription subscribe(ViewHolder<V> viewHolder, Observable<T> observable, Observer<? super T> observer) {
-        Subscription subscription = startSubscription(observable, observer);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
-    protected final <T> Subscription subscribe(ViewHolder<V> viewHolder, Single<T> single, Action1<T> action) {
-        Subscription subscription = startSubscription(single, action);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
-    protected final <T> Subscription subscribe(ViewHolder<V> viewHolder, Single<T> single, SingleSubscriber<T> subscriber) {
-        Subscription subscription = startSubscription(single, subscriber);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
     protected ViewHolder<V> findViewHolderByViewId(int id) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             if (viewHolder.viewId == id) {
@@ -99,7 +72,7 @@ public abstract class BasePresenter<V extends VisumView> {
     }
 
     public final <T> Subscription subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        Subscription subscription = startSubscription(observable, new Observer<T>() {
+        Subscription subscription = SubscriptionsHelper.startSubscription(observable, new Observer<T>() {
 
             @Override
             public void onCompleted() {
@@ -124,7 +97,7 @@ public abstract class BasePresenter<V extends VisumView> {
     }
 
     public final <T> Subscription subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        Subscription subscription = startSubscription(single, new SingleSubscriber<T>() {
+        Subscription subscription = SubscriptionsHelper.startSubscription(single, new SingleSubscriber<T>() {
 
             @Override
             public void onSuccess(T t) {
@@ -161,27 +134,6 @@ public abstract class BasePresenter<V extends VisumView> {
         }
     }
 
-    protected  <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(observer);
-    }
-
-    protected  <T> Subscription startSubscription(Single<T> single, Action1<T> action) {
-        return single
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(action);
-    }
-
-    protected  <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
-        return single
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
-    }
 
     public final int getViewCount() {
         return viewHolders.size();

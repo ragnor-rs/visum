@@ -8,8 +8,8 @@ import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleViewVisumPresenter;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 /**
  * Extend your {@link FrameLayout}s with this class to take advantage of Visum MVP.
@@ -17,7 +17,7 @@ import io.reist.visum.presenter.VisumPresenter;
  * Created by Defuera on 29/01/16.
  */
 @SuppressWarnings("unused")
-public abstract class VisumWidget<P extends VisumPresenter>
+public abstract class VisumWidget<P extends BasePresenter>
         extends FrameLayout
         implements VisumView<P> {
 
@@ -41,7 +41,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context) {
-        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context);
+        this(VisumSinglePresenter.VIEW_ID_DEFAULT, context);
     }
 
     /**
@@ -50,7 +50,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context, attrs);
+        this(VisumSinglePresenter.VIEW_ID_DEFAULT, context, attrs);
     }
 
 

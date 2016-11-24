@@ -28,13 +28,13 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.feed.model.FeedService;
 import io.reist.sandbox.feed.view.FeedDetailView;
-import io.reist.visum.presenter.SingleViewVisumPresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 /**
  * Created by defuera on 10/11/2015.
  */
 @Singleton
-public class FeedDetailPresenter extends SingleViewVisumPresenter<FeedDetailView> {
+public class FeedDetailPresenter extends VisumSinglePresenter<FeedDetailView> {
 
     private final FeedService feedService;
 

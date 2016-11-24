@@ -5,14 +5,14 @@ import android.support.annotation.CallSuper;
 
 import io.reist.visum.VisumBaseClient;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleViewVisumPresenter;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 /**
  * Created by Reist on 20.05.16.
  */
 @SuppressWarnings("unused")
-public abstract class VisumBaseView<P extends VisumPresenter>
+public abstract class VisumBaseView<P extends BasePresenter>
         extends VisumBaseClient implements VisumView<P> {
 
     private static final String TAG = VisumBaseView.class.getName();
@@ -25,7 +25,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     @SuppressWarnings({"deprecation", "unused"})
     @Deprecated
     public VisumBaseView(Context context) {
-        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT, context);
+        this(VisumSinglePresenter.VIEW_ID_DEFAULT, context);
     }
 
     public VisumBaseView(int viewId, Context context) {

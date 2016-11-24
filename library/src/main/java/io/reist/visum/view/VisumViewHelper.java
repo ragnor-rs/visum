@@ -6,7 +6,9 @@ import android.util.Log;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.BasePresenter;
 import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 /**
  * A helper class for implementations of {@link VisumView}. It provides callback for
@@ -15,7 +17,7 @@ import io.reist.visum.presenter.VisumPresenter;
  * <p>
  * Created by Reist on 19.05.16.
  */
-public final class VisumViewHelper<P extends VisumPresenter> {
+public final class VisumViewHelper<P extends BasePresenter> {
 
     private static final String LOG_TAG = VisumViewHelper.class.getSimpleName();
 
@@ -34,10 +36,16 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     @SuppressWarnings("unchecked") // todo setView should be checked call
     public void attachPresenter() {
         VisumView<P> view = helper.getClient();
-        VisumPresenter presenter = view.getPresenter();
+        BasePresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, view);
-        } else {
+            if(presenter instanceof VisumPresenter) {
+                ((VisumPresenter) presenter).setView(viewId, view);
+            }
+            if(presenter instanceof VisumSinglePresenter) {
+                ((VisumSinglePresenter) presenter).setView(view);
+            }
+
+        }  else {
             Log.w(LOG_TAG, "presenter is null");
         }
     }
@@ -45,9 +53,15 @@ public final class VisumViewHelper<P extends VisumPresenter> {
     @SuppressWarnings("unchecked") // todo setView should be checked call
     public void detachPresenter() {
         VisumView<P> view = helper.getClient();
-        VisumPresenter presenter = view.getPresenter();
+        BasePresenter presenter = view.getPresenter();
         if (presenter != null) {
-            presenter.setView(viewId, null);
+            if(presenter instanceof VisumPresenter) {
+                ((VisumPresenter) presenter).setView(viewId, null);
+            }
+            if(presenter instanceof VisumSinglePresenter) {
+                ((VisumSinglePresenter) presenter).setView(null);
+            }
+
         } else {
             Log.w(LOG_TAG, "presenter is null");
         }

@@ -36,8 +36,8 @@ import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleViewVisumPresenter;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
 import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
@@ -47,7 +47,7 @@ import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragm
  *
  * @param <P> - subclass of VisumPresenter
  */
-public abstract class VisumFragment<P extends VisumPresenter>
+public abstract class VisumFragment<P extends BasePresenter>
         extends Fragment
         implements VisumView<P> {
 
@@ -65,7 +65,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumFragment() {
-        this(SingleViewVisumPresenter.VIEW_ID_DEFAULT);
+        this(VisumSinglePresenter.VIEW_ID_DEFAULT);
     }
 
     // todo add javadoc for viewId

@@ -34,14 +34,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25"
 
     defaultConfig {
 
         applicationId "io.reist.sandbox"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
 
@@ -67,11 +67,11 @@ android {
 
 }
 
-def supportVersion = '24.2.1'
+def supportVersion = '25.0.1'
 def retrofitVersion = '2.1.0'
-def storioVersion = '1.5.0'
-def daggerVersion = '2.5'
-def butterknifeVersion = '8.0.1'
+def storioVersion = '1.11.0'
+def daggerVersion = '2.7'
+def butterknifeVersion = '8.4.0'
 def supportTestVersion = '0.5'
 def espressoVersion = '2.2.2'
 
@@ -104,7 +104,7 @@ dependencies {
     apt ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile 'com.github.ragnor-rs:dali:093f33996498b5eeb8a59374be678e7b23a38df1'
+    compile 'com.github.ragnor-rs:dali:3f7d328cfda30d08abfdbe7b58759f93b1c597d3'
 
     compile project(':library')
 

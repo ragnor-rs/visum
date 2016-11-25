@@ -68,7 +68,8 @@ public abstract class VisumSinglePresenter<V extends VisumView> extends BasePres
             }
         }
 
-        if(view != null && addView(VIEW_ID_DEFAULT, view)){
+        if(view != null){
+            addView(VIEW_ID_DEFAULT, view);
             onViewAttached();
         }
     }

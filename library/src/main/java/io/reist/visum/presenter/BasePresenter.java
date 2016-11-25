@@ -48,6 +48,14 @@ public abstract class BasePresenter<V extends VisumView> {
         }
     }
 
+    /**
+     * Remove view from {@link #viewHolders} and unsubscribe it
+     * Have to call {@link #clearSubscriptions()} and {@link #onStart()} after removing last view.
+     *
+     * @param id an id for view
+     *
+     * @return V  removed view
+     */
     final V removeView(int id){
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
@@ -64,7 +72,15 @@ public abstract class BasePresenter<V extends VisumView> {
         }
     }
 
-    final boolean addView(int id, @NonNull V view){
+    /**
+     * Add view to {@link #viewHolders}
+     * If presenter hadn't view it emit {@link #onStart()}
+     * and create presenter's subscription
+     *
+     * @param id an id for view
+     * @param view view
+     */
+    final void addView(int id, @NonNull V view){
 
         if (!hasViews()) {
             subscriptions = new CompositeSubscription();
@@ -72,8 +88,6 @@ public abstract class BasePresenter<V extends VisumView> {
         }
 
         viewHolders.add(new ViewHolder<>(id, view));
-
-        return true;
     }
 
     public void onStop() {}

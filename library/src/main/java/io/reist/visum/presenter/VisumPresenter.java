@@ -70,7 +70,8 @@ public abstract class VisumPresenter<V extends VisumView> extends BasePresenter<
             }
         }
 
-        if(view != null && addView(id, view)){
+        if(view != null){
+            addView(id, view);
             onViewAttached(id, view);
         }
     }

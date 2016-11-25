@@ -26,11 +26,11 @@ import rx.subscriptions.CompositeSubscription;
 @SuppressWarnings("unused")
 public abstract class BasePresenter<V extends VisumView> {
 
-   private CompositeSubscription subscriptions;
+    private CompositeSubscription subscriptions;
 
-   private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
+    private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
-   protected static class ViewHolder<V> {
+    protected static class ViewHolder<V> {
         protected V view;
 
         protected int viewId;
@@ -192,4 +192,5 @@ public abstract class BasePresenter<V extends VisumView> {
             return viewId;
         }
     }
+
 }

@@ -24,13 +24,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.reist.visum.view.VisumView;
+import rx.Completable;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * A MVP presenter which is capable of handling multiple views.
@@ -60,36 +61,17 @@ public abstract class VisumPresenter<V extends VisumView> extends BasePresenter<
      * @param view      a MVP view; use null to stop the view with the given id
      */
     public final void setView(int id, @Nullable V view) {
-
-        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
-
-        if (viewHolder != null) {
-
-            // remove the old view
-            viewHolder.subscriptions.unsubscribe();
-            viewHolder.subscriptions = null;
-            onViewDetached(id, viewHolder.view);
-            viewHolders.remove(viewHolder);
-
-            if (getViewCount() == 0) {
-                subscriptions.unsubscribe();
-                subscriptions = null;
+        V removedView = removeView(id);
+        if(removedView != null) {
+            onViewDetached(id, removedView);
+            if (!hasViews()) {
+                clearSubscriptions();
                 onStop();
             }
-
         }
 
-        if (view != null) {
-
-            if (getViewCount() == 0) {
-                subscriptions = new CompositeSubscription();
-                onStart();
-            }
-
-            // start the given view
-            viewHolders.add(new BasePresenter.ViewHolder<>(id, view));
+        if(view != null && addView(id, view)){
             onViewAttached(id, view);
-
         }
     }
 
@@ -114,6 +96,13 @@ public abstract class VisumPresenter<V extends VisumView> extends BasePresenter<
         return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), single, subscriber);
     }
 
+    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), completable, onComplete);
+    }
+
+    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(viewId), completable, onComplete, onError);
+    }
 
     public final boolean hasViewSubscriptions(int viewId) {
         try {
@@ -122,6 +111,5 @@ public abstract class VisumPresenter<V extends VisumView> extends BasePresenter<
             return false;
         }
     }
-
 
 }

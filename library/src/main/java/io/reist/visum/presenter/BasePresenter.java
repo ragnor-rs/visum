@@ -26,11 +26,11 @@ import rx.subscriptions.CompositeSubscription;
 @SuppressWarnings("unused")
 public abstract class BasePresenter<V extends VisumView> {
 
-    protected CompositeSubscription subscriptions;
+   private CompositeSubscription subscriptions;
 
-    protected final List<ViewHolder<V>> viewHolders = new ArrayList<>();
+   private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
 
-    protected static class ViewHolder<V> {
+   protected static class ViewHolder<V> {
         protected V view;
 
         protected int viewId;
@@ -43,10 +43,37 @@ public abstract class BasePresenter<V extends VisumView> {
             this.subscriptions = new CompositeSubscription();
         }
 
-        public final boolean hasSubscriptions() {
+        public boolean hasSubscriptions() {
             return subscriptions != null && subscriptions.hasSubscriptions();
         }
+    }
 
+    final V removeView(int id){
+
+        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
+        if (viewHolder != null) {
+
+            V removedView = viewHolder.view;
+            viewHolder.subscriptions.unsubscribe();
+            viewHolder.subscriptions = null;
+            viewHolders.remove(viewHolder);
+
+            return removedView;
+        } else {
+            return null;
+        }
+    }
+
+    final boolean addView(int id, @NonNull V view){
+
+        if (!hasViews()) {
+            subscriptions = new CompositeSubscription();
+            onStart();
+        }
+
+        viewHolders.add(new ViewHolder<>(id, view));
+
+        return true;
     }
 
     public void onStop() {}
@@ -72,7 +99,7 @@ public abstract class BasePresenter<V extends VisumView> {
     }
 
     public final <T> Subscription subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        Subscription subscription = SubscriptionsHelper.startSubscription(observable, new Observer<T>() {
+        Subscription subscription = SubscriptionsHelper.subscribe(observable, new Observer<T>() {
 
             @Override
             public void onCompleted() {
@@ -97,7 +124,7 @@ public abstract class BasePresenter<V extends VisumView> {
     }
 
     public final <T> Subscription subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
-        Subscription subscription = SubscriptionsHelper.startSubscription(single, new SingleSubscriber<T>() {
+        Subscription subscription = SubscriptionsHelper.subscribe(single, new SingleSubscriber<T>() {
 
             @Override
             public void onSuccess(T t) {
@@ -135,15 +162,22 @@ public abstract class BasePresenter<V extends VisumView> {
     }
 
 
-    public final int getViewCount() {
+    final int getViewCount() {
         return viewHolders.size();
+    }
+
+    final boolean hasViews(){
+        return getViewCount() > 0;
     }
 
     public final boolean hasSubscriptions() {
         return subscriptions != null && subscriptions.hasSubscriptions();
     }
 
-    //ViewHolder<V> viewHolder
+    void clearSubscriptions(){
+        subscriptions.unsubscribe();
+        subscriptions = null;
+    }
 
     public static class ViewNotFoundException extends RuntimeException {
 
@@ -157,6 +191,5 @@ public abstract class BasePresenter<V extends VisumView> {
         public int getViewId() {
             return viewId;
         }
-
     }
 }

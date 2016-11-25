@@ -24,13 +24,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import io.reist.visum.view.VisumView;
+import rx.Completable;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * A MVP presenter for handling only one view.
@@ -58,46 +59,23 @@ public abstract class VisumSinglePresenter<V extends VisumView> extends BasePres
      * @param view a MVP view
      */
     public final void setView(@Nullable V view) {
-
-        ViewHolder<V> viewHolder = findViewHolderByViewId(VIEW_ID_DEFAULT);
-
-        if (viewHolder != null) {
-
-            // remove the old view
-            viewHolder.subscriptions.unsubscribe();
-            viewHolder.subscriptions = null;
+        V removedView = removeView(VIEW_ID_DEFAULT);
+        if(removedView != null) {
             onViewDetached();
-            viewHolders.remove(viewHolder);
-
-            if (hasView()) {
-                subscriptions.unsubscribe();
-                subscriptions = null;
+            if (!hasViews()) {
+                clearSubscriptions();
                 onStop();
             }
-
         }
 
-        if (view != null) {
-
-            if (hasView()) {
-                subscriptions = new CompositeSubscription();
-                onStart();
-            }
-
-            // start the given view
-            viewHolders.add(new BasePresenter.ViewHolder<>(VIEW_ID_DEFAULT, view));
+        if(view != null && addView(VIEW_ID_DEFAULT, view)){
             onViewAttached();
-
         }
     }
 
     protected void onViewAttached() {}
 
     protected void onViewDetached() {}
-
-    public boolean hasView(){
-        return findViewHolderByViewId(VIEW_ID_DEFAULT) != null;
-    }
 
     @NonNull
     public final V view() {
@@ -114,6 +92,14 @@ public abstract class VisumSinglePresenter<V extends VisumView> extends BasePres
 
     public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), single, subscriber);
+    }
+
+    public final <T> Subscription subscribe(Completable completable, Action0 onComplete) {
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), completable, onComplete);
+    }
+
+    public final <T> Subscription subscribe(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        return SubscriptionsHelper.subscribe(findViewHolderByViewId(VIEW_ID_DEFAULT), completable, onComplete, onError);
     }
 
     public final boolean hasViewSubscriptions() {

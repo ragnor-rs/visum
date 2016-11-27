@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ServiceController;
@@ -22,7 +23,7 @@ import static io.reist.visum.ClientAssert.assertClientDetached;
 /**
  * Created by Reist on 26.05.16.
  */
-@RunWith(RobolectricGradle3TestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(
         constants = BuildConfig.class,
         sdk = Build.VERSION_CODES.JELLY_BEAN,

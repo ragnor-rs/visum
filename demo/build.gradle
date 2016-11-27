@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'me.tatarka:gradle-retrolambda:3.2.2'
+        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
     }
@@ -33,14 +33,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
 
         applicationId "io.reist.sandbox"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
 
@@ -66,11 +66,11 @@ android {
 
 }
 
-def supportVersion = '24.2.1'
+def supportVersion = '25.0.1'
 def retrofitVersion = '2.1.0'
-def storioVersion = '1.5.0'
-def daggerVersion = '2.5'
-def butterknifeVersion = '8.0.1'
+def storioVersion = '1.11.0'
+def daggerVersion = '2.8'
+def butterknifeVersion = '8.4.0'
 def supportTestVersion = '0.5'
 def espressoVersion = '2.2.2'
 
@@ -109,9 +109,9 @@ dependencies {
     // junit tests
 
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.1.2"
-    testCompile 'org.assertj:assertj-core:2.2.0'
-    testCompile "org.mockito:mockito-core:1.10.19"
+    testCompile "org.robolectric:robolectric:3.1.4"
+    testCompile "org.mockito:mockito-core:2.2.24"
+    testCompile 'org.assertj:assertj-core:3.6.0'
 
     testApt "com.google.dagger:dagger-compiler:$daggerVersion"
 

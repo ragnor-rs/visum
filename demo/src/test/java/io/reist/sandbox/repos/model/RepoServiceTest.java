@@ -22,7 +22,6 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.model.remote.SandboxApi;
 import io.reist.sandbox.core.RobolectricTestCase;
-import io.reist.sandbox.core.RobolectricTestRunner;
 import io.reist.sandbox.repos.ReposModule;
 import rx.Observable;
 import rx.observers.TestSubscriber;
@@ -39,7 +38,7 @@ import static org.mockito.Mockito.when;
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  *
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(org.robolectric.RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class RepoServiceTest extends RobolectricTestCase {
 

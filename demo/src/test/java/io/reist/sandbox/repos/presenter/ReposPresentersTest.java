@@ -22,7 +22,6 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.core.RobolectricTestCase;
-import io.reist.sandbox.core.RobolectricTestRunner;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.repos.view.RepoEditView;
@@ -38,7 +37,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by m039 on 11/27/15.
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(org.robolectric.RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class ReposPresentersTest extends RobolectricTestCase {
 

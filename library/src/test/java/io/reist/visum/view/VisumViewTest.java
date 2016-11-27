@@ -13,13 +13,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
 import io.reist.visum.BuildConfig;
-import io.reist.visum.RobolectricGradle3TestRunner;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
@@ -34,7 +34,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 /**
  * Created by Reist on 26.05.16.
  */
-@RunWith(RobolectricGradle3TestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(
         constants = BuildConfig.class,
         sdk = Build.VERSION_CODES.LOLLIPOP,

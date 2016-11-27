@@ -2,7 +2,7 @@ package io.reist.sandbox.feed.model.remote;
 
 import java.util.List;
 
-import io.reist.sandbox.feed.model.local.Post;
+import io.reist.sandbox.app.model.Post;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -12,9 +12,9 @@ import rx.Observable;
  */
 public interface FeedServerApi {
 
-    @GET("/posts")
+    @GET("/json/feed.json")
     Observable<List<Post>> posts();
 
-    @GET("/posts/{postId}")
+    @GET("/json/{postId}.json")
     Observable<Post> post(@Path("postId") long postId);
 }

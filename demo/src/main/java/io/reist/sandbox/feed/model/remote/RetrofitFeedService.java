@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.feed.model.FeedService;
-import io.reist.sandbox.feed.model.local.Post;
 import rx.Observable;
 
 /**

@@ -1,9 +1,11 @@
-package io.reist.sandbox.feed.model.local;
+package io.reist.sandbox.app.model;
 
 
 import com.google.gson.annotations.SerializedName;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
+
+import io.reist.sandbox.feed.model.local.PostTable;
 
 /**
  * Created by 4xes on 8/11/16.
@@ -23,12 +25,17 @@ public class Post {
     @StorIOSQLiteColumn(name = PostTable.Column.BODY)
     public String body;
 
+    @SerializedName("image")
+    @StorIOSQLiteColumn(name = PostTable.Column.IMAGE)
+    public String image;
+
     @Override
     public String toString() {
         return Post.class.getSimpleName() + "{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

@@ -14,10 +14,10 @@ import javax.inject.Singleton;
 import dagger.Component;
 import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxModule;
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.core.RobolectricTestCase;
 import io.reist.sandbox.feed.model.FeedServiceTest;
-import io.reist.sandbox.feed.model.local.Post;
 import io.reist.sandbox.feed.view.FeedListView;
 
 import static org.assertj.core.api.Assertions.assertThat;

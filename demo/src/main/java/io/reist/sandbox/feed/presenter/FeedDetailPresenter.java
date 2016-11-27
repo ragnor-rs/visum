@@ -23,10 +23,10 @@ package io.reist.sandbox.feed.presenter;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.feed.model.FeedService;
-import io.reist.sandbox.feed.model.local.Post;
 import io.reist.sandbox.feed.view.FeedDetailView;
 import io.reist.visum.presenter.VisumPresenter;
 

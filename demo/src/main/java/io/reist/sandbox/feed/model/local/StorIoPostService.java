@@ -5,6 +5,7 @@ import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
+import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.local.StorIoService;
 import io.reist.sandbox.feed.model.FeedService;

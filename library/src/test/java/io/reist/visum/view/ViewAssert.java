@@ -3,7 +3,7 @@ package io.reist.visum.view;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -18,8 +18,8 @@ public class ViewAssert {
 
         assertFalse("View has not been recreated", newTestView == oldTestView);
 
-        VisumPresenter oldPresenter = oldTestView.getPresenter();
-        VisumPresenter newPresenter = newTestView.getPresenter();
+        BasePresenter oldPresenter = oldTestView.getPresenter();
+        BasePresenter newPresenter = newTestView.getPresenter();
         assertNotNull("No presenter is attached to the new instance of the view", newPresenter);
         assertTrue("Presenter didn't survive", oldPresenter == newPresenter);
 

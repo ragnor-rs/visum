@@ -1,5 +1,7 @@
 package io.reist.sandbox.weather.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -23,7 +25,7 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
 
     public static final int WEATHER_CODE = 1001;
 
-    private String TAG = WeatherPresenter.class.getName();
+    private WeatherEntity weatherEntity;
     private WeatherService weatherService;
     private boolean isLoading;
 
@@ -33,8 +35,10 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
     }
 
     @Override
-    protected void onViewAttached() {
-        super.onViewAttached();
+    protected void onViewAttached(int id, @NonNull WeatherView view) {
+        if(weatherEntity != null){
+            view(WEATHER_CODE).showData(weatherEntity);
+        }
     }
 
     public void loadData(String query) {
@@ -58,6 +62,7 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
                 return;
             }
 
+            weatherEntity = value;
             view(WEATHER_CODE).showLoading(false);
             view(WEATHER_CODE).showData(value);
             isLoading = false;

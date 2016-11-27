@@ -39,7 +39,7 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
                 assertGlobalSubscribe(this, true);
 
                 assertTrue(presenter.hasSubscriptions());
-                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+                assertFalse(presenter.hasViewSubscriptions(VIEW_ID));
 
             }
 
@@ -52,7 +52,7 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
                 assertGlobalSubscribe(this, true);
 
                 assertTrue(presenter.hasSubscriptions());
-                assertTrue(presenter.hasSubscriptions(VIEW_ID));
+                assertTrue(presenter.hasViewSubscriptions(VIEW_ID));
 
             }
 
@@ -65,7 +65,7 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
                 assertGlobalSubscribe(this, true);
 
                 assertTrue(presenter.hasSubscriptions());
-                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+                assertFalse(presenter.hasViewSubscriptions(VIEW_ID));
 
             }
 
@@ -78,7 +78,7 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
                 assertGlobalSubscribe(this, false);
 
                 assertFalse(presenter.hasSubscriptions());
-                assertFalse(presenter.hasSubscriptions(VIEW_ID));
+                assertFalse(presenter.hasViewSubscriptions(VIEW_ID));
 
             }
 

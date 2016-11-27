@@ -30,14 +30,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
+import io.reist.visum.presenter.VisumSinglePresenter;
 
 /**
  * Extend your activities with this class to take advantage of Visum MVP.
  * <p>
  * Created by Defuera on 29/01/16.
  */
-public abstract class VisumActivity<P extends VisumPresenter>
+public abstract class VisumActivity<P extends BasePresenter>
         extends AppCompatActivity
         implements VisumView<P> {
 
@@ -55,7 +56,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     @SuppressWarnings("deprecation")
     @Deprecated
     public VisumActivity() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this(VisumSinglePresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumActivity(int viewId) {

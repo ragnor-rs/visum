@@ -21,7 +21,7 @@
 package io.reist.visum.view;
 
 import io.reist.visum.VisumClient;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.BasePresenter;
 
 /**
  * A MVP view which is capable of handling presenters' lifecycle.
@@ -30,7 +30,7 @@ import io.reist.visum.presenter.VisumPresenter;
  *
  * @param <P>   a class of a MVP presenter to be attached
  */
-public interface VisumView<P extends VisumPresenter> extends VisumClient {
+public interface VisumView<P extends BasePresenter> extends VisumClient {
 
     /**
      * @return  an injected presenter

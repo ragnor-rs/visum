@@ -17,7 +17,7 @@ import rx.schedulers.Schedulers;
 public class RobolectricTestCase {
 
     @BeforeClass
-    public static void setLogs(){
+    public static void setLogs() {
         ShadowLog.stream = System.out;
     }
 

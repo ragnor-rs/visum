@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reist.sandbox.app.SandboxApplication;
 import io.reist.sandbox.time.model.TimeService;
 import io.reist.sandbox.time.view.TimeNotification;
 import io.reist.sandbox.time.view.TimeView;

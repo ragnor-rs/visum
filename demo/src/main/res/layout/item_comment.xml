@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,29 +10,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:ignore="RtlSymmetry,ContentDescription,RtlHardcoded">
 
-    <ImageView
-        android:id="@+id/post_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:paddingRight="16dp"
-        />
-
     <TextView
-        android:id="@+id/post_title"
+        android:id="@+id/comment_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold"
-        android:layout_toRightOf="@+id/post_image"
-        android:layout_toEndOf="@+id/post_image" />
+        tools:text="qa@test.com"/>
 
     <TextView
-        android:id="@+id/post_body"
+        android:id="@+id/comment_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/post_title"
-        android:layout_toRightOf="@+id/post_image"
-        android:layout_toEndOf="@+id/post_image" />
-</RelativeLayout>
+        android:textSize="12sp"
+        tools:text="amazing comment"/>
+</LinearLayout>

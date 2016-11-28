@@ -20,7 +20,6 @@
 
 package io.reist.sandbox.repos.presenter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,9 +47,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
-        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = layoutInflater.inflate(R.layout.github_repo_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.github_repo_item, parent, false);
         return new ViewHolder(v);
     }
 

@@ -105,6 +105,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.github.ragnor-rs:dali:093f33996498b5eeb8a59374be678e7b23a38df1'
+    compile 'com.github.m039:el-adapter:1de79186b4cfffa20e4f05173dbd3a113e612a7b'
 
     compile project(':library')
 

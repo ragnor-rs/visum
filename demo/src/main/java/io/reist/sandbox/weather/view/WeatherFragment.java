@@ -64,7 +64,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     @Override
     public void showError(SandboxError error) {
         String errorMessage = error.getMessage() == null ? getString(R.string.weather_error) : error.getMessage();
-        Snackbar.make(this.getView(), errorMessage , Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(this.getView(), errorMessage, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

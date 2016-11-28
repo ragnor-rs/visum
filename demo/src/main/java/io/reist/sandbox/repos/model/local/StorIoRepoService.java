@@ -57,7 +57,7 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
     }
 
     @Override
-    public Observable<SandboxResponse<Integer>>  delete(Long id) {
+    public Observable<SandboxResponse<Integer>> delete(Long id) {
         return storIoSqLite        //cur if that's fine to make storIoSqLite protected?
                 .delete()
                 .byQuery(

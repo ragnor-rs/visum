@@ -7,6 +7,7 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
@@ -25,7 +26,6 @@ import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.core.RobolectricTestCase;
-import io.reist.sandbox.core.RobolectricTestRunner;
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.StorIoPostService;
 import io.reist.sandbox.feed.model.remote.FeedServerApi;

@@ -23,7 +23,6 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.model.remote.SandboxApi;
 import io.reist.sandbox.core.RobolectricTestCase;
-import io.reist.sandbox.core.RobolectricTestRunner;
 import io.reist.sandbox.users.UsersModule;
 import io.reist.sandbox.users.model.UserService;
 import io.reist.sandbox.users.view.UserListView;
@@ -36,7 +35,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by m039 on 11/25/15.
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(org.robolectric.RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class UserListPresenterTest extends RobolectricTestCase {
 

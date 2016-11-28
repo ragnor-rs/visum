@@ -17,7 +17,6 @@ import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.core.RobolectricTestCase;
-import io.reist.sandbox.core.RobolectricTestRunner;
 import io.reist.sandbox.feed.model.FeedServiceTest;
 import io.reist.sandbox.feed.view.FeedDetailView;
 
@@ -32,7 +31,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by 4xes on 9/11/16.
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(org.robolectric.RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class FeedDetailPresenterTest extends RobolectricTestCase {
 

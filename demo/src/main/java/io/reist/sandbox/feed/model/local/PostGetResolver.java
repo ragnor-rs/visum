@@ -19,6 +19,7 @@ public class PostGetResolver extends GetResolver<Post> {
     private final ThreadLocal<StorIOSQLite> storIOSQLiteFromPerformGet = new ThreadLocal<>();
 
     private final GetResolver<Post> postGetResolver = new PostStorIOSQLiteGetResolver();
+
     @NonNull
     @Override
     public Post mapFromCursor(@NonNull Cursor cursor) {

@@ -133,9 +133,9 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
     @Override
     public void displayData(List<Post> data) {
         loaderView.hide();
-        for(Post post: data){
+        for (Post post : data) {
             listAdapter.addItem(post);
-            if(post.comments != null && !post.comments.isEmpty()){
+            if (post.comments != null && !post.comments.isEmpty()) {
                 listAdapter.addItems(post.comments);
             }
         }

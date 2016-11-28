@@ -14,8 +14,10 @@ import io.reist.visum.view.VisumView;
 public interface WeatherView extends VisumView<WeatherPresenter> {
 
     void showSuccess();
+
     void showError(SandboxError error);
 
     void showData(WeatherEntity entity);
+
     void showLoading(boolean enabled);
 }

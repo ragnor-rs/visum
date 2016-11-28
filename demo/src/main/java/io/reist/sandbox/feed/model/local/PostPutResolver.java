@@ -15,7 +15,7 @@ import io.reist.sandbox.app.model.PostStorIOSQLitePutResolver;
 /**
  * Created by 4xes on 18/11/16.
  */
-public class PostPutResolver extends PutResolver<Post>{
+public class PostPutResolver extends PutResolver<Post> {
 
     PutResolver<Post> defaultPutResolver = new PostStorIOSQLitePutResolver();
 
@@ -25,7 +25,7 @@ public class PostPutResolver extends PutResolver<Post>{
         boolean hasComments = post.comments != null && !post.comments.isEmpty();
 
 
-        if(hasComments) {
+        if (hasComments) {
             storIOSQLite
                     .put()
                     .objects(post.comments)
@@ -38,11 +38,11 @@ public class PostPutResolver extends PutResolver<Post>{
 
         final Set<String> affectedTables = new HashSet<>(2);
         affectedTables.add(PostTable.NAME);
-        if(hasComments) {
+        if (hasComments) {
             affectedTables.add(CommentTable.NAME);
         }
 
-        int affectedObjects = 1 + (hasComments ? post.comments.size(): 0);
+        int affectedObjects = 1 + (hasComments ? post.comments.size() : 0);
 
         return PutResult.newUpdateResult(affectedObjects, affectedTables);
     }

@@ -26,10 +26,7 @@ import io.reist.sandbox.app.model.User;
 /**
  * Created by m039 on 11/12/15.
  */
-public class CachedUserService
-        extends CachedService<User>
-        implements UserService
-{
+public class CachedUserService extends CachedService<User> implements UserService {
 
     public CachedUserService(UserService local, UserService remote) {
         super(local, remote);

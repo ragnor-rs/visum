@@ -48,7 +48,7 @@ public class UserTable extends BaseTable {
     public String[] getUpgradeTableQueries(int oldVersion) {
         switch (oldVersion) {
             case 2:
-                return new String[]{CREATE_TABLE};
+                return new String[] {CREATE_TABLE};
             default:
                 return null;
         }

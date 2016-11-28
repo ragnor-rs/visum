@@ -40,13 +40,13 @@ import io.reist.sandbox.app.model.Repo;
  * Created by Reist on 10/14/15.
  */
 public class UserReposAdapter extends RecyclerView.Adapter<UserReposAdapter.ViewHolder>
-        implements View.OnClickListener
-{
+        implements View.OnClickListener {
 
     private List<Repo> repos = new ArrayList<>();
 
     public interface OnLikeRepoClickListener {
         void onLikeRepoClick(Repo repo);
+
         void onUnlikeRepoClick(Repo repo);
     }
 
@@ -107,7 +107,7 @@ public class UserReposAdapter extends RecyclerView.Adapter<UserReposAdapter.View
 
     @Override
     public int getItemCount() {
-        return repos == null? 0 : repos.size();
+        return repos == null ? 0 : repos.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

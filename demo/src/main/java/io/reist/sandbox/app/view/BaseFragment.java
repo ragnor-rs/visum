@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import io.reist.visum.presenter.SingleVisumPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 import io.reist.visum.view.VisumFragment;
 
@@ -38,13 +39,8 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragme
 
     private final int layoutResId;
 
-    /**
-     * @deprecated use {@link #BaseFragment(int, int)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public BaseFragment(@LayoutRes int layoutResId) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, layoutResId);
+        this(SingleVisumPresenter.VIEW_ID_DEFAULT, layoutResId);
     }
 
     public BaseFragment(int viewId, @LayoutRes int layoutResId) {

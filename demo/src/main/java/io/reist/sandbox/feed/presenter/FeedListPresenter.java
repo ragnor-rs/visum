@@ -11,16 +11,14 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.feed.model.FeedService;
 import io.reist.sandbox.feed.view.FeedListView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleVisumPresenter;
 import rx.Observer;
 
 /**
  * Created by 4xes on 7/11/16.
  */
 @Singleton
-public class FeedListPresenter extends VisumPresenter<FeedListView> {
-
-    private static final String TAG = FeedListPresenter.class.getName();
+public class FeedListPresenter extends SingleVisumPresenter<FeedListView> {
 
     private final FeedService feedService;
 

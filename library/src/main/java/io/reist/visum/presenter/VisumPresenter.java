@@ -106,7 +106,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      */
     public final void setView(int id, @Nullable V view) {
         V removedView = removeView(id);
-        if(removedView != null) {
+        if (removedView != null) {
             onViewDetached(id, removedView);
             if (!hasViews()) {
                 clearSubscriptions();
@@ -114,7 +114,7 @@ public abstract class VisumPresenter<V extends VisumView> {
             }
         }
 
-        if(view != null){
+        if (view != null) {
             addView(id, view);
             onViewAttached(id, view);
         }

@@ -5,6 +5,7 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 
+import io.reist.visum.presenter.SingleVisumPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -18,13 +19,9 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
 
-    /**
-     * @deprecated use {@link #VisumAccountAuthenticatorActivity(int)} instead
-     */
-    @SuppressWarnings({"unused", "deprecation"})
-    @Deprecated
+    @SuppressWarnings("unused")
     public VisumAccountAuthenticatorActivity() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleVisumPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumAccountAuthenticatorActivity(int viewId) {

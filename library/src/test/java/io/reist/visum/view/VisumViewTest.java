@@ -71,6 +71,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 TestVisumView.class,
                 BaseTestVisumFragment.class,
                 BaseTestVisumDialogFragment.class,
+                BaseTestVisumBottomSheetDialogFragment.class,
                 BaseTestVisumActivity.class,
                 BaseTestVisumAccountAuthenticatorActivity.class,
                 TestVisumWidget.class
@@ -165,6 +166,11 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @Test
+    public void visumBottomSheetDialogFragment() {
+        testFragment(new TestVisumBottomSheetDialogFragment());
+    }
+
+    @Test
     public void visumFragment() {
         testFragment(new TestVisumFragment());
     }
@@ -189,6 +195,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     public void visumChildFragment() {
         visumChildFragment(new TestVisumFragment(), new TestVisumChildFragment());
         visumChildFragment(new TestVisumFragment(), new TestVisumChildDialogFragment());
+        visumChildFragment(new TestVisumFragment(), new TestVisumChildBottomSheetDialogFragment());
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
@@ -196,6 +203,15 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     public void visumChildDialogFragment() {
         visumChildFragment(new TestVisumDialogFragment(), new TestVisumChildFragment());
         visumChildFragment(new TestVisumDialogFragment(), new TestVisumChildDialogFragment());
+        visumChildFragment(new TestVisumDialogFragment(), new TestVisumChildBottomSheetDialogFragment());
+    }
+
+    @SuppressWarnings({"ResourceType", "unchecked"})
+    @Test
+    public void visumChildBottomSheetDialogFragment() {
+        visumChildFragment(new TestVisumBottomSheetDialogFragment(), new TestVisumChildFragment());
+        visumChildFragment(new TestVisumBottomSheetDialogFragment(), new TestVisumChildDialogFragment());
+        visumChildFragment(new TestVisumBottomSheetDialogFragment(), new TestVisumChildBottomSheetDialogFragment());
     }
 
     @SuppressWarnings({"ResourceType", "unchecked"})
@@ -377,6 +393,18 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
 
     public static class TestVisumChildDialogFragment extends BaseTestVisumDialogFragment {
         public TestVisumChildDialogFragment() {
+            super(CHILD_VIEW_ID);
+        }
+    }
+
+    public static class TestVisumBottomSheetDialogFragment extends BaseTestVisumBottomSheetDialogFragment {
+        public TestVisumBottomSheetDialogFragment() {
+            super(VIEW_ID);
+        }
+    }
+
+    public static class TestVisumChildBottomSheetDialogFragment extends BaseTestVisumBottomSheetDialogFragment {
+        public TestVisumChildBottomSheetDialogFragment() {
             super(CHILD_VIEW_ID);
         }
     }

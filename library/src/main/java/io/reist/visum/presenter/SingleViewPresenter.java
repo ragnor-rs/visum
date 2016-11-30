@@ -18,7 +18,7 @@ import rx.functions.Action1;
  * @param <V> a type of view to be handled
  */
 @SuppressWarnings({"unused"})
-public abstract class SingleVisumPresenter<V extends VisumView> extends VisumPresenter<V>{
+public abstract class SingleViewPresenter<V extends VisumView> extends VisumPresenter<V>{
 
     public static final int VIEW_ID_DEFAULT = 0;
 

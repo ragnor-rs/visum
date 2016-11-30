@@ -30,7 +30,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleVisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -51,7 +51,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     private boolean presenterAttached;
 
     public VisumActivity() {
-        this(SingleVisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumActivity(int viewId) {

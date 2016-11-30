@@ -5,7 +5,7 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
 
-import io.reist.visum.presenter.SingleVisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -21,7 +21,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
 
     @SuppressWarnings("unused")
     public VisumAccountAuthenticatorActivity() {
-        this(SingleVisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewPresenter.VIEW_ID_DEFAULT);
     }
 
     public VisumAccountAuthenticatorActivity(int viewId) {

@@ -33,11 +33,11 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.users.view.UserReposView;
-import io.reist.visum.presenter.SingleVisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import rx.Observer;
 
 @Singleton
-public class UserReposPresenter extends SingleVisumPresenter<UserReposView> {
+public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
 
     private static final String TAG = UserReposPresenter.class.getName();
 

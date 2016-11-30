@@ -27,12 +27,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reist.visum.view.VisumView;
+import rx.Completable;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -49,14 +51,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class VisumPresenter<V extends VisumView> {
 
-    /**
-     * View id is for old visum implementations. Do not rely on this constant in new code.
-     *
-     * @deprecated  specify view ids explicitly
-     */
-    @Deprecated
-    public static final int VIEW_ID_DEFAULT = 0;
-
     private static class ViewHolder<V> {
 
         private V view;
@@ -69,6 +63,9 @@ public abstract class VisumPresenter<V extends VisumView> {
             this.subscriptions = new CompositeSubscription();
         }
 
+        public boolean hasSubscriptions() {
+            return subscriptions != null && subscriptions.hasSubscriptions();
+        }
     }
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
@@ -84,11 +81,20 @@ public abstract class VisumPresenter<V extends VisumView> {
         return null;
     }
 
+    @NonNull
+    private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
+        if (viewHolder == null) {
+            throw new ViewNotFoundException(id);
+        }
+        return viewHolder;
+    }
+
     /**
      * Attaches the given view to this presenter. For the view,
      * {@link #onViewAttached(int, VisumView)} will be called and the view will be able to subscribe
-     * to {@link Observable}s and {@link Single}s via {@link #subscribe(Observable, Observer)},
-     * {@link #subscribe(Single, Action1)} and {@link #subscribe(Single, SingleSubscriber)}.
+     * to {@link Observable}s and {@link Single}s via {@link #subscribe(int, Observable, Observer)},
+     * {@link #subscribe(int, Single, Action1)} and {@link #subscribe(int, Single, SingleSubscriber)}.
      *
      * If null is passed as a view then a view with the given id will be detached from the
      * presenter. Method {@link #onViewDetached(int, VisumView)} will be called. If there are no
@@ -99,54 +105,67 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @param view      a MVP view; use null to stop the view with the given id
      */
     public final void setView(int id, @Nullable V view) {
-
-        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
-
-        if (viewHolder != null) {
-
-            // remove the old view
-            viewHolder.subscriptions.unsubscribe();
-            viewHolder.subscriptions = null;
-            onViewDetached(id, viewHolder.view);
-            viewHolders.remove(viewHolder);
-
-            if (getViewCount() == 0) {
-                subscriptions.unsubscribe();
-                subscriptions = null;
+        V removedView = removeView(id);
+        if(removedView != null) {
+            onViewDetached(id, removedView);
+            if (!hasViews()) {
+                clearSubscriptions();
                 onStop();
             }
-
         }
 
-        if (view != null) {
-
-            if (getViewCount() == 0) {
-                subscriptions = new CompositeSubscription();
-                onStart();
-            }
-
-            // start the given view
-            viewHolders.add(new ViewHolder<>(id, view));
+        if(view != null){
+            addView(id, view);
             onViewAttached(id, view);
+        }
+    }
 
+    /**
+     * Remove view from {@link #viewHolders} and remove its subscriptions
+     * Have to call {@link #clearSubscriptions()} and {@link #onStop()} after removing last view.
+     *
+     * @param id an id for view
+     *
+     * @return V  removed view
+     */
+    private V removeView(int id){
+
+        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
+        if (viewHolder != null) {
+
+            V removedView = viewHolder.view;
+            viewHolder.subscriptions.unsubscribe();
+            viewHolder.subscriptions = null;
+            viewHolders.remove(viewHolder);
+
+            return removedView;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Add view to {@link #viewHolders}
+     * If presenter hadn't view it emit {@link #onStart()}
+     * and create presenter's subscription
+     *
+     * @param id an id for view
+     * @param view view
+     */
+    private void addView(int id, @NonNull V view){
+
+        if (!hasViews()) {
+            subscriptions = new CompositeSubscription();
+            onStart();
         }
 
+        viewHolders.add(new ViewHolder<>(id, view));
     }
 
     public void onStop() {}
 
     public void onStart() {}
 
-    @NonNull
-    private ViewHolder<V> findViewHolderByViewIdOrThrow(int id) {
-        ViewHolder<V> viewHolder = findViewHolderByViewId(id);
-        if (viewHolder == null) {
-            throw new ViewNotFoundException(id);
-        }
-        return viewHolder;
-    }
-
-    @SuppressWarnings("unused")
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(observable, observer);
@@ -156,7 +175,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    @SuppressWarnings("unused")
     public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(single, action);
@@ -166,7 +184,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    @SuppressWarnings("unused")
     public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(single, subscriber);
@@ -176,7 +193,24 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    @SuppressWarnings("unused")
+    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(completable, onComplete);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
+    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(completable, onComplete, onError);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
     public final <T> Subscription subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
         Subscription subscription = startSubscription(observable, new Observer<T>() {
 
@@ -231,11 +265,11 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(observer);
     }
 
-    private <T> Subscription startSubscription(Single<T> single, Action1<T> action) {
+    private <T> Subscription startSubscription(Single<T> single, Action1<T> onSuccess) {
         return single
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(action);
+                .subscribe(onSuccess);
     }
 
     private <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
@@ -245,81 +279,31 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(subscriber);
     }
 
-    @SuppressWarnings({"unused", "deprecation"})
-    protected void onViewAttached(int id, @NonNull V view) {
-        onViewAttached();
+    private Subscription startSubscription(Completable completable, Action0 onComplete) {
+        return completable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onComplete);
     }
 
-    @SuppressWarnings({"unused", "deprecation"})
-    protected void onViewDetached(int id, @NonNull V view) {
-        onViewDetached();
+
+    private Subscription startSubscription(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        return completable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onComplete, onError);
     }
+
+    protected void onViewAttached(int id, @NonNull V view) {}
+
+    protected void onViewDetached(int id, @NonNull V view) {}
 
     @NonNull
     public final V view(int id) {
         return findViewHolderByViewIdOrThrow(id).view;
     }
 
-    /**
-     * @deprecated use {@link #setView(int, VisumView)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    public final void setView(V view) {
-        setView(VIEW_ID_DEFAULT, view);
-    }
-
-    /**
-     * @deprecated use {@link #onViewAttached(int, VisumView)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    protected void onViewAttached() {}
-
-    /**
-     * @deprecated use {@link #onViewDetached(int, VisumView)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    protected void onViewDetached() {}
-
-    /**
-     * @deprecated use {@link #view(int)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    @NonNull
-    public final V view() {
-        return view(VIEW_ID_DEFAULT);
-    }
-
-    /**
-     * @deprecated use {@link #subscribe(int, Observable, Observer)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    public final <T> Subscription subscribe(Observable<T> observable, Observer<? super T> observer) {
-        return subscribe(VIEW_ID_DEFAULT, observable, observer);
-    }
-
-    /**
-     * @deprecated use {@link #subscribe(int, Single, Action1)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
-        return subscribe(VIEW_ID_DEFAULT, single, action);
-    }
-    /**
-     * @deprecated use {@link #subscribe(int, Single, SingleSubscriber)} instead
-     */
-    @Deprecated
-    @SuppressWarnings({"unused", "deprecation"})
-    public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        return subscribe(VIEW_ID_DEFAULT, single, subscriber);
-    }
-
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused"})
     public final void forEachView(@NonNull Action1<V> action1) {
         for (ViewHolder<V> viewHolder : viewHolders) {
             action1.call(viewHolder.view);
@@ -348,17 +332,25 @@ public abstract class VisumPresenter<V extends VisumView> {
         return viewHolders.size();
     }
 
+    public final boolean hasViews(){
+        return getViewCount() > 0;
+    }
+
     public final boolean hasSubscriptions() {
         return subscriptions != null && subscriptions.hasSubscriptions();
     }
 
     public final boolean hasSubscriptions(int viewId) {
         try {
-            ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-            return viewHolder.subscriptions != null && viewHolder.subscriptions.hasSubscriptions();
+            return findViewHolderByViewIdOrThrow(viewId).hasSubscriptions();
         } catch (ViewNotFoundException e) {
             return false;
         }
+    }
+
+    private void clearSubscriptions(){
+        subscriptions.unsubscribe();
+        subscriptions = null;
     }
 
     public static class ViewNotFoundException extends RuntimeException {

@@ -41,7 +41,7 @@ import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragm
 import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
 
 /**
- * Extend your dialog fragments with this class to take advantage of Visum MVP.
+ * Extend your bottom sheet dialog fragments with this class to take advantage of Visum MVP.
  */
 @SuppressWarnings("unused")
 public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>

@@ -20,6 +20,8 @@ public class VisumFragmentUtils {
                 ((VisumFragment) fragment).detachPresenter();
             } else if (fragment instanceof VisumDialogFragment) {
                 ((VisumDialogFragment) fragment).detachPresenter();
+            } else if (fragment instanceof VisumBottomSheetDialogFragment) {
+                ((VisumBottomSheetDialogFragment) fragment).detachPresenter();
             }
         }
     }
@@ -34,6 +36,8 @@ public class VisumFragmentUtils {
                 ((VisumFragment) fragment).attachPresenter();
             } else if (fragment instanceof VisumDialogFragment) {
                 ((VisumDialogFragment) fragment).attachPresenter();
+            } else if (fragment instanceof VisumBottomSheetDialogFragment) {
+                ((VisumBottomSheetDialogFragment) fragment).attachPresenter();
             }
         }
     }

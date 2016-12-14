@@ -9,21 +9,18 @@ import javax.inject.Singleton;
 import io.reist.sandbox.time.model.TimeService;
 import io.reist.sandbox.time.view.TimeNotification;
 import io.reist.sandbox.time.view.TimeView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumViewsPresenter;
 
 /**
  * This class is a part of the example of single presenter - multiple views feature of Visum.
- * TimePresenter manages two {@link TimeView} identified by {@link #VIEW_ID_MAIN} and
- * {@link #VIEW_ID_NOTIFICATION}.
+ * TimePresenter manages two {@link TimeView} identified by {@link TimeView#ID_MAIN} and
+ * {@link TimeView#ID_NOTIFICATION}.
  *
  * @see io.reist.sandbox.time.view.TimeNotification
  * @see io.reist.sandbox.time.view.TimeFragment
  */
 @Singleton
-public class TimePresenter extends VisumPresenter<TimeView> {
-
-    public static final int VIEW_ID_MAIN = 1;
-    public static final int VIEW_ID_NOTIFICATION = 2;
+public class TimePresenter extends VisumViewsPresenter<TimeView> {
 
     private final TimeService timeService;
 

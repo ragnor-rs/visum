@@ -6,13 +6,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reist.sandbox.result.view.ResultView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumViewPresenter;
 
 /**
  * Created by Reist on 07.06.16.
  */
 @Singleton
-public class ResultPresenter extends VisumPresenter<ResultView> {
+public class ResultPresenter extends VisumViewPresenter<ResultView> {
 
     private static final String TAG = ResultPresenter.class.getSimpleName();
 

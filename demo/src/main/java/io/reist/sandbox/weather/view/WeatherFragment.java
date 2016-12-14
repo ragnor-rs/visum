@@ -48,7 +48,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     WeatherPresenter presenter;
 
     public WeatherFragment() {
-        super(WeatherPresenter.WEATHER_CODE, R.layout.fragment_weather);
+        super(R.layout.fragment_weather);
     }
 
     @Override

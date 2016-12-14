@@ -28,7 +28,7 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
     TimePresenter presenter;
 
     public TimeFragment() {
-        super(TimePresenter.VIEW_ID_MAIN, R.layout.fragment_time);
+        super(R.layout.fragment_time);
     }
 
     @Override
@@ -52,4 +52,8 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
         presenter.onHideTimeClicked();
     }
 
+    @Override
+    public int getViewId() {
+        return TimeView.ID_MAIN;
+    }
 }

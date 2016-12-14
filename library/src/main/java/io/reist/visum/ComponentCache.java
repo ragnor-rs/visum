@@ -79,7 +79,7 @@ public class ComponentCache {
 
     protected final ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
         for (ComponentEntry componentEntry : componentEntries) {
-            for(Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
+            for (Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
                 if (clientClass.isAssignableFrom(clazz)) {
                     return componentEntry;
                 }
@@ -118,7 +118,7 @@ public class ComponentCache {
                     listener.onComponentDestroyed(component);
                 }
             }
-        } else  {
+        } else {
             throw new IllegalStateException(client + " is already detached");
         }
     }

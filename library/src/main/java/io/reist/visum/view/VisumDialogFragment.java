@@ -34,7 +34,7 @@ import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.VisumBasePresenter;
 
 import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
 import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
@@ -43,7 +43,7 @@ import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragm
  * Extend your dialog fragments with this class to take advantage of Visum MVP.
  */
 @SuppressWarnings("unused")
-public abstract class VisumDialogFragment<P extends VisumPresenter>
+public abstract class VisumDialogFragment<P extends VisumBasePresenter>
         extends DialogFragment
         implements VisumView<P> {
 
@@ -55,20 +55,9 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
      */
     private boolean presenterAttached = false;
 
-    /**
-     * @deprecated use {@link #VisumDialogFragment(int)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public VisumDialogFragment() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
-
-    // todo add javadoc for viewId
-    public VisumDialogFragment(int viewId) {
-        this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
-    }
-
 
     //region VisumClient implementation
 

@@ -31,6 +31,18 @@ public class PresenterAssert {
         inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
     }
 
+    public static void assertPresenterDetached(TestSingleViewPresenter presenter, VisumView view) {
+        TestSingleViewPresenter dummy = presenter.getDummy();
+        InOrder inOrder = Mockito.inOrder(dummy);
+        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(view);
+    }
+
+    public static void assertPresenterAttached(TestSingleViewPresenter presenter, VisumView view) {
+        TestSingleViewPresenter dummy = presenter.getDummy();
+        InOrder inOrder = Mockito.inOrder(dummy);
+        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(view);
+    }
+
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {
         try {
             presenter.subscribe(viewId, Single.just(true), new Action1<Boolean>() {

@@ -40,8 +40,10 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
 
     protected void onViewDetached(@NonNull V view) {}
 
+    @Override
     final public void onStop() {}
 
+    @Override
     final public void onStart() {}
 
     @NonNull

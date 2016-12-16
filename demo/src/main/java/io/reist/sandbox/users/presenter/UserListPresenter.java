@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.users.presenter;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,10 +49,8 @@ public class UserListPresenter extends SingleViewPresenter<UserListView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull UserListView view) {
         mIsDataLoaded = false;
-
-        UserListView view = view();
         view.showLoader(true);
         loadData();
     }

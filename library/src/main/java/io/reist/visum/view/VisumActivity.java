@@ -51,13 +51,12 @@ public abstract class VisumActivity<P extends VisumPresenter>
     private boolean presenterAttached;
 
     public VisumActivity() {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT);
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
     public VisumActivity(int viewId) {
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
-
 
     //region VisumClient implementation
 

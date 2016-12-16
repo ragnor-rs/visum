@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.repos.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -48,10 +50,8 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull RepoEditView view) {
         mIsDataLoaded = false;
-
-        RepoEditView view = view();
         long repoId = view.getRepoId();
         view.displayLoader(true);
         subscribe(repoService.byId(repoId), new ResponseObserver<Repo>() {

@@ -20,6 +20,7 @@
 
 package io.reist.sandbox.users.presenter;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -49,8 +50,7 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
     }
 
     @Override
-    protected void onViewAttached() {
-        UserReposView view = view();
+    protected void onViewAttached(@NonNull UserReposView view) {
         view.showLoader(true);
         loadData(view.getUserId());
     }

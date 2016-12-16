@@ -28,17 +28,21 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
 
     @Override
     protected void onViewAttached(int id, @NonNull V view) {
-        onViewAttached();
+        onViewAttached(view);
     }
 
     @Override
     protected void onViewDetached(int id, @NonNull V view) {
-        onViewDetached();
+        onViewDetached(view);
     }
 
-    protected void onViewAttached() {}
+    protected void onViewAttached(@NonNull V view) {}
 
-    protected void onViewDetached() {}
+    protected void onViewDetached(@NonNull V view) {}
+
+    final public void onStop() {}
+
+    final public void onStart() {}
 
     @NonNull
     public final V view() {
@@ -55,10 +59,6 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
 
     public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
         return subscribe(VIEW_ID_DEFAULT, single, subscriber);
-    }
-
-    public final boolean hasViewSubscriptions() {
-        return hasSubscriptions(VIEW_ID_DEFAULT);
     }
 
 

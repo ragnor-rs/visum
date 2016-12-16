@@ -6,6 +6,7 @@ import android.util.Log;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -24,6 +25,11 @@ public final class VisumViewHelper<P extends VisumPresenter> {
 
     public VisumViewHelper(int viewId, @NonNull VisumClientHelper<? extends VisumView<P>> helper) {
         this.viewId = viewId;
+        this.helper = helper;
+    }
+
+    public VisumViewHelper(@NonNull VisumClientHelper<? extends VisumView<P>> helper) {
+        this.viewId = SingleViewPresenter.VIEW_ID_DEFAULT;
         this.helper = helper;
     }
 

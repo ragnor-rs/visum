@@ -20,6 +20,7 @@
 
 package io.reist.sandbox.repos.presenter;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
@@ -50,9 +51,8 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull RepoListView view) {
         mIsDataLoaded = false;
-        RepoListView view = view();
         view.showLoader(true);
         loadData();
     }

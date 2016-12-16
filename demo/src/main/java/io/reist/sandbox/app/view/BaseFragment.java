@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
-import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 import io.reist.visum.view.VisumFragment;
 
@@ -40,7 +39,8 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragme
     private final int layoutResId;
 
     public BaseFragment(@LayoutRes int layoutResId) {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT, layoutResId);
+        super();
+        this.layoutResId = layoutResId;
     }
 
     public BaseFragment(int viewId, @LayoutRes int layoutResId) {

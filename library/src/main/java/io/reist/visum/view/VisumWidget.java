@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -36,13 +35,16 @@ public abstract class VisumWidget<P extends VisumPresenter>
     }
 
     public VisumWidget(Context context) {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT, context);
+        super(context);
+        inflate();
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT, context, attrs);
+        super(context, attrs);
+        inflate();
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
-
 
     //region VisumClient implementation
 

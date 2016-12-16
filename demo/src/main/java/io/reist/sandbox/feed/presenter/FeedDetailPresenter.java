@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.feed.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -44,10 +46,7 @@ public class FeedDetailPresenter extends SingleViewPresenter<FeedDetailView> {
     }
 
     @Override
-    protected void onViewAttached() {
-
-        FeedDetailView view = view();
-
+    protected void onViewAttached(@NonNull FeedDetailView view) {
         long postId = view.getPostId();
         view.displayLoader(true);
         subscribe(feedService.byId(postId), new FeedPostObserver());

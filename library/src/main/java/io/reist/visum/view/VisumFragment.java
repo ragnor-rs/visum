@@ -60,14 +60,12 @@ public abstract class VisumFragment<P extends VisumPresenter>
     private boolean presenterAttached = false;
 
     public VisumFragment() {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT);
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
-    // todo add javadoc for viewId
     public VisumFragment(int viewId) {
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
-
 
     //region VisumClient implementation
 

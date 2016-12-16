@@ -1,5 +1,7 @@
 package io.reist.sandbox.feed.presenter;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,7 @@ public class FeedListPresenter extends SingleViewPresenter<FeedListView> {
     }
 
     @Override
-    protected void onViewAttached() {
-        FeedListView view = view();
+    protected void onViewAttached(@NonNull FeedListView view) {
         view.showLoader(true);
         loadData();
     }

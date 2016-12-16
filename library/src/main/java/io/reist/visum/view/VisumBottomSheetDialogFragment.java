@@ -57,7 +57,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     private boolean presenterAttached = false;
 
     public VisumBottomSheetDialogFragment() {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT);
+        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
     }
 
     // todo add javadoc for viewId

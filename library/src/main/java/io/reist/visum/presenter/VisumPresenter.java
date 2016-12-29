@@ -128,7 +128,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      *
      * @return V  removed view
      */
-    private V removeView(int id){
+    private V removeView(int id) {
 
         ViewHolder<V> viewHolder = findViewHolderByViewId(id);
         if (viewHolder != null) {
@@ -152,7 +152,7 @@ public abstract class VisumPresenter<V extends VisumView> {
      * @param id an id for view
      * @param view view
      */
-    private void addView(int id, @NonNull V view){
+    private void addView(int id, @NonNull V view) {
 
         if (!hasViews()) {
             subscriptions = new CompositeSubscription();
@@ -193,7 +193,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
+    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(completable, onComplete);
 
@@ -202,7 +202,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    public final <T> Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(completable, onComplete, onError);
 
@@ -332,7 +332,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         return viewHolders.size();
     }
 
-    public final boolean hasViews(){
+    public final boolean hasViews() {
         return getViewCount() > 0;
     }
 
@@ -348,7 +348,7 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
     }
 
-    private void clearSubscriptions(){
+    private void clearSubscriptions() {
         subscriptions.unsubscribe();
         subscriptions = null;
     }

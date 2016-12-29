@@ -28,11 +28,6 @@ public final class VisumViewHelper<P extends VisumPresenter> {
         this.helper = helper;
     }
 
-    public VisumViewHelper(@NonNull VisumClientHelper<? extends VisumView<P>> helper) {
-        this.viewId = SingleViewPresenter.VIEW_ID_DEFAULT;
-        this.helper = helper;
-    }
-
     public P getPresenter() {
         return helper.getClient().getPresenter();
     }

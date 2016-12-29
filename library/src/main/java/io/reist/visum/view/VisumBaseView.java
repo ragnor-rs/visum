@@ -20,7 +20,7 @@ public abstract class VisumBaseView<P extends VisumPresenter>
     private final VisumViewHelper<P> helper;
 
     public VisumBaseView(Context context) {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT, context);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID, context);
     }
 
     public VisumBaseView(int viewId, Context context) {

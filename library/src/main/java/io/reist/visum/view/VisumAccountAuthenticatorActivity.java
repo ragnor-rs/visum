@@ -21,7 +21,7 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
 
     @SuppressWarnings("unused")
     public VisumAccountAuthenticatorActivity() {
-        this(SingleViewPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
     public VisumAccountAuthenticatorActivity(int viewId) {

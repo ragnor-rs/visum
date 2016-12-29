@@ -60,7 +60,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     private boolean presenterAttached = false;
 
     public VisumFragment() {
-        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
+        this(SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
     public VisumFragment(int viewId) {

@@ -18,12 +18,12 @@ import rx.functions.Action1;
  * @param <V> a type of view to be handled
  */
 @SuppressWarnings({"unused"})
-public abstract class SingleViewPresenter<V extends VisumView> extends VisumPresenter<V>{
+public abstract class SingleViewPresenter<V extends VisumView> extends VisumPresenter<V> {
 
-    public static final int VIEW_ID_DEFAULT = 0;
+    public static final int DEFAULT_VIEW_ID = 0;
 
     public final void setView(V view) {
-        setView(VIEW_ID_DEFAULT, view);
+        setView(DEFAULT_VIEW_ID, view);
     }
 
     @Override
@@ -48,19 +48,19 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
 
     @NonNull
     public final V view() {
-        return view(VIEW_ID_DEFAULT);
+        return view(DEFAULT_VIEW_ID);
     }
 
     public final <T> Subscription subscribe(Observable<T> observable, Observer<? super T> observer) {
-        return subscribe(VIEW_ID_DEFAULT, observable, observer);
+        return subscribe(DEFAULT_VIEW_ID, observable, observer);
     }
 
     public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
-        return subscribe(VIEW_ID_DEFAULT, single, action);
+        return subscribe(DEFAULT_VIEW_ID, single, action);
     }
 
     public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        return subscribe(VIEW_ID_DEFAULT, single, subscriber);
+        return subscribe(DEFAULT_VIEW_ID, single, subscriber);
     }
 
 

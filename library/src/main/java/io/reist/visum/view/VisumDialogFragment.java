@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
@@ -56,7 +57,7 @@ public abstract class VisumDialogFragment<P extends VisumPresenter>
     private boolean presenterAttached = false;
 
     public VisumDialogFragment() {
-        this.helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
+        this(SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
     public VisumDialogFragment(int viewId) {

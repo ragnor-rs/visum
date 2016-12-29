@@ -3,7 +3,7 @@ package io.reist.visum.view;
 import io.reist.visum.BaseTestClient;
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.TestPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -15,9 +15,7 @@ public abstract class BaseTestView extends BaseTestClient implements VisumView<V
     private final VisumViewHelper<VisumPresenter> helper;
 
     protected BaseTestView(ComponentCache componentCache, VisumPresenter presenter) {
-        super(componentCache);
-        this.presenter = presenter;
-        helper = new VisumViewHelper<>(new VisumClientHelper<>(this));
+        this(componentCache, presenter, SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
     protected BaseTestView(ComponentCache componentCache, VisumPresenter presenter, int viewId) {

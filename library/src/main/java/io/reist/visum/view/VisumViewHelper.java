@@ -6,7 +6,6 @@ import android.util.Log;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
-import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**

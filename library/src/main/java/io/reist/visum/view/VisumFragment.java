@@ -209,7 +209,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     protected abstract int getLayoutRes();
 
     @StyleRes
-    protected int getCustomTheme(){
+    protected int getCustomTheme() {
         return 0;
     }
 

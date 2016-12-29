@@ -85,7 +85,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (!isInEditMode()){
+        if (!isInEditMode()) {
             onStartClient();
         }
         attachPresenter();

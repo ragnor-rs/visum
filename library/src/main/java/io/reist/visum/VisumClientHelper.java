@@ -54,9 +54,9 @@ public final class VisumClientHelper<C extends VisumClient> {
                 Class types[] = method.getParameterTypes();
                 if (
                         method.getName().startsWith(INJECT_METHOD_NAME) &&
-                        types != null && types.length == 1 &&
-                        types[0].isAssignableFrom(clientClass)
-                ) {
+                                types != null && types.length == 1 &&
+                                types[0].isAssignableFrom(clientClass)
+                        ) {
                     method.invoke(component, client);
                     Log.d(TAG, String.format(
                             "onCreate: client [%s] was injected by [%s] with [%s]",

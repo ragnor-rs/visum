@@ -19,7 +19,6 @@ public class SingeViewPresenterTest extends VisumTest<BaseTestView> {
 
     private TestSingleViewPresenter presenter;
 
-    private TestView view;
 
     @Before
     public void start() {
@@ -38,8 +37,6 @@ public class SingeViewPresenterTest extends VisumTest<BaseTestView> {
                 TestView.class
         );
 
-        view = new TestView(getComponentCache());
-
     }
 
     @After
@@ -49,8 +46,6 @@ public class SingeViewPresenterTest extends VisumTest<BaseTestView> {
 
         tearDown();
 
-        view = null;
-
     }
 
     @Test
@@ -59,10 +54,10 @@ public class SingeViewPresenterTest extends VisumTest<BaseTestView> {
         BaseTestView view = getClient();
 
         view.attachPresenter();
-        assertPresenterAttached(presenter, view);
+        assertPresenterAttached(presenter, SingleViewPresenter.DEFAULT_VIEW_ID, view);
 
         view.detachPresenter();
-        assertPresenterDetached(presenter, view);
+        assertPresenterDetached(presenter, SingleViewPresenter.DEFAULT_VIEW_ID, view);
 
     }
 

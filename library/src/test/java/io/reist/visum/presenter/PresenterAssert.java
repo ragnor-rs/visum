@@ -1,8 +1,6 @@
 package io.reist.visum.presenter;
 
 import org.junit.Assert;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
 
 import io.reist.visum.view.VisumView;
 import rx.Single;
@@ -13,34 +11,17 @@ import rx.functions.Action1;
  */
 public class PresenterAssert {
 
-    public static void assertPresenterDetached(TestPresenter presenter, int viewId, VisumView view) {
-        TestPresenter dummy = presenter.getDummy();
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(viewId, view);
-        if (presenter.getViewCount() == 0) {
-            inOrder.verify(dummy, Mockito.times(1)).onStop();
-        }
+    public interface AssertTestPresenter {
+        void assertPresenterAttached(int viewId, VisumView view);
+        void assertPresenterDetached(int viewId, VisumView view);
     }
 
-    public static void assertPresenterAttached(TestPresenter presenter, int viewId, VisumView view) {
-        TestPresenter dummy = presenter.getDummy();
-        InOrder inOrder = Mockito.inOrder(dummy);
-        if (presenter.getViewCount() == 1) {
-            inOrder.verify(dummy, Mockito.times(1)).onStart();
-        }
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
+    public static void assertPresenterDetached(AssertTestPresenter presenter, int viewId, VisumView view) {
+        presenter.assertPresenterDetached(viewId, view);
     }
 
-    public static void assertPresenterDetached(TestSingleViewPresenter presenter, VisumView view) {
-        TestSingleViewPresenter dummy = presenter.getDummy();
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(view);
-    }
-
-    public static void assertPresenterAttached(TestSingleViewPresenter presenter, VisumView view) {
-        TestSingleViewPresenter dummy = presenter.getDummy();
-        InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(view);
+    public static void assertPresenterAttached(AssertTestPresenter presenter, int viewId, VisumView view) {
+        presenter.assertPresenterAttached(viewId, view);
     }
 
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {

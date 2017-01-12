@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.repos.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -29,14 +31,14 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.repos.view.RepoEditView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import rx.Subscriber;
 
 /**
  * Created by defuera on 10/11/2015.
  */
 @Singleton
-public class RepoEditPresenter extends VisumPresenter<RepoEditView> {
+public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
     private RepoService repoService;
     private boolean mIsDataLoaded;
@@ -48,10 +50,8 @@ public class RepoEditPresenter extends VisumPresenter<RepoEditView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull RepoEditView view) {
         mIsDataLoaded = false;
-
-        RepoEditView view = view();
         long repoId = view.getRepoId();
         view.displayLoader(true);
         subscribe(repoService.byId(repoId), new ResponseObserver<Repo>() {

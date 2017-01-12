@@ -27,7 +27,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +34,7 @@ import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
@@ -56,13 +56,8 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
      */
     private boolean presenterAttached = false;
 
-    /**
-     * @deprecated use {@link #VisumDialogFragment(int)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public VisumBottomSheetDialogFragment() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
     // todo add javadoc for viewId

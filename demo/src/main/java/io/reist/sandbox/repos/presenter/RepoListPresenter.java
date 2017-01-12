@@ -20,6 +20,7 @@
 
 package io.reist.sandbox.repos.presenter;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
@@ -34,10 +35,10 @@ import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.repos.view.RepoListView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 
 @Singleton
-public class RepoListPresenter extends VisumPresenter<RepoListView> {
+public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
 
     private static final String TAG = RepoListPresenter.class.getName();
 
@@ -50,9 +51,8 @@ public class RepoListPresenter extends VisumPresenter<RepoListView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull RepoListView view) {
         mIsDataLoaded = false;
-        RepoListView view = view();
         view.showLoader(true);
         loadData();
     }

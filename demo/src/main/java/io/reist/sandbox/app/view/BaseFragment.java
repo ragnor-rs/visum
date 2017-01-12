@@ -38,13 +38,9 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragme
 
     private final int layoutResId;
 
-    /**
-     * @deprecated use {@link #BaseFragment(int, int)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public BaseFragment(@LayoutRes int layoutResId) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, layoutResId);
+        super();
+        this.layoutResId = layoutResId;
     }
 
     public BaseFragment(int viewId, @LayoutRes int layoutResId) {

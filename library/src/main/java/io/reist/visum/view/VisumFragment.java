@@ -26,7 +26,6 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +36,7 @@ import android.view.ViewGroup;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
@@ -59,20 +59,13 @@ public abstract class VisumFragment<P extends VisumPresenter>
      */
     private boolean presenterAttached = false;
 
-    /**
-     * @deprecated use {@link #VisumFragment(int)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public VisumFragment() {
-        this(VisumPresenter.VIEW_ID_DEFAULT);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID);
     }
 
-    // todo add javadoc for viewId
     public VisumFragment(int viewId) {
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
-
 
     //region VisumClient implementation
 
@@ -216,7 +209,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     protected abstract int getLayoutRes();
 
     @StyleRes
-    protected int getCustomTheme(){
+    protected int getCustomTheme() {
         return 0;
     }
 

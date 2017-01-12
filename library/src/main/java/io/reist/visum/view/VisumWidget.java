@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
@@ -34,24 +35,13 @@ public abstract class VisumWidget<P extends VisumPresenter>
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
-    /**
-     * @deprecated use {@link #VisumWidget(int, Context)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public VisumWidget(Context context) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID, context);
     }
 
-    /**
-     * @deprecated use {@link #VisumWidget(int, Context, AttributeSet)} instead
-     */
-    @SuppressWarnings("deprecation")
-    @Deprecated
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(VisumPresenter.VIEW_ID_DEFAULT, context, attrs);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID, context);
     }
-
 
     //region VisumClient implementation
 
@@ -95,7 +85,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (!isInEditMode()){
+        if (!isInEditMode()) {
             onStartClient();
         }
         attachPresenter();

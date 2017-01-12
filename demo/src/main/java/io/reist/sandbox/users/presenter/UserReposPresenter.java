@@ -20,6 +20,7 @@
 
 package io.reist.sandbox.users.presenter;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -33,11 +34,11 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.users.view.UserReposView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import rx.Observer;
 
 @Singleton
-public class UserReposPresenter extends VisumPresenter<UserReposView> {
+public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
 
     private static final String TAG = UserReposPresenter.class.getName();
 
@@ -49,8 +50,7 @@ public class UserReposPresenter extends VisumPresenter<UserReposView> {
     }
 
     @Override
-    protected void onViewAttached() {
-        UserReposView view = view();
+    protected void onViewAttached(@NonNull UserReposView view) {
         view.showLoader(true);
         loadData(view.getUserId());
     }

@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.users.presenter;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -29,14 +31,14 @@ import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.users.model.UserService;
 import io.reist.sandbox.users.view.UserListView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 import rx.Observer;
 
 /**
  * Created by m039 on 11/12/15.
  */
 @Singleton
-public class UserListPresenter extends VisumPresenter<UserListView> {
+public class UserListPresenter extends SingleViewPresenter<UserListView> {
 
     UserService mUserService;
     private boolean mIsDataLoaded = false;
@@ -47,10 +49,8 @@ public class UserListPresenter extends VisumPresenter<UserListView> {
     }
 
     @Override
-    protected void onViewAttached() {
+    protected void onViewAttached(@NonNull UserListView view) {
         mIsDataLoaded = false;
-
-        UserListView view = view();
         view.showLoader(true);
         loadData();
     }

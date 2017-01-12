@@ -1,6 +1,5 @@
 package io.reist.visum.presenter;
 
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 
 import org.mockito.InOrder;
@@ -9,49 +8,45 @@ import org.mockito.Mockito;
 import io.reist.visum.view.VisumView;
 
 /**
- * Created by Reist on 26.05.16.
+ * Created by 4xes on 17.12.16.
  */
-public class TestPresenter extends VisumPresenter<VisumView> implements PresenterAssert.AssertTestPresenter{
+public class TestSingleViewPresenter extends SingleViewPresenter<VisumView> implements PresenterAssert.AssertTestPresenter {
 
-    private final TestPresenter dummy = Mockito.mock(TestPresenter.class);
+    private final TestSingleViewPresenter dummy = Mockito.mock(TestSingleViewPresenter.class);
 
     @Override
-    public void onStop() {
-        super.onStop();
-        dummy.onStop();
+    protected void onViewAttached(@NonNull VisumView view) {
+        dummy.onViewAttached(view);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        dummy.onStart();
+    protected void onViewDetached(@NonNull VisumView view) {
+        dummy.onViewDetached(view);
     }
 
     @Override
     protected void onViewAttached(int id, @NonNull VisumView view) {
         dummy.onViewAttached(id, view);
+        super.onViewAttached(id, view);
     }
 
     @Override
     protected void onViewDetached(int id, @NonNull VisumView view) {
         dummy.onViewDetached(id, view);
+        super.onViewDetached(id, view);
     }
 
     @Override
     public void assertPresenterAttached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
         inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
-        if (getViewCount() == 0) {
-            inOrder.verify(dummy, Mockito.times(1)).onStart();
-        }
+        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(view);
     }
 
     @Override
     public void assertPresenterDetached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(viewId, view);
-        if (getViewCount() == 0) {
-            inOrder.verify(dummy, Mockito.times(1)).onStop();
-        }
+        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
+        inOrder.verify(dummy, Mockito.times(1)).onViewDetached(view);
     }
 }

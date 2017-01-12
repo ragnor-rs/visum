@@ -20,6 +20,8 @@
 
 package io.reist.sandbox.feed.presenter;
 
+import android.support.annotation.NonNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -28,13 +30,13 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.feed.model.FeedService;
 import io.reist.sandbox.feed.view.FeedDetailView;
-import io.reist.visum.presenter.VisumPresenter;
+import io.reist.visum.presenter.SingleViewPresenter;
 
 /**
  * Created by defuera on 10/11/2015.
  */
 @Singleton
-public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
+public class FeedDetailPresenter extends SingleViewPresenter<FeedDetailView> {
 
     private final FeedService feedService;
 
@@ -44,10 +46,7 @@ public class FeedDetailPresenter extends VisumPresenter<FeedDetailView> {
     }
 
     @Override
-    protected void onViewAttached() {
-
-        FeedDetailView view = view();
-
+    protected void onViewAttached(@NonNull FeedDetailView view) {
         long postId = view.getPostId();
         view.displayLoader(true);
         subscribe(feedService.byId(postId), new FeedPostObserver());

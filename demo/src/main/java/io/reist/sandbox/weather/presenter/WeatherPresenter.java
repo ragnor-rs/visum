@@ -23,18 +23,12 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
 
     public static final int WEATHER_CODE = 1001;
 
-    private String TAG = WeatherPresenter.class.getName();
     private WeatherService weatherService;
     private boolean isLoading;
 
     @Inject
     public WeatherPresenter(WeatherService service) {
         this.weatherService = service;
-    }
-
-    @Override
-    protected void onViewAttached() {
-        super.onViewAttached();
     }
 
     public void loadData(String query) {

@@ -1,6 +1,6 @@
 # Visum
 [![Build Status](https://travis-ci.org/ragnor-rs/visum.svg?branch=develop)](https://travis-ci.org/ragnor-rs/visum)
-[![Release](https://jitpack.io/v/ragnor-rs/visum.svg)](https://jitpack.io/#ragnor-rs/visum/bb0bc22489)
+[![Release](https://jitpack.io/v/ragnor-rs/visum.svg)](https://jitpack.io/#ragnor-rs/visum)
 
 Android reactive MVP stack.
 

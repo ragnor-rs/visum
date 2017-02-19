@@ -56,7 +56,7 @@ public abstract class VisumWidget<P extends VisumPresenter>
     }
 
     public VisumWidget(Context context, AttributeSet attrs) {
-        this(SingleViewPresenter.DEFAULT_VIEW_ID, context);
+        this(SingleViewPresenter.DEFAULT_VIEW_ID, context, attrs);
     }
 
     //region VisumClient implementation

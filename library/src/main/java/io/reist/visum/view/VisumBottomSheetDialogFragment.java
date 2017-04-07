@@ -158,7 +158,9 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        detachPresenter();
+        if (presenterAttached) {
+            detachPresenter();
+        }
     }
 
     @Override

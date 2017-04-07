@@ -27,12 +27,12 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
     }
 
     @Override
-    protected void onViewAttached(int id, @NonNull V view) {
+    protected final void onViewAttached(int id, @NonNull V view) {
         onViewAttached(view);
     }
 
     @Override
-    protected void onViewDetached(int id, @NonNull V view) {
+    protected final void onViewDetached(int id, @NonNull V view) {
         onViewDetached(view);
     }
 
@@ -41,10 +41,10 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
     protected void onViewDetached(@NonNull V view) {}
 
     @Override
-    final public void onStop() {}
+    public final void onStop() {}
 
     @Override
-    final public void onStart() {}
+    public final void onStart() {}
 
     @NonNull
     public final V view() {

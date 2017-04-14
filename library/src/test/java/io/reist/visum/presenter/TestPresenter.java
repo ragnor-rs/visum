@@ -16,7 +16,6 @@
 
 package io.reist.visum.presenter;
 
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 
 import org.mockito.InOrder;
@@ -70,4 +69,5 @@ public class TestPresenter extends VisumPresenter<VisumView> implements Presente
             inOrder.verify(dummy, Mockito.times(1)).onStop();
         }
     }
+
 }

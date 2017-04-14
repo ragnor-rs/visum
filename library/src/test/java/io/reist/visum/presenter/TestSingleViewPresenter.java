@@ -17,36 +17,25 @@ public class TestSingleViewPresenter extends SingleViewPresenter<VisumView> impl
     @Override
     protected void onViewAttached(@NonNull VisumView view) {
         dummy.onViewAttached(view);
+        super.onViewAttached(view);
     }
 
     @Override
     protected void onViewDetached(@NonNull VisumView view) {
         dummy.onViewDetached(view);
-    }
-
-    @Override
-    protected void onViewAttached(int id, @NonNull VisumView view) {
-        dummy.onViewAttached(id, view);
-        super.onViewAttached(id, view);
-    }
-
-    @Override
-    protected void onViewDetached(int id, @NonNull VisumView view) {
-        dummy.onViewDetached(id, view);
-        super.onViewDetached(id, view);
+        super.onViewAttached(view);
     }
 
     @Override
     public void assertPresenterAttached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
         inOrder.verify(dummy, Mockito.times(1)).onViewAttached(view);
     }
 
     @Override
     public void assertPresenterDetached(int viewId, VisumView view) {
         InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(1)).onViewAttached(viewId, view);
         inOrder.verify(dummy, Mockito.times(1)).onViewDetached(view);
     }
+
 }

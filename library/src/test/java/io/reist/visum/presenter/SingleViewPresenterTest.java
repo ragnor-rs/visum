@@ -15,10 +15,9 @@ import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
 /**
  * Created by 4xes on 17.12.16.
  */
-public class SingeViewPresenterTest extends VisumTest<BaseTestView> {
+public class SingleViewPresenterTest extends VisumTest<BaseTestView> {
 
     private TestSingleViewPresenter presenter;
-
 
     @Before
     public void start() {

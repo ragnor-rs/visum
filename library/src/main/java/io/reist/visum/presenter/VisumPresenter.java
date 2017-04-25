@@ -282,7 +282,6 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(onComplete);
     }
 
-
     private Subscription startSubscription(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         return completable
                 .subscribeOn(Schedulers.io())

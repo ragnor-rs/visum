@@ -3,11 +3,14 @@ package io.reist.visum.presenter;
 import android.support.annotation.NonNull;
 
 import io.reist.visum.view.VisumView;
+import rx.Completable;
+import rx.CompletableSubscriber;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
+import rx.functions.Action0;
 import rx.functions.Action1;
 
 /**
@@ -63,5 +66,12 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
         return subscribe(DEFAULT_VIEW_ID, single, subscriber);
     }
 
+    public final Subscription subscribe(Completable completable, Action0 onComplete) {
+        return subscribe(DEFAULT_VIEW_ID, completable, onComplete);
+    }
+
+    public final Subscription subscribe(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        return subscribe(DEFAULT_VIEW_ID, completable, onComplete, onError);
+    }
 
 }

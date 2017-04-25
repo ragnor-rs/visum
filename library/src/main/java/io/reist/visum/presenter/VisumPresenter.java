@@ -24,7 +24,6 @@ import java.util.List;
 
 import io.reist.visum.view.VisumView;
 import rx.Completable;
-import rx.CompletableSubscriber;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;

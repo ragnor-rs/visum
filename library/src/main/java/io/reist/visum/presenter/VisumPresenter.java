@@ -24,6 +24,7 @@ import java.util.List;
 
 import io.reist.visum.view.VisumView;
 import rx.Completable;
+import rx.CompletableSubscriber;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
@@ -281,7 +282,6 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onComplete);
     }
-
 
     private Subscription startSubscription(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         return completable

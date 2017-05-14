@@ -162,6 +162,9 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     public void onStart() {}
 
+
+    //region Observable
+
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(observable, observer);
@@ -171,36 +174,19 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-    public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
+    public final <T> Subscription subscribe(int viewId, Observable<T> observable, Action1<T> action, Action1<Throwable> error) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(single, action);
+        Subscription subscription = startSubscription(observable, action, error);
 
         viewHolder.subscriptions.add(subscription);
 
         return subscription;
     }
 
-    public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
+
+    public final <T> Subscription subscribe(int viewId, Observable<T> observable, Action1<T> action) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(single, subscriber);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
-    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
-        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(completable, onComplete);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
-    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
-        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(completable, onComplete, onError);
+        Subscription subscription = startSubscription(observable, action);
 
         viewHolder.subscriptions.add(subscription);
 
@@ -232,6 +218,38 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
+    //endregion
+
+
+    //region Single
+
+    public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(single, subscriber);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
+    public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(single, action);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
+    public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action, Action1<Throwable> error) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(single, action, error);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
     @SuppressWarnings("unused")
     public final <T> Subscription subscribe(Single<T> single, @NonNull final ViewNotifier<V, T> viewNotifier) {
         Subscription subscription = startSubscription(single, new SingleSubscriber<T>() {
@@ -253,12 +271,61 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
+    //endregion
+
+
+    //region Completable
+
+    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(completable, onComplete);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
+    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
+        Subscription subscription = startSubscription(completable, onComplete, onError);
+
+        viewHolder.subscriptions.add(subscription);
+
+        return subscription;
+    }
+
+    //endregion
+
+
     private <T> Subscription startSubscription(Observable<T> observable, Observer<? super T> observer) {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .unsubscribeOn(Schedulers.io())
                 .subscribe(observer);
+    }
+
+    private <T> Subscription startSubscription(Observable<T> observable, Action1<T> onSuccess) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(onSuccess);
+    }
+
+    private <T> Subscription startSubscription(Observable<T> observable, Action1<T> onSuccess, Action1<Throwable> onError) {
+        return observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(onSuccess, onError);
+    }
+
+    private <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
+        return single
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
     }
 
     private <T> Subscription startSubscription(Single<T> single, Action1<T> onSuccess) {
@@ -268,11 +335,11 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(onSuccess);
     }
 
-    private <T> Subscription startSubscription(Single<T> single, SingleSubscriber<T> subscriber) {
+    private <T> Subscription startSubscription(Single<T> single, Action1<T> onSuccess, Action1<Throwable> onError) {
         return single
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+                .subscribe(onSuccess, onError);
     }
 
     private Subscription startSubscription(Completable completable, Action0 onComplete) {

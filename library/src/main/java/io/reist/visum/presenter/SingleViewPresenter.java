@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import io.reist.visum.view.VisumView;
 import rx.Completable;
-import rx.CompletableSubscriber;
 import rx.Observable;
 import rx.Observer;
 import rx.Single;
@@ -54,17 +53,42 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
         return view(DEFAULT_VIEW_ID);
     }
 
+
+    //region Observable
+
     public final <T> Subscription subscribe(Observable<T> observable, Observer<? super T> observer) {
         return subscribe(DEFAULT_VIEW_ID, observable, observer);
+    }
+
+    public final <T> Subscription subscribe(Observable<T> observable, Action1<T> action, Action1<Throwable> error) {
+        return subscribe(DEFAULT_VIEW_ID, observable, action, error);
+    }
+
+    public final <T> Subscription subscribe(Observable<T> observable, Action1<T> action) {
+        return subscribe(DEFAULT_VIEW_ID, observable, action);
+    }
+
+    //endregion
+
+
+    //region Single
+
+    public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
+        return subscribe(DEFAULT_VIEW_ID, single, subscriber);
+    }
+
+    public final <T> Subscription subscribe(Single<T> single, Action1<T> action, Action1<Throwable> onError) {
+        return subscribe(DEFAULT_VIEW_ID, single, action, onError);
     }
 
     public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
         return subscribe(DEFAULT_VIEW_ID, single, action);
     }
 
-    public final <T> Subscription subscribe(Single<T> single, SingleSubscriber<T> subscriber) {
-        return subscribe(DEFAULT_VIEW_ID, single, subscriber);
-    }
+    //endregion
+
+
+    //region Completable
 
     public final Subscription subscribe(Completable completable, Action0 onComplete) {
         return subscribe(DEFAULT_VIEW_ID, completable, onComplete);
@@ -73,5 +97,7 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
     public final Subscription subscribe(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         return subscribe(DEFAULT_VIEW_ID, completable, onComplete, onError);
     }
+
+    //endregion
 
 }

@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.3.1'
     }
 
 }
@@ -27,7 +27,7 @@ android {
     }
 
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
 
@@ -55,7 +55,7 @@ android {
 
 }
 
-def supportVersion = '25.0.1'
+def supportVersion = '25.3.1'
 def robolectricVersion = '3.1.4'
 
 dependencies {

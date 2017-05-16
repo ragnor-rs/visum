@@ -27,6 +27,7 @@ import java.util.List;
 public class VisumFragmentUtils {
 
     protected static void detachPresenterInChildFragments(FragmentManager childFragmentManager) {
+        @SuppressWarnings("RestrictedApi")
         List<Fragment> fragments = childFragmentManager.getFragments();
         if (fragments == null) {
             return;
@@ -43,6 +44,7 @@ public class VisumFragmentUtils {
     }
 
     protected static void attachPresenterInChildFragments(FragmentManager childFragmentManager) {
+        @SuppressWarnings("RestrictedApi")
         List<Fragment> fragments = childFragmentManager.getFragments();
         if (fragments == null) {
             return;

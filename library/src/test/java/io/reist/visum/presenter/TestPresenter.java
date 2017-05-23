@@ -26,7 +26,7 @@ import io.reist.visum.view.VisumView;
 /**
  * Created by Reist on 26.05.16.
  */
-public class TestPresenter extends VisumPresenter<VisumView> implements PresenterAssert.AssertTestPresenter{
+public class TestPresenter extends VisumPresenter<VisumView> implements PresenterAssert.AssertTestPresenter {
 
     private final TestPresenter dummy = Mockito.mock(TestPresenter.class);
 

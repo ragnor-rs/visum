@@ -55,17 +55,17 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
-public class ReposPresentersTest extends RobolectricTestCase {
+public class RepoListPresenterTest extends RobolectricTestCase {
 
     @Inject
-    RepoListPresenter mRepoListPresenter;
+    RepoListPresenter repoListPresenter;
 
     @Inject
-    RepoEditPresenter mRepoEditPresenter;
+    RepoEditPresenter repoEditPresenter;
 
     @Before
     public void initComponents() {
-        DaggerReposPresentersTest_TestComponent
+        DaggerRepoListPresenterTest_TestComponent
                 .builder()
                 .reposModule(new TestReposModule())
                 .sandboxModule(new SandboxModule(RuntimeEnvironment.application))
@@ -77,7 +77,7 @@ public class ReposPresentersTest extends RobolectricTestCase {
     @Component(modules = SandboxModule.class)
     public interface TestComponent {
 
-        void inject(ReposPresentersTest reposPresentersTest);
+        void inject(RepoListPresenterTest repoListPresenterTest);
 
     }
 
@@ -125,28 +125,28 @@ public class ReposPresentersTest extends RobolectricTestCase {
 
     @Test
     public void testRepoListPresenter() throws InterruptedException {
-        assertThat(mRepoListPresenter).isNotNull();
+        assertThat(repoListPresenter).isNotNull();
 
-        mRepoListPresenter.setView(mock(RepoListView.class));
+        repoListPresenter.setView(mock(RepoListView.class));
 
         Thread.sleep(1000);
 
-        assertThat(mRepoListPresenter.isDataLoaded()).isTrue();
+        assertThat(repoListPresenter.isDataLoaded()).isTrue();
     }
 
     @Test
     public void testRepoEditPresenter() throws InterruptedException {
-        assertThat(mRepoEditPresenter).isNotNull();
+        assertThat(repoEditPresenter).isNotNull();
 
         RepoEditView mockedRepoEditView = mock(RepoEditView.class);
 
         when(mockedRepoEditView.getRepoId()).thenReturn(1L);
 
-        mRepoEditPresenter.setView(mockedRepoEditView);
+        repoEditPresenter.setView(mockedRepoEditView);
 
         Thread.sleep(1000);
 
-        assertThat(mRepoEditPresenter.isDataLoaded()).isTrue();
+        assertThat(repoEditPresenter.isDataLoaded()).isTrue();
     }
 
 }

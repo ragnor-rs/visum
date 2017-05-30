@@ -7,7 +7,7 @@ buildscript {
 
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'me.tatarka:gradle-retrolambda:3.3.1'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
         classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
         classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
     }
@@ -35,7 +35,7 @@ android {
     }
 
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
 
@@ -68,10 +68,10 @@ android {
 }
 
 def supportVersion = '25.3.1'
-def retrofitVersion = '2.1.0'
-def storioVersion = '1.11.0'
-def daggerVersion = '2.8'
-def butterknifeVersion = '8.4.0'
+def retrofitVersion = '2.3.0'
+def storioVersion = '1.13.0'
+def daggerVersion = '2.10'
+def butterknifeVersion = '8.6.0'
 def supportTestVersion = '0.5'
 def espressoVersion = '2.2.2'
 
@@ -104,17 +104,17 @@ dependencies {
     apt ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile 'com.github.ragnor-rs:dali:093f33996498b5eeb8a59374be678e7b23a38df1'
-    compile 'com.github.m039:el-adapter:1de79186b4cfffa20e4f05173dbd3a113e612a7b'
+    compile 'com.github.ragnor-rs:dali:b00c9ea6ea6d125aba1a3d1783b3869394b7b4ea'
+    compile 'com.github.ragnor-rs:el-adapter:55c27dabc53fcccde128732b2c05efe81b6b9432'
 
     compile project(':library')
 
     // junit tests
 
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.1.4"
-    testCompile "org.mockito:mockito-core:2.2.24"
-    testCompile 'org.assertj:assertj-core:3.6.0'
+    testCompile "org.robolectric:robolectric:3.3.2"
+    testCompile "org.mockito:mockito-core:2.8.9"
+    testCompile 'org.assertj:assertj-core:3.8.0'
 
     testApt "com.google.dagger:dagger-compiler:$daggerVersion"
 

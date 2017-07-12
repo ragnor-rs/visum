@@ -89,3 +89,12 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives sourcesJar
 }
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat "full"
+        events "passed", "failed"
+        showStandardStreams true
+    }
+}
+

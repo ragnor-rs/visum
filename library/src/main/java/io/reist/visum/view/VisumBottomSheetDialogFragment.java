@@ -129,7 +129,13 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
 
     @Override
     public void onHiddenChanged(boolean hidden) {
+
+        if (hidden && !presenterAttached || !hidden && presenterAttached) {
+            return;
+        }
+
         FragmentManager childFragmentManager = getChildFragmentManager();
+
         if (hidden) {
             detachPresenter();
             detachPresenterInChildFragments(childFragmentManager);
@@ -137,6 +143,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
             attachPresenter();
             attachPresenterInChildFragments(childFragmentManager);
         }
+
     }
 
     @Override

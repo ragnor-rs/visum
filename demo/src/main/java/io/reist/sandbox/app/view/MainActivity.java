@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.reist.sandbox.R;
+import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyFragment;
 import io.reist.sandbox.feed.view.FeedListFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
@@ -136,6 +137,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_weather:
                 showFragment(new WeatherFragment(), true, true);
+                break;
+            case R.id.nav_cryptocurrency:
+                showFragment(new CryptoCurrencyFragment(), true, true);
                 break;
         }
 

@@ -44,6 +44,11 @@ import io.reist.sandbox.app.model.UserStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.local.DbOpenHelper;
 import io.reist.sandbox.app.model.remote.NestedFieldNameAdapter;
 import io.reist.sandbox.app.model.remote.SandboxApi;
+import io.reist.sandbox.cryptocurrency.CryptoCurrencyModule;
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemStorIOSQLiteGetResolver;
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemStorIOSQLitePutResolver;
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
@@ -67,7 +72,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
         TimeModule.class,
         ResultModule.class,
         WeatherModule.class,
-        FeedModule.class
+        FeedModule.class,
+        CryptoCurrencyModule.class
 })
 public class SandboxModule {
 
@@ -122,6 +128,14 @@ public class SandboxModule {
                                 .putResolver(new CommentStorIOSQLitePutResolver())
                                 .getResolver(new CommentStorIOSQLiteGetResolver())
                                 .deleteResolver(new CommentStorIOSQLiteDeleteResolver())
+                                .build()
+                )
+                .addTypeMapping(
+                        CryptoCurrencyItem.class,
+                        SQLiteTypeMapping.<CryptoCurrencyItem>builder()
+                                .putResolver(new CryptoCurrencyItemStorIOSQLitePutResolver())
+                                .getResolver(new CryptoCurrencyItemStorIOSQLiteGetResolver())
+                                .deleteResolver(new CryptoCurrencyItemStorIOSQLiteDeleteResolver())
                                 .build()
                 )
                 .build();

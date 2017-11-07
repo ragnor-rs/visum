@@ -17,8 +17,8 @@ import io.reist.sandbox.core.ActivityInstrumentationTestCase;
 import io.reist.sandbox.core.TestUtils;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(AndroidJUnit4.class)
 public class CryptoCurrencyUiTest extends ActivityInstrumentationTestCase<MainActivity> {
@@ -44,18 +44,20 @@ public class CryptoCurrencyUiTest extends ActivityInstrumentationTestCase<MainAc
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_cryptocurrency));
 
-        onView(isRoot()).perform(TestUtils.waitId(R.id.cryptocurrency_recycler_view, TestUtils.ACTION_TIMEOUT, v -> (hasPrice(R.id.cryptocurrency_recycler_view, 0) != 0)));
+        onView(isRoot()).perform(TestUtils.waitId(R.id.cryptocurrency_recycler_view, TestUtils.ACTION_TIMEOUT));
+
+        assertNotEquals(hasPrice(R.id.cryptocurrency_recycler_view, 0), "");
 
     }
 
-    private float hasPrice(@IdRes int recyclerViewId, int position) {
+    private String hasPrice(@IdRes int recyclerViewId, int position) {
 
         TextView price = (TextView) ((RecyclerView) mMainActivity.findViewById(recyclerViewId))
                 .findViewHolderForAdapterPosition(position)
                 .itemView
                 .findViewById(R.id.item_cryptocurrency_price);
 
-        return Float.valueOf(price.getText().toString());
+        return price.getText().toString();
 
     }
 

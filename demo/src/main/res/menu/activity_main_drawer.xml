@@ -28,4 +28,10 @@
         android:icon="@drawable/ic_sun_cloud"
         android:title="@string/weather_nav_title" />
 
+
+    <item
+        android:id="@+id/nav_restaurants"
+        android:icon="@drawable/ic_sun_cloud"
+        android:title="@string/weather_nav_title" />
+
 </menu>

@@ -32,6 +32,7 @@
     <string name="get_weather">Get weather</string>
     <string name="enter_city">Enter city</string>
     <string name="weather_nav_title">Weather</string>
+    <string name="restaurants_nav_title">Restaurants</string>
     <string name="temperature">Temperature:</string>
     <string name="no_degrees_label">no degrees</string>
     <string name="no_pressure_label">no pressure</string>

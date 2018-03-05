@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 
 import io.reist.sandbox.feed.model.local.CommentTable;
 import io.reist.sandbox.feed.model.local.PostTable;
+import io.reist.sandbox.food.model.local.RestaurantsTable;
 import io.reist.sandbox.repos.model.local.RepoTable;
 import io.reist.sandbox.users.model.local.UserTable;
 
@@ -35,6 +36,7 @@ public class DbOpenHelper extends BaseDbHelper {
         addTable(UserTable.class);
         addTable(PostTable.class);
         addTable(CommentTable.class);
+        addTable(RestaurantsTable.class);
     }
 
 }

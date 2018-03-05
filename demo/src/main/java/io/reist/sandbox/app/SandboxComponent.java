@@ -20,6 +20,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import io.reist.sandbox.feed.FeedComponent;
+import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.repos.ReposComponent;
 import io.reist.sandbox.result.ResultComponent;
 import io.reist.sandbox.time.TimeComponent;
@@ -41,5 +42,7 @@ public interface SandboxComponent {
     WeatherComponent weatherComponent();
 
     FeedComponent feedComponent();
+
+    RestaurantComponent restaurantComponent();
 
 }

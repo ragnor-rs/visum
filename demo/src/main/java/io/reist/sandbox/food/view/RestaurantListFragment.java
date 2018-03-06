@@ -1,5 +1,9 @@
 package io.reist.sandbox.food.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.TextureView;
@@ -33,6 +37,7 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
 
     @Inject
     RestaurantListPresenter presenter;
+    private final int MY_PERMISSIONS_REQUEST = 1233;
 
     public RestaurantListFragment() {
         super(R.layout.fragment_food);
@@ -41,6 +46,18 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
     @Override
     public void attachPresenter() {
         super.attachPresenter();
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        && (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                    },
+                    MY_PERMISSIONS_REQUEST);
+        } else{
+            getPresenter().init();
+
+        }
     }
 
     @Override
@@ -61,7 +78,22 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
     }
 
     @Override
-    public void hideLoader(){
+    public void hideLoader() {
         loaderView.hide();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getPresenter().init();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 }

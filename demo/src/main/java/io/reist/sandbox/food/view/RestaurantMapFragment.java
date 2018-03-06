@@ -56,6 +56,7 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
         fragmentTransaction.commit();
 
         getPresenter().initPresenter(getArguments().getString(ARG_RESTAURANT));
+        moveMapToUser();
     }
 
     @Override
@@ -64,20 +65,23 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
     }
 
     @Override
-    public void setRestaurantCoordinates(double lat, double lon) {
-
-        mapFragment.getMapAsync(map ->
-                map.addMarker(new MarkerOptions()
-                        .position(new LatLng(lat, lon))
-                        .title("Marker")));
-    }
-
-    @Override
-    public void moveMapToUser(LatLng latLng) {
+    public void setRestaurantCoordinates(LatLng latLng, String name) {
         mapFragment.getMapAsync(map -> {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+            map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(name));
         });
-//                map.setMyLocationEnabled(true));
+    }
+
+    public void moveMapToUser() {
+        mapFragment.getMapAsync(map -> {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            map.setMyLocationEnabled(true);
+        });
 
     }
 

@@ -1,6 +1,8 @@
 package io.reist.sandbox.food.model;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +11,11 @@ import javax.inject.Inject;
 
 import io.reist.sandbox.food.model.dto.RestaurantDto;
 import io.reist.sandbox.food.model.dto.RestaurantsDto;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 import io.reist.sandbox.food.model.local.RestaurantsService;
 import io.reist.sandbox.food.model.remote.RestaurantApi;
 import rx.Observable;
 import rx.SingleSubscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
@@ -24,6 +26,7 @@ import static android.media.CamcorderProfile.get;
  */
 
 public class RestaurantMonitor {
+    private final String KEY = "AIzaSyA5rbx7kV-wcHYLqef3BpWTf8YiiVc6GF8";
 
     private RestaurantsService restaurantService;
     private RestaurantApi restaurantApi;
@@ -38,30 +41,19 @@ public class RestaurantMonitor {
 
     }
 
-    public void update() {
-        restaurantApi.searchForRestaurants(String.format("%s,%s", 55.741453, 37.628418), "bar", 1000, true, "AIzaSyA5rbx7kV-wcHYLqef3BpWTf8YiiVc6GF8")
+    public void findRestaurants(LatLng latLng) {
+        restaurantApi.searchForRestaurants(String.format("%s,%s", latLng.latitude, latLng.longitude), "bar", 1000, true, KEY)
                 .subscribeOn(Schedulers.io())
                 .subscribe(restaurantsFound);
     }
 
-    private void takeCachedRestaurants() {
-        restaurantService.list()
-                .observeOn(Schedulers.newThread())
-                .subscribeOn(Schedulers.newThread())
-                .doOnError((error) -> {
-                    Log.d("", "");
-                })
-                .subscribe((response) -> {
-                    if (!response.isSuccessful()) {
-                        return;
-                    }
-                    List<RestaurantEntity> restaurants = response.getResult();
-                    restaurantModels.clear();
-                    for (RestaurantEntity restaurant : restaurants) {
-                        restaurantModels.add(new RestaurantModel(restaurant));
-                    }
-                    restaurantModelsSubject.onNext(restaurantModels);
-                });
+    public RestaurantModel getRestaurantById(String id) {
+        for (RestaurantModel restaurant : restaurantModels) {
+            if (restaurant.getId().equals(id)) {
+                return restaurant;
+            }
+        }
+        return null;
     }
 
     public Observable<List<RestaurantModel>> getRestaurantsFound() {
@@ -87,6 +79,32 @@ public class RestaurantMonitor {
     };
 
     private void saveToDatabase() {
+        ArrayList<RestaurantEntity> restaurantEntities = mapModelsToEntities();
+        restaurantService.save(restaurantEntities)
+                .subscribeOn(Schedulers.io())
+                .subscribe((response) -> {
+                });
+    }
+
+    private void takeCachedRestaurants() {
+        restaurantService.list()
+                .subscribeOn(Schedulers.io())
+                .subscribe((response) -> {
+                    if (!response.isSuccessful()) {
+                        return;
+                    }
+
+                    restaurantModels.clear();
+                    List<RestaurantEntity> restaurants = response.getResult();
+                    for (RestaurantEntity restaurant : restaurants) {
+                        restaurantModels.add(new RestaurantModel(restaurant));
+                    }
+                    restaurantModelsSubject.onNext(restaurantModels);
+                });
+    }
+
+    @NonNull
+    private ArrayList<RestaurantEntity> mapModelsToEntities() {
         ArrayList<RestaurantEntity> restaurantEntities = new ArrayList<>();
         for (RestaurantModel restaurant : restaurantModels) {
             RestaurantEntity restaurantEntity = new RestaurantEntity();
@@ -97,22 +115,7 @@ public class RestaurantMonitor {
             restaurantEntity.lon = restaurant.getLon();
             restaurantEntities.add(restaurantEntity);
         }
-        restaurantService.save(restaurantEntities)
-                .subscribeOn(Schedulers.io())
-                .doOnError((err) -> {
-                    err.getMessage();
-                })
-                .subscribe((response) -> {
-                    response.isSuccessful();
-                });
+        return restaurantEntities;
     }
 
-    public RestaurantModel getRestaurantById(String id) {
-        for (RestaurantModel restaurant : restaurantModels) {
-            if (restaurant.getId().equals(id)) {
-                return restaurant;
-            }
-        }
-        return null;
-    }
 }

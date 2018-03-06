@@ -1,6 +1,7 @@
 package io.reist.sandbox.food.model;
 
 import io.reist.sandbox.food.model.dto.RestaurantDto;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 
 /**
  * Created by Fedorov-DA on 01.03.2018.

@@ -74,13 +74,13 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
         });
     }
 
+    @SuppressWarnings({"MissingPermission"})
     public void moveMapToUser() {
         mapFragment.getMapAsync(map -> {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                map.setMyLocationEnabled(true);
             }
-            map.setMyLocationEnabled(true);
         });
 
     }

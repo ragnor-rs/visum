@@ -97,3 +97,7 @@
 -keepclassmembers class * {
     @com.fernandocejas.frodo.annotation.RxLogObservable *;
 }
+
+#GMS
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**

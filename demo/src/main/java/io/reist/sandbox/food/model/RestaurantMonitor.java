@@ -42,7 +42,7 @@ public class RestaurantMonitor {
     }
 
     public void findRestaurants(LatLng latLng) {
-        restaurantApi.searchForRestaurants(String.format("%s,%s", latLng.latitude, latLng.longitude), "bar", 1000, true, KEY)
+        restaurantApi.searchForRestaurants(String.format("%s,%s", latLng.latitude, latLng.longitude), "restaurant", 1000, true, KEY)
                 .subscribeOn(Schedulers.io())
                 .subscribe(restaurantsFound);
     }

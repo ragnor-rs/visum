@@ -28,10 +28,6 @@ public class RestaurantModel {
                 : dto.name;
     }
 
-    public String getDistance() {
-        return "dist";
-    }
-
     public String getRating() {
         return isLocal
                 ? entity.rating

@@ -46,7 +46,6 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantViewHolde
     public void onBindViewHolder(RestaurantViewHolder holder, int position) {
         RestaurantModel restaurant = restaurants.get(position);
         holder.setName(restaurant.getName());
-        holder.setDistance(restaurant.getDistance());
         holder.setRating(restaurant.getRating());
         holder.onClick(()-> onRestaurantClickListener.onClick(restaurant));
     }

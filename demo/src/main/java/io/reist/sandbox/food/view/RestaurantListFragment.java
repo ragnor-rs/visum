@@ -82,18 +82,4 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
         loaderView.hide();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getPresenter().init();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
-    }
 }

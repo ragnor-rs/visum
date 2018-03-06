@@ -17,14 +17,12 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.restaurant_name_text)
     TextView name;
-    @BindView(R.id.restaurant_distance_text)
-    TextView distance;
     @BindView(R.id.restaurant_rating_text)
     TextView rating;
     @BindView(R.id.restaurant__item)
     LinearLayout item;
 
-    Runnable onClickRunner;
+    private Runnable onClickRunner;
 
     public RestaurantViewHolder(View view) {
         super(view);
@@ -34,10 +32,6 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     public void setName(String _name) {
         name.setText(_name);
-    }
-
-    public void setDistance(String _distance) {
-        distance.setText(_distance);
     }
 
     public void setRating(String _rating) {

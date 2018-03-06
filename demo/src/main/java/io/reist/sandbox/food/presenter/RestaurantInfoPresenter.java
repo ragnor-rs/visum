@@ -34,7 +34,6 @@ public class RestaurantInfoPresenter extends VisumPresenter<RestaurantInfoView> 
         restaurantId = _restaurantId;
         restaurant=restaurantMonitor.getRestaurantById(restaurantId);
         view(INFO_FRAGMENT).setName(restaurant.getName());
-        view(INFO_FRAGMENT).setDistance(restaurant.getDistance());
         view(INFO_FRAGMENT).setRating(restaurant.getRating());
     }
 }

@@ -30,15 +30,15 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         item.setOnClickListener(view1 -> onClickRunner.run());
     }
 
-    public void setName(String _name) {
-        name.setText(_name);
+    public void setName(String name) {
+        this.name.setText(name);
     }
 
-    public void setRating(String _rating) {
-        rating.setText(_rating);
+    public void setRating(String rating) {
+        this.rating.setText(rating);
     }
 
-    public void onClick(Runnable _onClickRunner) {
-        onClickRunner = _onClickRunner;
+    public void onClick(Runnable onClickRunner) {
+        this.onClickRunner = onClickRunner;
     }
 }

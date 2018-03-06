@@ -30,8 +30,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantViewHolde
 
     private OnRestaurantClickListener onRestaurantClickListener;
 
-    public void setOnUserClickListener(OnRestaurantClickListener _onRestaurantClickListener) {
-        onRestaurantClickListener = _onRestaurantClickListener;
+    public void setOnUserClickListener(OnRestaurantClickListener onRestaurantClickListener) {
+        this.onRestaurantClickListener = onRestaurantClickListener;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantViewHolde
         RestaurantModel restaurant = restaurants.get(position);
         holder.setName(restaurant.getName());
         holder.setRating(restaurant.getRating());
-        holder.onClick(()-> onRestaurantClickListener.onClick(restaurant));
+        holder.onClick(() -> onRestaurantClickListener.onClick(restaurant));
     }
 
     @Override
@@ -55,9 +55,8 @@ public class RestaurantsAdapter extends RecyclerView.Adapter<RestaurantViewHolde
         return restaurants.size();
     }
 
-
-    public void setRestaurants(List<RestaurantModel> _restaurants) {
-        restaurants = _restaurants;
+    public void setRestaurants(List<RestaurantModel> restaurants) {
+        this.restaurants = restaurants;
         notifyDataSetChanged();
     }
 }

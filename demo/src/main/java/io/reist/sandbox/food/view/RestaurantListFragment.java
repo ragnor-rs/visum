@@ -67,9 +67,9 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
 
 
     @Override
-    public void setRestaurantsListAdapter(RestaurantsAdapter _restaurantsAdapter) {
+    public void setRestaurantsListAdapter(RestaurantsAdapter restaurantsAdapter) {
         restaurantsListView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        restaurantsListView.setAdapter(_restaurantsAdapter);
+        restaurantsListView.setAdapter(restaurantsAdapter);
     }
 
     @Override

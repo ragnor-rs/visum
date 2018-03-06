@@ -29,9 +29,9 @@ public class GeopositionMonitor {
     private FusedLocationProviderClient locationProviderClient;
 private Context context;
 private BehaviorSubject<LatLng> location = BehaviorSubject.create();
-    public GeopositionMonitor(Context _context) {
-        context=_context;
-        locationProviderClient = LocationServices.getFusedLocationProviderClient(_context);
+    public GeopositionMonitor(Context context) {
+        this.context=context;
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         initiateLocation();
     }
 
@@ -48,9 +48,9 @@ private BehaviorSubject<LatLng> location = BehaviorSubject.create();
         }
         locationProviderClient.getLastLocation()
                 .addOnCompleteListener(task -> {
-                    Location _location = task.getResult();
-                    if (task.isSuccessful() && _location != null) {
-                        location.onNext(new LatLng(_location.getLatitude(), _location.getLongitude()));
+                    Location location = task.getResult();
+                    if (task.isSuccessful() && location != null) {
+                        this.location.onNext(new LatLng(location.getLatitude(), location.getLongitude()));
                     }
                 });
     }

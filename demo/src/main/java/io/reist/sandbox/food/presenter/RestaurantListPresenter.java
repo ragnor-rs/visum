@@ -28,9 +28,9 @@ public class RestaurantListPresenter extends SingleViewPresenter<RestaurantListV
     private RestaurantsAdapter restaurantsAdapter = new RestaurantsAdapter();
 
     @Inject
-    public RestaurantListPresenter(RestaurantMonitor _restaurantMonitor, GeopositionMonitor _geopositionMonitor) {
-        restaurantMonitor = _restaurantMonitor;
-        geopositionMonitor = _geopositionMonitor;
+    public RestaurantListPresenter(RestaurantMonitor restaurantMonitor, GeopositionMonitor geopositionMonitor) {
+        this.restaurantMonitor = restaurantMonitor;
+        this.geopositionMonitor = geopositionMonitor;
         restaurantMonitor.getRestaurantsFound()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

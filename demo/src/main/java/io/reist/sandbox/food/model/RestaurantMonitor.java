@@ -35,9 +35,9 @@ public class RestaurantMonitor {
     BehaviorSubject<List<RestaurantModel>> restaurantModelsSubject = BehaviorSubject.create();
 
     @Inject
-    public RestaurantMonitor(RestaurantApi _restaurantApi, RestaurantsService _restaurantService) {
-        restaurantApi = _restaurantApi;
-        restaurantService = _restaurantService;
+    public RestaurantMonitor(RestaurantApi restaurantApi, RestaurantsService restaurantService) {
+        this.restaurantApi = restaurantApi;
+        this.restaurantService = restaurantService;
 
     }
 
@@ -63,9 +63,9 @@ public class RestaurantMonitor {
 
     private SingleSubscriber<RestaurantsDto> restaurantsFound = new SingleSubscriber<RestaurantsDto>() {
         @Override
-        public void onSuccess(RestaurantsDto _restaurantsDto) {
+        public void onSuccess(RestaurantsDto restaurantsDto) {
             restaurantModels.clear();
-            for (RestaurantDto restaurant : _restaurantsDto.results) {
+            for (RestaurantDto restaurant : restaurantsDto.results) {
                 restaurantModels.add(new RestaurantModel(restaurant));
             }
             restaurantModelsSubject.onNext(restaurantModels);

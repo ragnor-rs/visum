@@ -21,8 +21,8 @@ public class RestaurantPresenter extends VisumPresenter<RestaurantView> {
     private RestaurantModel restaurant;
 
     @Inject
-    public RestaurantPresenter(RestaurantMonitor _restaurantMonitor) {
-        restaurantMonitor = _restaurantMonitor;
+    public RestaurantPresenter(RestaurantMonitor restaurantMonitor) {
+        this.restaurantMonitor = restaurantMonitor;
     }
 
     @Override
@@ -30,8 +30,8 @@ public class RestaurantPresenter extends VisumPresenter<RestaurantView> {
         super.onViewAttached(id, view);
     }
 
-    public void setRestaurantId(String _restaurantId) {
-        restaurantId = _restaurantId;
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
         restaurant = restaurantMonitor.getRestaurantById(restaurantId);
         view(RESTAURANT_FRAGMENT).showInfo(restaurantId);
         view(RESTAURANT_FRAGMENT).showMap(restaurantId);

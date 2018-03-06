@@ -12,13 +12,13 @@ public class RestaurantModel {
     RestaurantDto dto;
     private boolean isLocal;
 
-    public RestaurantModel(RestaurantDto _dto) {
-        dto = _dto;
+    public RestaurantModel(RestaurantDto dto) {
+        this.dto = dto;
         isLocal = false;
     }
 
-    public RestaurantModel(RestaurantEntity _entity) {
-        entity = _entity;
+    public RestaurantModel(RestaurantEntity entity) {
+        entity = entity;
         isLocal = true;
     }
 

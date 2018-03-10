@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import io.reist.sandbox.R;
 import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyFragment;
 import io.reist.sandbox.feed.view.FeedListFragment;
+import io.reist.sandbox.food.view.RestaurantListFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
 import io.reist.sandbox.time.view.TimeFragment;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.addOnBackStackChangedListener(this);
 
         if (savedInstanceState == null) {
-            showFragment(new RepoListFragment(), false);
+            showFragment(new RestaurantListFragment(), false);
         }
         syncBackStack();
 
@@ -140,6 +141,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_cryptocurrency:
                 showFragment(new CryptoCurrencyFragment(), true, true);
+                break;
+            case R.id.nav_restaurants:
+                showFragment(new RestaurantListFragment(), true, true);
                 break;
         }
 

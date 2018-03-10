@@ -52,6 +52,11 @@ import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemStorIOSQLit
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
+import io.reist.sandbox.food.model.RestaurantEntity;
+import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteGetResolver;
+import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLitePutResolver;
+import io.reist.sandbox.food.model.RestaurantModule;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -73,7 +78,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
         ResultModule.class,
         WeatherModule.class,
         FeedModule.class,
-        CryptoCurrencyModule.class
+        CryptoCurrencyModule.class,
+        RestaurantModule.class
 })
 public class SandboxModule {
 
@@ -136,6 +142,14 @@ public class SandboxModule {
                                 .putResolver(new CryptoCurrencyItemStorIOSQLitePutResolver())
                                 .getResolver(new CryptoCurrencyItemStorIOSQLiteGetResolver())
                                 .deleteResolver(new CryptoCurrencyItemStorIOSQLiteDeleteResolver())
+                                .build()
+                )
+                .addTypeMapping(
+                        RestaurantEntity.class,
+                        SQLiteTypeMapping.<RestaurantEntity>builder()
+                                .putResolver(new RestaurantEntityStorIOSQLitePutResolver())
+                                .getResolver(new RestaurantEntityStorIOSQLiteGetResolver())
+                                .deleteResolver(new RestaurantEntityStorIOSQLiteDeleteResolver())
                                 .build()
                 )
                 .build();

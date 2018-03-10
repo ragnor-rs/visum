@@ -21,6 +21,10 @@ import android.content.Context;
 import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyFragment;
 import io.reist.sandbox.feed.view.FeedDetailFragment;
 import io.reist.sandbox.feed.view.FeedListFragment;
+import io.reist.sandbox.food.view.RestaurantFragment;
+import io.reist.sandbox.food.view.RestaurantInfoFragment;
+import io.reist.sandbox.food.view.RestaurantListFragment;
+import io.reist.sandbox.food.view.RestaurantMapFragment;
 import io.reist.sandbox.repos.view.RepoEditFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
@@ -70,6 +74,13 @@ public class SandboxComponentCache extends ComponentCache {
         register(
                 sandboxComponent::feedComponent,
                 FeedListFragment.class, FeedDetailFragment.class
+        );
+        register(
+                sandboxComponent::restaurantComponent,
+                RestaurantListFragment.class,
+                RestaurantFragment.class,
+                RestaurantMapFragment.class,
+                RestaurantInfoFragment.class
         );
 
         register(

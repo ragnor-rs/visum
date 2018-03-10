@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 public final class CryptoCurrencyPrice {
 
     @SerializedName("USD")

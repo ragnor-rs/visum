@@ -9,7 +9,6 @@ import io.reist.visum.view.VisumView;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 public interface CryptoCurrencyView extends VisumView<CryptoCurrencyPresenter> {
 
     void showLoading(boolean show);

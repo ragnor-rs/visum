@@ -25,19 +25,18 @@ import io.reist.sandbox.cryptocurrency.presenter.CryptoCurrencyPresenter;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPresenter> implements CryptoCurrencyView {
 
     @Inject
     CryptoCurrencyPresenter presenter;
 
     @BindView(R.id.cryptocurrency_recycler_view)
-    RecyclerView recycler_view;
+    RecyclerView recycler;
 
     @BindView(R.id.cryptocurrency_loader_view)
-    LoaderView loader_view;
+    LoaderView loader;
 
-    private ListItemAdapter list_adapter;
+    private ListItemAdapter adapter;
 
     public CryptoCurrencyFragment() {
         super(R.layout.fragment_cryptocurrency);
@@ -52,13 +51,13 @@ public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPre
     public void attachPresenter() {
         super.attachPresenter();
 
-        recycler_view.setHasFixedSize(true);
+        recycler.setHasFixedSize(true);
 
-        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        list_adapter = new ListItemAdapter();
+        adapter = new ListItemAdapter();
 
-        list_adapter
+        adapter
             .addViewCreator(CryptoCurrencyItem.class, parent -> LayoutInflater.from(getActivity()).inflate(R.layout.item_cryptocurrency, parent, false))
             .addViewBinder((view, item) -> {
 
@@ -71,30 +70,32 @@ public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPre
 
         });
 
-        recycler_view.setAdapter(list_adapter);
+        recycler.setAdapter(adapter);
 
     }
 
     @Override
     public void showLoading(boolean show) {
-        loader_view.showLoading(show);
+        loader.showLoading(show);
     }
 
     @Override
     public void showData(List<CryptoCurrencyItem> items) {
 
-        loader_view.hide();
+        loader.hide();
 
-        for (CryptoCurrencyItem item : items) list_adapter.addItem(item);
+        for (CryptoCurrencyItem item : items) {
+            adapter.addItem(item);
+        }
 
-        list_adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
 
     }
 
     @Override
     public void showError() {
 
-        loader_view.hide();
+        loader.hide();
 
         Toast.makeText(this.getContext(), "Error", Toast.LENGTH_LONG).show();
 

@@ -18,7 +18,6 @@ import rx.Observer;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 @Singleton
 public final class CryptoCurrencyPresenter extends SingleViewPresenter<CryptoCurrencyView> {
 

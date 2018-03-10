@@ -15,58 +15,53 @@ import rx.Observable;
 /**
  * Created by Sergey on 03/11/2017.
  */
-
 public final class CryptoCurrencyRemoteService implements CryptoCurrencyBaseService {
 
-    private CryptoCurrencyServerListAPI api_list;
-    private CryptoCurrencyServerPriceAPI api_price;
+    private CryptoCurrencyServerListAPI apiList;
+    private CryptoCurrencyServerPriceAPI apiPrice;
 
-    private CryptoCurrencyList items_list;
-    private Map<String, CryptoCurrencyPrice> items_price;
+    private CryptoCurrencyList itemsList;
+    private Map<String, CryptoCurrencyPrice> itemsPrice;
 
-    public CryptoCurrencyRemoteService(CryptoCurrencyServerListAPI api_list, CryptoCurrencyServerPriceAPI api_price) {
-        this.api_list = api_list;
-        this.api_price = api_price;
+    public CryptoCurrencyRemoteService(CryptoCurrencyServerListAPI apiList, CryptoCurrencyServerPriceAPI apiPrice) {
+        this.apiList = apiList;
+        this.apiPrice = apiPrice;
     }
 
-    private Observable<SandboxResponse<List<CryptoCurrencyItem>>> getResult(CryptoCurrencyList items_list, Map<String, CryptoCurrencyPrice> items_price) {
-
+    private Observable<SandboxResponse<List<CryptoCurrencyItem>>> getResult(CryptoCurrencyList itemsList, Map<String, CryptoCurrencyPrice> itemsPrice) {
         return Observable.fromCallable(() -> {
 
             List<CryptoCurrencyItem> result = new ArrayList<>();
 
-            for (String key : items_price.keySet()) {
+            for (String key : itemsPrice.keySet()) {
 
-                CryptoCurrencyList.Details details = items_list.data.get(key);
+                CryptoCurrencyList.Details details = itemsList.data.get(key);
 
-                if (details != null) result.add(new CryptoCurrencyItem(key, String.format(Locale.ENGLISH,"%.6f", items_price.get(key).price), items_list.base_url + details.image));
+                if (details != null) result.add(new CryptoCurrencyItem(key, String.format(Locale.ENGLISH,"%.6f", itemsPrice.get(key).price), itemsList.baseUrl + details.image));
 
             }
 
             return new SandboxResponse<>(result);
 
         });
-
     }
 
     @Override
     public Observable<SandboxResponse<List<CryptoCurrencyItem>>> list() {
-
-        return api_list.getCurrencyList()
+        return apiList.getCurrencyList()
                 .flatMap(cryptoCurrencyList -> {
 
-                    items_list = cryptoCurrencyList;
+                    itemsList = cryptoCurrencyList;
 
-                    return api_price.getCurrencyPrice(items_list.toString(), "USD");
+                    return apiPrice.getCurrencyPrice(itemsList.toString(), "USD");
 
                 }).flatMap(stringCryptoCurrencyPriceMap -> {
 
-                    items_price = stringCryptoCurrencyPriceMap;
+                    itemsPrice = stringCryptoCurrencyPriceMap;
 
-                return getResult(items_list, items_price);
+                return getResult(itemsList, itemsPrice);
 
             });
-
     }
 
     @Override

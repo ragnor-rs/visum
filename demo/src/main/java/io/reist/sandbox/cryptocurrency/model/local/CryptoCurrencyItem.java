@@ -6,7 +6,6 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 @StorIOSQLiteType(table = CryptoCurrencyItemTable.NAME)
 public class CryptoCurrencyItem {
 

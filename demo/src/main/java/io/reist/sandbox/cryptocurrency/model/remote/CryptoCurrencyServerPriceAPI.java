@@ -10,7 +10,6 @@ import rx.Observable;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 public interface CryptoCurrencyServerPriceAPI {
 
     @GET("pricemulti")

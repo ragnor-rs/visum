@@ -19,7 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 @Module
 public final class CryptoCurrencyModule {
 

@@ -7,11 +7,10 @@ import java.util.Map;
 /**
  * Created by Sergey on 02/11/2017.
  */
-
 public final class CryptoCurrencyList {
 
     @SerializedName("BaseImageUrl")
-    public String base_url;
+    public String baseUrl;
 
     @SerializedName("Data")
     public Map<String, Details> data;

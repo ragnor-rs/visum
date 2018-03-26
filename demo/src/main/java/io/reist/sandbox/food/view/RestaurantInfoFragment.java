@@ -26,9 +26,6 @@ public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter
     @BindView(R.id.restaurant_info_name)
     TextView restaurantNameText;
 
-    @BindView(R.id.restaurant_info_open)
-    TextView restaurantIsOpenText;
-
     @BindView(R.id.restaurant_info_rating)
     TextView restaurantRatingText;
 
@@ -59,11 +56,6 @@ public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter
     @Override
     public void setName(String name) {
         restaurantNameText.setText(name);
-    }
-
-    @Override
-    public void setDistance(String distance) {
-        restaurantIsOpenText.setText(distance);
     }
 
     @Override

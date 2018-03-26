@@ -6,6 +6,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import javax.inject.Inject;
 
+import io.reist.sandbox.food.model.GeopositionMonitor;
 import io.reist.sandbox.food.model.RestaurantModel;
 import io.reist.sandbox.food.model.RestaurantMonitor;
 import io.reist.sandbox.food.view.RestaurantMapView;
@@ -23,8 +24,8 @@ public class RestaurantMapPresenter extends VisumPresenter<RestaurantMapView> {
     private RestaurantModel restaurant;
 
     @Inject
-    public RestaurantMapPresenter(RestaurantMonitor _restaurantMonitor) {
-        restaurantMonitor = _restaurantMonitor;
+    public RestaurantMapPresenter(RestaurantMonitor restaurantMonitor) {
+        this.restaurantMonitor = restaurantMonitor;
     }
 
     @Override
@@ -32,10 +33,9 @@ public class RestaurantMapPresenter extends VisumPresenter<RestaurantMapView> {
         super.onViewAttached(id, view);
     }
 
-    public void initPresenter(String _restaurantId) {
-        restaurantId = _restaurantId;
+    public void initPresenter(String restaurantId) {
+        this.restaurantId = restaurantId;
         restaurant = restaurantMonitor.getRestaurantById(restaurantId);
-        view(MAP_FRAGMENT).moveMapToUser(new LatLng(restaurant.getLat(), restaurant.getLon()));
-        view(MAP_FRAGMENT).setRestaurantCoordinates(restaurant.getLat(),restaurant.getLon());
+        view(MAP_FRAGMENT).setRestaurantCoordinates(new LatLng(restaurant.getLat(),restaurant.getLon()), restaurant.getName());
     }
 }

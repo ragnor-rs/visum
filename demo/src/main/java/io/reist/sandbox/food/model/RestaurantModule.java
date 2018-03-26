@@ -1,5 +1,7 @@
 package io.reist.sandbox.food.model;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -50,5 +52,10 @@ public class RestaurantModule {
     @Singleton
     RestaurantMonitor restaurantMonitor(StorIOSQLite storIOSQLite) {
         return new RestaurantMonitor(restaurantApi(), restaurantsService(storIOSQLite));
+    }
+    @Provides
+    @Singleton
+    GeopositionMonitor geopositionMonitor(Context context) {
+        return new GeopositionMonitor(context);
     }
 }

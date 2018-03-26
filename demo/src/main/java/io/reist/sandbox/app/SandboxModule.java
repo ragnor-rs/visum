@@ -47,11 +47,11 @@ import io.reist.sandbox.app.model.remote.SandboxApi;
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
-import io.reist.sandbox.food.model.RestaurantEntity;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteDeleteResolver;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteGetResolver;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLitePutResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 import io.reist.sandbox.food.model.RestaurantModule;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteGetResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLitePutResolver;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -183,4 +183,8 @@ public class SandboxModule {
         return (SandboxApplication) context.getApplicationContext();
     }
 
+    @Provides
+    Context context(){
+        return context;
+    }
 }

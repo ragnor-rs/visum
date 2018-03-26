@@ -1,6 +1,7 @@
 package io.reist.sandbox.food.model;
 
 import io.reist.sandbox.food.model.dto.RestaurantDto;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 
 /**
  * Created by Fedorov-DA on 01.03.2018.
@@ -11,13 +12,13 @@ public class RestaurantModel {
     RestaurantDto dto;
     private boolean isLocal;
 
-    public RestaurantModel(RestaurantDto _dto) {
-        dto = _dto;
+    public RestaurantModel(RestaurantDto dto) {
+        this.dto = dto;
         isLocal = false;
     }
 
-    public RestaurantModel(RestaurantEntity _entity) {
-        entity = _entity;
+    public RestaurantModel(RestaurantEntity entity) {
+        entity = entity;
         isLocal = true;
     }
 
@@ -25,10 +26,6 @@ public class RestaurantModel {
         return isLocal
                 ? entity.name
                 : dto.name;
-    }
-
-    public String getDistance() {
-        return "dist";
     }
 
     public String getRating() {

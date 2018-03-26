@@ -1,4 +1,4 @@
-package io.reist.sandbox.food.model;
+package io.reist.sandbox.food.model.entity;
 
 import com.google.gson.annotations.SerializedName;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;

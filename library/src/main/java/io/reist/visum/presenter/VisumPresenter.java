@@ -301,7 +301,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
                 .subscribe(observer);
     }
 
@@ -309,7 +308,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
                 .subscribe(onSuccess);
     }
 
@@ -317,7 +315,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
                 .subscribe(onSuccess, onError);
     }
 

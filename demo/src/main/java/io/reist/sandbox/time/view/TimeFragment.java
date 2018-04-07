@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.time.presenter.TimePresenter;
 
 /**
@@ -66,6 +67,11 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
     @OnClick(R.id.hide_time_btn)
     void onHideTimeClicked() {
         presenter.onHideTimeClicked();
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((TimeComponent) component).inject(this);
     }
 
 }

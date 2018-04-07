@@ -4,21 +4,12 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
-import java.util.Locale;
-import java.util.Observable;
-
-import rx.Single;
-import rx.SingleSubscriber;
 import rx.subjects.BehaviorSubject;
 
 /**
@@ -26,24 +17,27 @@ import rx.subjects.BehaviorSubject;
  */
 
 public class GeopositionMonitor {
+
     private FusedLocationProviderClient locationProviderClient;
-private Context context;
-private BehaviorSubject<LatLng> location = BehaviorSubject.create();
+    private Context context;
+    private BehaviorSubject<LatLng> location = BehaviorSubject.create();
+
     public GeopositionMonitor(Context context) {
-        this.context=context;
+        this.context = context;
         locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         initiateLocation();
     }
 
-    public BehaviorSubject<LatLng> getLocationFound(){
+    public BehaviorSubject<LatLng> getLocationFound() {
         initiateLocation();
         return location;
     }
 
     public void initiateLocation() {
-        if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
             return;
         }
         locationProviderClient.getLastLocation()

@@ -32,6 +32,7 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.repos.ReposComponent;
 import io.reist.sandbox.repos.presenter.RepoListAdapter;
 import io.reist.sandbox.repos.presenter.RepoListPresenter;
 
@@ -114,6 +115,11 @@ public class RepoListFragment extends BaseFragment<RepoListPresenter> implements
     @Override
     public void displaySuccess() {
         Toast.makeText(getActivity(), R.string.repo_saved, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((ReposComponent) component).inject(this);
     }
 
 }

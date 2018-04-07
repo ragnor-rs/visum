@@ -9,8 +9,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.food.presenter.RestaurantInfoPresenter;
-import io.reist.sandbox.food.presenter.RestaurantPresenter;
 
 /**
  * Created by Fedorov-DA on 01.03.2018.
@@ -18,8 +18,8 @@ import io.reist.sandbox.food.presenter.RestaurantPresenter;
 
 public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter> implements RestaurantInfoView{
 
-
     private static final String ARG_RESTAURANT = "arg_restaurant";
+
     @Inject
     RestaurantInfoPresenter presenter;
 
@@ -34,7 +34,6 @@ public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter
     }
 
     public static Fragment newInstance(String restaurantId) {
-
         RestaurantInfoFragment fragment = new RestaurantInfoFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_RESTAURANT, restaurantId);
@@ -61,6 +60,11 @@ public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter
     @Override
     public void setRating(String rating) {
         restaurantRatingText.setText(rating);
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((RestaurantComponent) component).inject(this);
     }
 
 }

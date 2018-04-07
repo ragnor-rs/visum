@@ -14,6 +14,7 @@ import butterknife.BindView;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.food.model.RestaurantModel;
 import io.reist.sandbox.food.presenter.RestaurantListPresenter;
 import io.reist.sandbox.food.presenter.RestaurantsAdapter;
@@ -78,6 +79,11 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
     @Override
     public void hideLoader() {
         loaderView.hide();
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((RestaurantComponent) component).inject(this);
     }
 
 }

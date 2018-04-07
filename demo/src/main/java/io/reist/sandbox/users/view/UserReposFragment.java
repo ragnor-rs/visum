@@ -32,6 +32,7 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.users.UsersComponent;
 import io.reist.sandbox.users.presenter.UserReposPresenter;
 
 /**
@@ -128,6 +129,11 @@ public class UserReposFragment extends BaseFragment<UserReposPresenter> implemen
     public void displayData(List<Repo> data) {
         loaderView.hide();
         adapter.setRepos(data);
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((UsersComponent) component).inject(this);
     }
 
 }

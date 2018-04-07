@@ -1,21 +1,16 @@
 package io.reist.sandbox.food.view;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.reist.sandbox.app.view.BaseFragment;
-import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.food.presenter.RestaurantListPresenter;
-import io.reist.sandbox.food.presenter.RestaurantPresenter;
 import io.reist.sandbox.R;
+import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.food.model.RestaurantComponent;
+import io.reist.sandbox.food.presenter.RestaurantPresenter;
 
 /**
  * Created by Fedorov-DA on 01.03.2018.
@@ -23,18 +18,16 @@ import io.reist.sandbox.R;
 
 public class RestaurantFragment extends BaseFragment<RestaurantPresenter> implements RestaurantView {
 
-
     private static final String ARG_RESTAURANT = "arg_restaurant";
+
     @Inject
     RestaurantPresenter presenter;
-
 
     @BindView(R.id.info_fragment)
     FrameLayout infoContainer;
 
     @BindView(R.id.map_fragment)
     FrameLayout mapContainer;
-
 
     public RestaurantFragment() {
         super(RestaurantPresenter.RESTAURANT_FRAGMENT, R.layout.fragment_restaurant);
@@ -76,4 +69,10 @@ public class RestaurantFragment extends BaseFragment<RestaurantPresenter> implem
                 .replace(R.id.info_fragment, RestaurantInfoFragment.newInstance(restaurantId))
                 .commit();
     }
+
+    @Override
+    public void inject(Object component) {
+        ((RestaurantComponent) component).inject(this);
+    }
+
 }

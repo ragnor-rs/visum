@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.food.presenter.RestaurantMapPresenter;
 
 /**
@@ -25,6 +26,7 @@ import io.reist.sandbox.food.presenter.RestaurantMapPresenter;
 public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> implements RestaurantMapView {
 
     //    AIzaSyDO8ouJon5tENu5sGE5OwhSTUQXllnifmo
+
     @Inject
     RestaurantMapPresenter presenter;
 
@@ -50,8 +52,7 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
         super.attachPresenter();
 
         mapFragment = SupportMapFragment.newInstance();
-        FragmentTransaction fragmentTransaction =
-                getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.map, mapFragment);
         fragmentTransaction.commit();
 
@@ -68,21 +69,25 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
     public void setRestaurantCoordinates(LatLng latLng, String name) {
         mapFragment.getMapAsync(map -> {
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-            map.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(name));
+            map.addMarker(new MarkerOptions().position(latLng).title(name));
         });
     }
 
     @SuppressWarnings({"MissingPermission"})
     public void moveMapToUser() {
         mapFragment.getMapAsync(map -> {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ) {
                 map.setMyLocationEnabled(true);
             }
         });
+    }
 
+    @Override
+    public void inject(Object component) {
+        ((RestaurantComponent) component).inject(this);
     }
 
 }

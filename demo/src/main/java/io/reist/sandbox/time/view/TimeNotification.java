@@ -32,6 +32,7 @@ import javax.inject.Inject;
 
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.MainActivity;
+import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.time.presenter.TimePresenter;
 import io.reist.visum.view.VisumBaseView;
 
@@ -129,6 +130,11 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
             notificationManager.deleteNotificationChannel(CHANNEL_ID);
         }
 
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((TimeComponent) component).inject(this);
     }
 
 }

@@ -38,6 +38,7 @@ import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.feed.FeedComponent;
 import io.reist.sandbox.feed.presenter.FeedListPresenter;
 
 /**
@@ -137,6 +138,11 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
         }
         listAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void inject(Object component) {
+        ((FeedComponent) component).inject(this);
     }
 
 }

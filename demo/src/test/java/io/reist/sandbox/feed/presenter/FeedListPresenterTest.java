@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -47,6 +48,7 @@ import static org.mockito.Mockito.verify;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
+@Config(shadows = ShadowMultiDex.class)
 public class FeedListPresenterTest extends RobolectricTestCase {
 
     @Inject

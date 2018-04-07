@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +58,7 @@ import static org.mockito.Mockito.when;
  *
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
+@Config(shadows = ShadowMultiDex.class)
 public class RepoServiceTest extends RobolectricTestCase {
 
     @Inject

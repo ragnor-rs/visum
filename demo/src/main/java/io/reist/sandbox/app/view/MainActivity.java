@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.addOnBackStackChangedListener(this);
 
         if (savedInstanceState == null) {
-            showFragment(new RestaurantListFragment(), false);
+            showFragment(new RepoListFragment(), false);
         }
         syncBackStack();
 

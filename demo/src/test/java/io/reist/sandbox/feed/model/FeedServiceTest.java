@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ import static org.mockito.Mockito.spy;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(RobolectricTestRunner.class)
+@Config(shadows = ShadowMultiDex.class)
 public class FeedServiceTest extends RobolectricTestCase {
 
     @Inject

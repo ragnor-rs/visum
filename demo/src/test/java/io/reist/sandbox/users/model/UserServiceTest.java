@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ import static org.mockito.Mockito.when;
  * Created by m039 on 11/27/15.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
+@Config(shadows = ShadowMultiDex.class)
 public class UserServiceTest extends RobolectricTestCase {
 
     @Inject

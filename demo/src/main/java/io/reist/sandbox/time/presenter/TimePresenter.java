@@ -52,7 +52,7 @@ public class TimePresenter extends VisumPresenter<TimeView> {
 
     @Override
     protected void onViewAttached(int id, @NonNull TimeView view) {
-        subscribe(id, timeService.getTime(), view::showTime);
+        subscribe(id, timeService.getTime(), view::showTime, Throwable::printStackTrace);
     }
 
     public void onShowTimeClicked(Context context) {

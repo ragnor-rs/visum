@@ -16,6 +16,8 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.NonNull;
+
 import org.junit.Assert;
 
 import io.reist.visum.view.VisumView;
@@ -42,13 +44,24 @@ public class PresenterAssert {
     }
 
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {
-        Subscription subscription = presenter.subscribe(viewId, Single.just(true), new Action1<Boolean>() {
+        Subscription subscription = presenter.subscribe(
+                viewId,
+                Single.just(true),
+                new Action1<Boolean>() {
 
-            @Override
-            public void call(Boolean aBoolean) {
-            }
+                    @Override
+                    public void call(Boolean aBoolean) {}
 
-        });
+                },
+                new Action1<Throwable>() {
+
+                    @Override
+                    public void call(Throwable throwable) {
+                        throw new RuntimeException(throwable);
+                    }
+
+                }
+        );
         Assert.assertEquals(expected, subscription != null);
     }
 
@@ -57,13 +70,15 @@ public class PresenterAssert {
             presenter.subscribe(Single.just(true), new ViewNotifier<VisumView, Boolean>() {
 
                 @Override
-                public void notifyCompleted(VisumView visumView) {}
+                public void notifyCompleted(@NonNull VisumView visumView) {}
 
                 @Override
-                public void notifyResult(VisumView view, Boolean aBoolean) {}
+                public void notifyResult(@NonNull VisumView view, Boolean aBoolean) {}
 
                 @Override
-                public void notifyError(VisumView view, Throwable e) {}
+                public void notifyError(@NonNull VisumView view, @NonNull Throwable e) {
+                    throw new RuntimeException(e);
+                }
 
             });
             Assert.assertTrue("subscribe() should work here", expected);

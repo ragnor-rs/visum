@@ -51,7 +51,8 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
         if (isLoading) return;
 
         isLoading = true;
-        view(WEATHER_CODE).showLoading(true);
+
+        withView(WEATHER_CODE, view -> view.showLoading(true));
 
         weatherService.getWeatherForCity(query)
                 .subscribeOn(Schedulers.io())
@@ -68,17 +69,30 @@ public class WeatherPresenter extends VisumPresenter<WeatherView> {
                 return;
             }
 
-            view(WEATHER_CODE).showLoading(false);
-            view(WEATHER_CODE).showData(value);
+            withView(
+                    WEATHER_CODE,
+                    view -> {
+                        view.showLoading(false);
+                        view.showData(value);
+                    }
+            );
+
             isLoading = false;
+
         }
 
         @Override
         public void onError(Throwable e) {
             SandboxError error = new SandboxError(e);
-            view(WEATHER_CODE).showError(error);
-            view(WEATHER_CODE).showLoading(false);
+            withView(
+                    WEATHER_CODE,
+                    view -> {
+                        view.showLoading(false);
+                        view.showError(error);
+                    }
+            );
             isLoading = false;
         }
+
     };
 }

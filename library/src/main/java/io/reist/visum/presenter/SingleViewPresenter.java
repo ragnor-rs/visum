@@ -48,9 +48,8 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
     @Override
     public final void onStart() {}
 
-    @NonNull
-    public final V view() {
-        return view(DEFAULT_VIEW_ID);
+    public final void withView(Action1<V> action1) {
+        withView(DEFAULT_VIEW_ID, action1);
     }
 
 
@@ -62,10 +61,6 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
 
     public final <T> Subscription subscribe(Observable<T> observable, Action1<T> action, Action1<Throwable> error) {
         return subscribe(DEFAULT_VIEW_ID, observable, action, error);
-    }
-
-    public final <T> Subscription subscribe(Observable<T> observable, Action1<T> action) {
-        return subscribe(DEFAULT_VIEW_ID, observable, action);
     }
 
     //endregion
@@ -81,23 +76,16 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
         return subscribe(DEFAULT_VIEW_ID, single, action, onError);
     }
 
-    public final <T> Subscription subscribe(Single<T> single, Action1<T> action) {
-        return subscribe(DEFAULT_VIEW_ID, single, action);
-    }
-
     //endregion
 
 
     //region Completable
 
-    public final Subscription subscribe(Completable completable, Action0 onComplete) {
-        return subscribe(DEFAULT_VIEW_ID, completable, onComplete);
-    }
-
-    public final Subscription subscribe(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
+    public final Subscription subscribe(Completable completable, Action0 onComplete, Action1<Throwable> onError) {
         return subscribe(DEFAULT_VIEW_ID, completable, onComplete, onError);
     }
 
     //endregion
+
 
 }

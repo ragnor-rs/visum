@@ -79,8 +79,7 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
 
         @Override
         public void onError(Throwable e) {
-            UserReposView view = view();
-            view.displayError(new SandboxError(e));
+            withView(v -> v.displayError(new SandboxError(e)));
         }
 
     }
@@ -90,27 +89,30 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
         @Override
         public void onNext(SandboxResponse<List<Repo>> response) {
             Log.i(TAG, "--- OBSERVED ON " + Thread.currentThread() + " ---");
-            UserReposView view = view();
             if (response.isSuccessful()) {
                 List<Repo> result = response.getResult();
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
                 Log.d(TAG, "successfully loaded " + result.size() + " items");
-                view.displayData(result);
-                view.showLoader(false);
+                withView(
+                        v -> {
+                            v.displayData(result == null ? new ArrayList<>() : result);
+                            v.showLoader(false);
+                        }
+                );
             } else {
                 Log.w(TAG, "network error occurred");
-                view.displayError(response.getError());
+                withView(v -> v.displayError(response.getError()));
             }
         }
 
         @Override
         public void onError(Throwable e) {
             Log.e(TAG, "Error fetching data", e);
-            UserReposView view = view();
-            view.displayError(new SandboxError(e));
-            view.showLoader(false);
+            withView(
+                    view -> {
+                        view.displayError(new SandboxError(e));
+                        view.showLoader(false);
+                    }
+            );
         }
 
         @Override

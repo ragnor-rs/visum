@@ -16,6 +16,7 @@ import io.reist.visum.presenter.VisumPresenter;
 public class RestaurantPresenter extends VisumPresenter<RestaurantView> {
 
     public static final int RESTAURANT_FRAGMENT = 20000;
+
     private RestaurantMonitor restaurantMonitor;
     private String restaurantId;
     private RestaurantModel restaurant;
@@ -33,7 +34,13 @@ public class RestaurantPresenter extends VisumPresenter<RestaurantView> {
     public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
         restaurant = restaurantMonitor.getRestaurantById(restaurantId);
-        view(RESTAURANT_FRAGMENT).showInfo(restaurantId);
-        view(RESTAURANT_FRAGMENT).showMap(restaurantId);
+        withView(
+                RESTAURANT_FRAGMENT,
+                view -> {
+                    view.showInfo(restaurantId);
+                    view.showMap(restaurantId);
+                }
+        );
     }
+
 }

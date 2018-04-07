@@ -54,18 +54,24 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             protected void onFail(SandboxError error) {
-                RepoEditView view = view();
-                view.displayLoader(false);
-                view.displayError(error);
+                withView(
+                        view -> {
+                            view.displayLoader(false);
+                            view.displayError(error);
+                        }
+                );
             }
 
             @Override
             protected void onSuccess(Repo result) {
-                RepoEditView view = view();
-                mIsDataLoaded = true;
-                view.displayLoader(false);
-                repo = result;
-                view.displayData(result);
+                withView(
+                        view -> {
+                            mIsDataLoaded = true;
+                            view.displayLoader(false);
+                            repo = result;
+                            view.displayData(result);
+                        }
+                );
             }
 
         });
@@ -84,14 +90,12 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             protected void onFail(SandboxError error) {
-                RepoEditView view = view();
-                view.displayError(error);
+                withView(v -> v.displayError(error));
             }
 
             @Override
             protected void onSuccess(Repo result) {
-                RepoEditView view = view();
-                view.displayEditSuccess();
+                withView(RepoEditView::displayEditSuccess);
             }
 
         });
@@ -108,8 +112,7 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             public void onNext(SandboxResponse<Integer> response) {
-                RepoEditView view = view();
-                view.back();
+                withView(RepoEditView::back);
             }
 
         });

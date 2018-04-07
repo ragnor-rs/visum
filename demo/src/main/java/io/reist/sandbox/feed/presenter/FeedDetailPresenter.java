@@ -53,16 +53,22 @@ public class FeedDetailPresenter extends SingleViewPresenter<FeedDetailView> {
 
         @Override
         protected void onFail(SandboxError error) {
-            FeedDetailView view = view();
-            view.displayLoader(false);
-            view.displayError(error);
+            withView(
+                    view -> {
+                        view.displayLoader(false);
+                        view.displayError(error);
+                    }
+            );
         }
 
         @Override
         protected void onSuccess(Post result) {
-            FeedDetailView view = view();
-            view.displayLoader(false);
-            view.displayData(result);
+            withView(
+                    view -> {
+                        view.displayLoader(false);
+                        view.displayData(result);
+                    }
+            );
         }
     }
 

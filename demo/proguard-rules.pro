@@ -29,6 +29,7 @@
 -keep class ** { android.app.PendingIntent actionIntent; }
 -dontnote android.os.Build$VERSION
 -dontnote rx.internal.util.PlatformDependent
+-dontwarn org.aspectj.runtime.reflect.Factory
 
 # Retrofit
 -dontwarn retrofit2.**
@@ -98,6 +99,6 @@
     @com.fernandocejas.frodo.annotation.RxLogObservable *;
 }
 
-#GMS
+# GMS
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**

@@ -49,7 +49,10 @@ import io.reist.sandbox.feed.model.remote.RetrofitFeedService;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -58,7 +61,6 @@ import static org.mockito.Mockito.spy;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class FeedServiceTest extends RobolectricTestCase {
 
     @Inject
@@ -76,7 +78,7 @@ public class FeedServiceTest extends RobolectricTestCase {
                 .build();
 
         testComponent.inject(this);
-        assertThat(feedService).isNotNull();
+        assertNotNull(feedService);
     }
 
     @Singleton
@@ -121,9 +123,8 @@ public class FeedServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnErrorEvents().isEmpty())
-                .isTrue();
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult().id).isEqualTo(POST_ID);
+        assertTrue(testSubscriber.getOnErrorEvents().isEmpty());
+        assertEquals((Object) POST_ID, (Object) testSubscriber.getOnNextEvents().get(0).getResult().id);
     }
 
     @Test
@@ -133,9 +134,8 @@ public class FeedServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnErrorEvents().isEmpty())
-                .isTrue();
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult()).isNotEmpty();
+        assertTrue(testSubscriber.getOnErrorEvents().isEmpty());
+        assertFalse(testSubscriber.getOnNextEvents().get(0).getResult().isEmpty());
     }
 
 

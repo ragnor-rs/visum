@@ -44,7 +44,9 @@ import io.reist.sandbox.repos.view.RepoEditView;
 import io.reist.sandbox.repos.view.RepoListView;
 import rx.Observable;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -54,7 +56,6 @@ import static org.mockito.Mockito.when;
  * Created by m039 on 11/27/15.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class RepoListPresenterTest extends RobolectricTestCase {
 
     @Inject
@@ -125,18 +126,18 @@ public class RepoListPresenterTest extends RobolectricTestCase {
 
     @Test
     public void testRepoListPresenter() throws InterruptedException {
-        assertThat(repoListPresenter).isNotNull();
+        assertNotNull(repoListPresenter);
 
         repoListPresenter.setView(mock(RepoListView.class));
 
         Thread.sleep(1000);
 
-        assertThat(repoListPresenter.isDataLoaded()).isTrue();
+        assertTrue(repoListPresenter.isDataLoaded());
     }
 
     @Test
     public void testRepoEditPresenter() throws InterruptedException {
-        assertThat(repoEditPresenter).isNotNull();
+        assertNotNull(repoEditPresenter);
 
         RepoEditView mockedRepoEditView = mock(RepoEditView.class);
 
@@ -146,7 +147,7 @@ public class RepoListPresenterTest extends RobolectricTestCase {
 
         Thread.sleep(1000);
 
-        assertThat(repoEditPresenter.isDataLoaded()).isTrue();
+        assertTrue(repoEditPresenter.isDataLoaded());
     }
 
 }

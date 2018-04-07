@@ -20,6 +20,7 @@ import org.junit.Assert;
 
 import io.reist.visum.view.VisumView;
 import rx.Single;
+import rx.Subscription;
 import rx.functions.Action1;
 
 /**
@@ -41,17 +42,14 @@ public class PresenterAssert {
     }
 
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {
-        try {
-            presenter.subscribe(viewId, Single.just(true), new Action1<Boolean>() {
+        Subscription subscription = presenter.subscribe(viewId, Single.just(true), new Action1<Boolean>() {
 
-                @Override
-                public void call(Boolean aBoolean) {}
+            @Override
+            public void call(Boolean aBoolean) {
+            }
 
-            });
-            Assert.assertTrue("subscribe(view) shouldn't work here", expected);
-        } catch (Exception e) {
-            Assert.assertFalse("subscribe(view) should work here", expected);
-        }
+        });
+        Assert.assertEquals(expected, subscription != null);
     }
 
     public static void assertGlobalSubscribe(TestPresenter presenter, boolean expected) {

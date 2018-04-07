@@ -36,7 +36,7 @@ import io.reist.sandbox.core.RobolectricTestCase;
 import io.reist.sandbox.feed.model.FeedServiceTest;
 import io.reist.sandbox.feed.view.FeedDetailView;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -48,7 +48,6 @@ import static org.mockito.Mockito.verify;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
 public class FeedDetailPresenterTest extends RobolectricTestCase {
 
     @Inject
@@ -71,8 +70,8 @@ public class FeedDetailPresenterTest extends RobolectricTestCase {
     }
 
     @Test
-    public void testPresenter() throws InterruptedException {
-        assertThat(feedDetailPresenter).isNotNull();
+    public void testPresenter() {
+        assertNotNull(feedDetailPresenter);
 
         FeedDetailView feedDetailView = mock(FeedDetailView.class);
 

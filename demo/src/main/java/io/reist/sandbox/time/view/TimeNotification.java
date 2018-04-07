@@ -16,12 +16,15 @@
 
 package io.reist.sandbox.time.view;
 
+import android.annotation.TargetApi;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.NotificationCompat;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 
 import java.util.Date;
 
@@ -44,6 +47,8 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
 
     private static final int NOTIFICATION_ID = 1;
 
+    private static final String CHANNEL_ID = "time_chan";
+
     @Inject
     TimePresenter presenter;
 
@@ -54,13 +59,15 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
     @Override
     public void showTime(Long t) {
 
+        initNotificationChannel();
+
         Context context = getContext();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(context)
+        Notification notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.current_time, new Date(t)))
                 .setContentIntent(pendingIntent)
@@ -82,8 +89,45 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
         super.detachPresenter();
 
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
         notificationManager.cancel(NOTIFICATION_ID);
+
+        dropNotificationChannel();
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private void initNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Time",
+                NotificationManager.IMPORTANCE_LOW
+        );
+
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private void dropNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return;
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            notificationManager.deleteNotificationChannel(CHANNEL_ID);
+        }
 
     }
 

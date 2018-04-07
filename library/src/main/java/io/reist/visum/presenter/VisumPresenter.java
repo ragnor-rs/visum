@@ -159,10 +159,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Observer<? super T> observer) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(observable, observer);
@@ -174,10 +172,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Action1<T> action, Action1<Throwable> error) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(observable, action, error);
@@ -189,10 +185,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Observable<T> observable, Action1<T> action) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(observable, action);
@@ -234,10 +228,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(single, subscriber);
@@ -249,10 +241,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(single, action);
@@ -264,10 +254,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action, Action1<Throwable> error) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(single, action, error);
@@ -305,10 +293,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(completable, onComplete);
@@ -320,10 +306,8 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     @Nullable
     public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
-        ViewHolder<V> viewHolder;
-        try {
-            viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        } catch (ViewNotFoundException e) {
+        ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
+        if (viewHolder == null) {
             return null;
         }
         Subscription subscription = startSubscription(completable, onComplete, onError);

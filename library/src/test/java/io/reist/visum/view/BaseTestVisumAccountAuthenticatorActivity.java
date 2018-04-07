@@ -112,4 +112,9 @@ public abstract class BaseTestVisumAccountAuthenticatorActivity extends VisumAcc
         dummy.attachPresenter();
     }
 
+    @Override
+    public void inject(Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
+    }
+
 }

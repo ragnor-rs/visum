@@ -47,7 +47,11 @@ public class TestVisumWidget extends VisumWidget<TestPresenter> implements Visum
     }
 
     @Override
-    protected void inflate() {
+    protected void inflate() {}
+
+    @Override
+    public void inject(Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
     }
 
 }

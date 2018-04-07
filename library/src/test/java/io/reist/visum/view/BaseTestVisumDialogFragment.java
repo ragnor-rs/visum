@@ -95,4 +95,9 @@ public abstract class BaseTestVisumDialogFragment extends VisumDialogFragment<Te
         dummy.attachPresenter();
     }
 
+    @Override
+    public void inject(Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
+    }
+
 }

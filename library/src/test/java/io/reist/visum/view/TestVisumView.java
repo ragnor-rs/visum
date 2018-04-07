@@ -41,4 +41,9 @@ class TestVisumView extends VisumBaseView<TestPresenter> implements VisumDynamic
         this.presenter = presenter;
     }
 
+    @Override
+    public void inject(Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
+    }
+
 }

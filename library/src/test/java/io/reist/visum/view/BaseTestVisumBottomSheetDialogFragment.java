@@ -95,4 +95,9 @@ public abstract class BaseTestVisumBottomSheetDialogFragment extends VisumBottom
         dummy.attachPresenter();
     }
 
+    @Override
+    public void inject(Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
+    }
+
 }

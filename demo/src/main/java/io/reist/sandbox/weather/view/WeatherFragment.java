@@ -16,6 +16,7 @@
 
 package io.reist.sandbox.weather.view;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
@@ -107,7 +108,7 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((WeatherComponent) component).inject(this);
     }
 

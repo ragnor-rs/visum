@@ -1,14 +1,8 @@
 buildscript {
-
     repositories {
         jcenter()
         mavenCentral()
     }
-
-    dependencies {
-        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
-    }
-
 }
 
 repositories {
@@ -19,7 +13,6 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.fernandocejas.frodo'
 
 android {
 

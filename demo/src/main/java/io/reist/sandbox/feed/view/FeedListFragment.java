@@ -16,6 +16,7 @@
 
 package io.reist.sandbox.feed.view;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -141,7 +142,7 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((FeedComponent) component).inject(this);
     }
 

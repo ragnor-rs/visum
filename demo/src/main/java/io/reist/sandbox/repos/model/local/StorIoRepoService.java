@@ -16,7 +16,6 @@
 
 package io.reist.sandbox.repos.model.local;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
@@ -35,7 +34,6 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
         super(storIoSqLite);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> list() {
         return preparedGetBuilder(Repo.class)
@@ -45,7 +43,6 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
                 .map(SandboxResponse::new);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<Repo>> byId(Long id) {
         return unique(Repo.class, RepoTable.NAME, id)
@@ -68,7 +65,6 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
                 .map(t -> new SandboxResponse<>(t.numberOfRowsDeleted()));
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> findReposByUserId(Long userId) {
         return preparedGetBuilder(Repo.class)

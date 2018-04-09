@@ -24,6 +24,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 
 import java.util.Date;
@@ -133,7 +134,7 @@ public class TimeNotification extends VisumBaseView<TimePresenter> implements Ti
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((TimeComponent) component).inject(this);
     }
 

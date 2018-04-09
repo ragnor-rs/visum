@@ -18,6 +18,7 @@ package io.reist.visum;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 /**
  * A helper class for implementations of {@link VisumClient}. It provides callback for typical
@@ -48,7 +49,12 @@ public final class VisumClientHelper<C extends VisumClient> {
 
     @SuppressWarnings({"unchecked", "TryWithIdenticalCatches"})
     public void onCreate() {
-        client.inject(client.getComponentCache().start(client));
+        Object component = client.getComponentCache().start(client);
+        if (component != null) {
+            client.inject(component);
+        } else {
+            Log.w(TAG, "No component for " + client);
+        }
     }
 
     public void onDestroy(boolean retainComponent) {

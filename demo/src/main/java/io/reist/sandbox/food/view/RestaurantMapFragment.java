@@ -3,6 +3,7 @@ package io.reist.sandbox.food.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -86,7 +87,7 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((RestaurantComponent) component).inject(this);
     }
 

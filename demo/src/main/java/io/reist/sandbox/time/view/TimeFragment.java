@@ -17,6 +17,7 @@
 package io.reist.sandbox.time.view;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -70,7 +71,7 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((TimeComponent) component).inject(this);
     }
 

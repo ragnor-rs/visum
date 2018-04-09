@@ -91,13 +91,13 @@ public class ComponentCacheTest extends VisumTest<BaseTestClient> {
         assertEquals(
                 "Can't find a ComponentEntry for the client of a registered type",
                 getComponentEntry(),
-                getComponentCache().findComponentEntryByClientOrThrow(getClient())
+                getComponentCache().findComponentEntryByClient(getClient())
         );
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testFindComponentFail() {
-        getComponentCache().findComponentEntryByClientOrThrow(clientTwo);
+        assertNull(getComponentCache().findComponentEntryByClient(clientTwo));
     }
 
     @Test

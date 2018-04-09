@@ -77,6 +77,6 @@ public interface VisumClient {
     @NonNull
     Context getContext();
 
-    void inject(Object component);
+    void inject(@NonNull Object component);
 
 }

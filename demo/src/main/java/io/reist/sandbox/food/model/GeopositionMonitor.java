@@ -24,8 +24,7 @@ public class GeopositionMonitor {
 
     public GeopositionMonitor(Context context) {
         this.context = context;
-        locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
-        initiateLocation();
+        this.locationProviderClient = LocationServices.getFusedLocationProviderClient(context);
     }
 
     public BehaviorSubject<LatLng> getLocationFound() {

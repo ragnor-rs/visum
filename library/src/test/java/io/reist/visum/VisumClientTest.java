@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.junit.After;
@@ -41,8 +42,7 @@ import static io.reist.visum.ClientAssert.assertClientDetached;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(
-        constants = BuildConfig.class,
-        sdk = Build.VERSION_CODES.JELLY_BEAN,
+        sdk = Build.VERSION_CODES.N,
         application = TestApplication.class
 )
 public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {
@@ -108,7 +108,7 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         }
 
         @Override
-        public void inject(Object component) {
+        public void inject(@NonNull Object component) {
             ((TestComponent) component).inject(this);
         }
 
@@ -123,7 +123,7 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         }
 
         @Override
-        public void inject(Object component) {
+        public void inject(@NonNull Object component) {
             ((TestComponent) component).inject(this);
         }
 
@@ -139,7 +139,7 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         protected void onHandleIntent(Intent intent) {}
 
         @Override
-        public void inject(Object component) {
+        public void inject(@NonNull Object component) {
             ((TestComponent) component).inject(this);
         }
 

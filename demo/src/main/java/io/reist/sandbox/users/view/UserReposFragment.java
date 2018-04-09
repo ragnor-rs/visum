@@ -132,7 +132,7 @@ public class UserReposFragment extends BaseFragment<UserReposPresenter> implemen
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((UsersComponent) component).inject(this);
     }
 

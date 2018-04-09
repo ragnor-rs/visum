@@ -17,6 +17,7 @@
 package io.reist.sandbox.feed.view;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -111,7 +112,7 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((FeedComponent) component).inject(this);
     }
 

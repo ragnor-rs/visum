@@ -317,6 +317,16 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(onComplete, onError);
     }
 
+    public void unsubscribe(Subscription... subscriptions) {
+        for (Subscription subscription : subscriptions) {
+            if (subscription != null) {
+                if (!subscription.isUnsubscribed()) {
+                    subscription.unsubscribe();
+                }
+            }
+        }
+    }
+
     protected void onViewAttached(int id, @NonNull V view) {}
 
     protected void onViewDetached(int id, @NonNull V view) {}

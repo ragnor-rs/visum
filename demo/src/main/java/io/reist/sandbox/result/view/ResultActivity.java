@@ -18,6 +18,7 @@ package io.reist.sandbox.result.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
@@ -72,7 +73,7 @@ public class ResultActivity extends VisumActivity<ResultPresenter> implements Re
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((ResultComponent) component).inject(this);
     }
 

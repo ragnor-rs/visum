@@ -35,7 +35,6 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
-import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
@@ -52,8 +51,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(
-        constants = BuildConfig.class,
-        sdk = Build.VERSION_CODES.LOLLIPOP,
+        sdk = Build.VERSION_CODES.N,
         application = TestApplication.class
 )
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {

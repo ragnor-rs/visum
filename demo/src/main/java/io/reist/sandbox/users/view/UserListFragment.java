@@ -100,7 +100,7 @@ public class UserListFragment extends BaseFragment<UserListPresenter> implements
     }
 
     @Override
-    public void inject(Object component) {
+    public void inject(@NonNull Object component) {
         ((UsersComponent) component).inject(this);
     }
 

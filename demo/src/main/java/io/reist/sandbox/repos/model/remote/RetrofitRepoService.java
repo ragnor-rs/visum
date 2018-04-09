@@ -16,8 +16,6 @@
 
 package io.reist.sandbox.repos.model.remote;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
-
 import java.util.List;
 
 import io.reist.sandbox.app.model.Repo;
@@ -33,25 +31,21 @@ public class RetrofitRepoService extends RetrofitService<Repo> implements RepoSe
         super(sandboxApi);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> list() {
         return sandboxApi.listRepos();
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<Repo>> byId(Long id) {
         return sandboxApi.repoById(id);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> save(List<Repo> list) { //cur this is not what we really get form api
         throw new UnsupportedOperationException();
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<Repo>> save(Repo repo) {
         return sandboxApi.save(repo);

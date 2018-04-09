@@ -17,7 +17,7 @@
 package io.reist.sandbox.feed;
 
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import javax.inject.Singleton;
 

@@ -16,8 +16,6 @@
 
 package io.reist.sandbox.repos.model;
 
-import android.os.Build;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +29,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxComponent;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Repo;
@@ -44,7 +41,6 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;

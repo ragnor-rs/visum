@@ -65,8 +65,8 @@ android {
 
 }
 
-def supportVersion = '27.0.0'
-def robolectricVersion = '3.3.2'
+def supportVersion = '27.1.1'
+def robolectricVersion = "3.8"
 
 dependencies {
 
@@ -80,12 +80,9 @@ dependencies {
     implementation 'io.reactivex:rxandroid:1.2.1'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.8.47"
-    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation "org.mockito:mockito-core:2.18.0"
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
-    testImplementation "org.robolectric:shadows-support-v4:$robolectricVersion"
-
-    testImplementation 'io.reactivex:rxandroid:1.2.1'
+    testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
 }
 

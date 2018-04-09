@@ -372,19 +372,19 @@ public abstract class VisumPresenter<V extends VisumView> {
         }
     }
 
-    public final int getViewCount() {
+    final int getViewCount() {
         return viewHolders.size();
     }
 
-    public final boolean hasViews() {
+    final boolean hasViews() {
         return getViewCount() > 0;
     }
 
-    public final boolean hasSubscriptions() {
+    final boolean hasSubscriptions() {
         return subscriptions != null && subscriptions.hasSubscriptions();
     }
 
-    public final boolean hasSubscriptions(int viewId) {
+    final boolean hasSubscriptions(int viewId) {
         ViewHolder<V> viewHolder = findViewHolderByViewId(viewId);
         return viewHolder != null && viewHolder.hasSubscriptions();
     }

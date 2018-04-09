@@ -31,8 +31,8 @@ import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ServiceController;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ServiceController;
 
 import static io.reist.visum.ClientAssert.assertClientAttached;
 import static io.reist.visum.ClientAssert.assertClientDetached;
@@ -42,7 +42,7 @@ import static io.reist.visum.ClientAssert.assertClientDetached;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(
-        sdk = Build.VERSION_CODES.N,
+        sdk = Build.VERSION_CODES.JELLY_BEAN,
         application = TestApplication.class
 )
 public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent> {

@@ -16,7 +16,7 @@
 
 package io.reist.sandbox.repos;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

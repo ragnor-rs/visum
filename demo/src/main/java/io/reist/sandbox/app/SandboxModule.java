@@ -21,9 +21,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.SQLiteTypeMapping;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.impl.DefaultStorIOSQLite;
 
 import javax.inject.Singleton;
 

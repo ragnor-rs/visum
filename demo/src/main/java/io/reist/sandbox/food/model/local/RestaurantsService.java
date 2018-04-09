@@ -1,7 +1,7 @@
 package io.reist.sandbox.food.model.local;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 

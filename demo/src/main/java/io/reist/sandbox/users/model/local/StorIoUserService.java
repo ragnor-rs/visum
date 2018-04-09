@@ -16,8 +16,8 @@
 
 package io.reist.sandbox.users.model.local;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public class StorIoUserService extends StorIoService<User> implements UserServic
                         .orderBy(UserTable.Column.ID)
                         .build())
                 .prepare()
-                .createObservable()
+                .asRxObservable()
                 .map(SandboxResponse::new);
     }
 

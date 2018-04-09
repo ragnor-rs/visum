@@ -16,9 +16,7 @@
 
 package io.reist.sandbox.feed.model;
 
-import android.os.Build;
-
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +35,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxApplication;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;

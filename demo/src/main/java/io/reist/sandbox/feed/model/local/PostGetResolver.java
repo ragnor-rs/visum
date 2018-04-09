@@ -19,10 +19,10 @@ package io.reist.sandbox.feed.model.local;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.get.GetResolver;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-import com.pushtorefresh.storio.sqlite.queries.RawQuery;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.operations.get.GetResolver;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.queries.RawQuery;
 
 import io.reist.sandbox.app.model.Comment;
 import io.reist.sandbox.app.model.Post;
@@ -38,9 +38,8 @@ public class PostGetResolver extends GetResolver<Post> {
 
     @NonNull
     @Override
-    public Post mapFromCursor(@NonNull Cursor cursor) {
-        final StorIOSQLite storIOSQLite = storIOSQLiteFromPerformGet.get();
-        final Post post = postGetResolver.mapFromCursor(cursor);
+    public Post mapFromCursor(@NonNull StorIOSQLite storIOSQLite, @NonNull Cursor cursor) {
+        final Post post = postGetResolver.mapFromCursor(storIOSQLite, cursor);
 
         post.comments = storIOSQLite
                 .get()
@@ -60,13 +59,13 @@ public class PostGetResolver extends GetResolver<Post> {
     @Override
     public Cursor performGet(@NonNull StorIOSQLite storIOSQLite, @NonNull RawQuery rawQuery) {
         storIOSQLiteFromPerformGet.set(storIOSQLite);
-        return storIOSQLite.internal().rawQuery(rawQuery);
+        return storIOSQLite.lowLevel().rawQuery(rawQuery);
     }
 
     @NonNull
     @Override
     public Cursor performGet(@NonNull StorIOSQLite storIOSQLite, @NonNull Query query) {
         storIOSQLiteFromPerformGet.set(storIOSQLite);
-        return storIOSQLite.internal().query(query);
+        return storIOSQLite.lowLevel().query(query);
     }
 }

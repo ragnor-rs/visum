@@ -36,17 +36,6 @@ android {
 
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -64,19 +53,21 @@ android {
 
 }
 
-def supportVersion = '27.0.0'
-def retrofitVersion = '2.3.0'
-def storioVersion = '1.13.0'
+def supportVersion = '27.1.1'
+def retrofitVersion = '2.4.0'
+def storioVersion = '2.1.0'
 def daggerVersion = '2.15'
-def butterknifeVersion = '8.6.0'
-def supportTestVersion = '0.5'
-def espressoVersion = '2.2.2'
+def butterknifeVersion = '8.8.1'
+def supportTestVersion = '1.0.1'
+def espressoVersion = '3.0.1'
 def playServicesVersion = '12.0.1'
-def roboctricVersion = "3.8"
+def robolectricVersion = "3.8"
 
 dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':library')
 
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -96,9 +87,9 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
 
     // Database layer
-    implementation "com.pushtorefresh.storio:sqlite:$storioVersion"
-    implementation "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
-    annotationProcessor "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
+    implementation "com.pushtorefresh.storio2:sqlite:$storioVersion"
+    implementation "com.pushtorefresh.storio2:sqlite-annotations:$storioVersion"
+    annotationProcessor "com.pushtorefresh.storio2:sqlite-annotations-processor:$storioVersion"
 
     // UI
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
@@ -113,33 +104,23 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:' + playServicesVersion
 
     // rx
-    implementation 'io.reactivex:rxjava:1.3.0'
+    implementation 'io.reactivex:rxjava:1.3.8'
     implementation 'io.reactivex:rxandroid:1.2.1'
     
-    implementation project(':library')
-
     // junit tests
-
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.8.47"
-    testImplementation 'org.assertj:assertj-core:3.8.0'
-
-    testImplementation "org.robolectric:robolectric:" + roboctricVersion
-    testImplementation "org.robolectric:shadows-multidex:" + roboctricVersion
-
+    testImplementation "org.mockito:mockito-core:2.18.0"
+    testImplementation "org.robolectric:robolectric:" + robolectricVersion
+    testImplementation "org.robolectric:shadows-multidex:" + robolectricVersion
     testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // android tests
-
     androidTestImplementation "com.android.support:support-annotations:$supportVersion"
-
     androidTestImplementation ("com.android.support.test:runner:$supportTestVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-
     androidTestImplementation "com.android.support.test:rules:$supportTestVersion"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
-
     androidTestImplementation ("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'

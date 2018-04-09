@@ -16,8 +16,6 @@
 
 package io.reist.sandbox.feed.presenter;
 
-import android.os.Build;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +27,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;

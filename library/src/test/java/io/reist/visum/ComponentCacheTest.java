@@ -26,11 +26,11 @@ import rx.functions.Func0;
 import static io.reist.visum.ClientAssert.assertClientStarted;
 import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRemoved;
 import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRetained;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * Created by Reist on 26.05.16.
@@ -127,7 +127,7 @@ public class ComponentCacheTest extends VisumTest<BaseTestClient> {
 
         try {
             componentCache.start(client);
-            shouldHaveThrown(IllegalStateException.class);
+            fail("IllegalStateException not thrown");
         } catch (IllegalStateException ignored) {}
 
         assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
@@ -138,7 +138,7 @@ public class ComponentCacheTest extends VisumTest<BaseTestClient> {
 
         try {
             componentCache.stop(client, false);
-            shouldHaveThrown(IllegalStateException.class);
+            fail("IllegalStateException not thrown");
         } catch (IllegalStateException ignored) {}
 
     }

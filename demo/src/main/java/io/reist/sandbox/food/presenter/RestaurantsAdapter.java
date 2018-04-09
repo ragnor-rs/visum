@@ -9,12 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reist.sandbox.R;
-import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.food.model.RestaurantModel;
-import io.reist.sandbox.food.view.RestaurantFragment;
 import io.reist.sandbox.food.view.RestaurantViewHolder;
-import io.reist.sandbox.users.presenter.UserListAdapter;
-import io.reist.visum.view.VisumFragmentManager;
 
 /**
  * Created by Fedorov-DA on 02.03.2018.

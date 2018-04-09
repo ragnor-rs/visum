@@ -39,7 +39,6 @@ import io.reist.sandbox.time.view.TimeFragment;
 import io.reist.sandbox.users.view.UserListFragment;
 import io.reist.sandbox.weather.view.WeatherFragment;
 import io.reist.visum.view.VisumFragment;
-import io.reist.visum.view.VisumFragmentManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,

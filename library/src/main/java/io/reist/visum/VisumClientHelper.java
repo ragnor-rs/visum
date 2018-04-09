@@ -28,8 +28,6 @@ import android.util.Log;
  */
 public final class VisumClientHelper<C extends VisumClient> {
 
-    private static final String INJECT_METHOD_NAME = "inject";
-
     private static final String TAG = VisumClientHelper.class.getSimpleName();
 
     protected final C client;
@@ -47,7 +45,6 @@ public final class VisumClientHelper<C extends VisumClient> {
         return ((ComponentCacheProvider) client.getContext().getApplicationContext()).getComponentCache();
     }
 
-    @SuppressWarnings({"unchecked", "TryWithIdenticalCatches"})
     public void onCreate() {
         Object component = client.getComponentCache().start(client);
         if (component != null) {

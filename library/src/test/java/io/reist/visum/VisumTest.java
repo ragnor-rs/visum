@@ -20,6 +20,8 @@ import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
 import rx.android.plugins.RxAndroidSchedulersHook;
 import rx.functions.Func0;
+import rx.plugins.RxJavaHooks;
+import rx.plugins.RxJavaPlugins;
 import rx.schedulers.Schedulers;
 
 import static io.reist.visum.ClientAssert.assertClientClassesRegistered;
@@ -103,6 +105,7 @@ public abstract class VisumTest<C extends VisumClient> implements ComponentCache
     public void onComponentCreated(Object component) {}
 
     static {
+
         RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
 
             @Override
@@ -111,6 +114,7 @@ public abstract class VisumTest<C extends VisumClient> implements ComponentCache
             }
 
         });
+
     }
 
 }

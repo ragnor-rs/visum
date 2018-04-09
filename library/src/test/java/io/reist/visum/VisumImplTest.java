@@ -25,6 +25,7 @@ import rx.Scheduler;
 import rx.android.plugins.RxAndroidPlugins;
 import rx.android.plugins.RxAndroidSchedulersHook;
 import rx.functions.Func0;
+import rx.plugins.RxJavaHooks;
 import rx.schedulers.Schedulers;
 
 /**
@@ -90,6 +91,7 @@ public abstract class VisumImplTest<C> implements ComponentCache.Listener {
     public void onComponentCreated(Object component) {}
 
     static {
+
         RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
 
             @Override
@@ -98,6 +100,7 @@ public abstract class VisumImplTest<C> implements ComponentCache.Listener {
             }
 
         });
+
     }
 
 }

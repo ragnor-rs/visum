@@ -3,6 +3,7 @@ package io.reist.vui.view;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public abstract class VisumCompositeFragment<P extends VisumPresenter>
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         bindViews(view);
         init(getContext(), savedInstanceState);
@@ -64,7 +65,7 @@ public abstract class VisumCompositeFragment<P extends VisumPresenter>
     }
 
     @Override
-    public final void onViewCreated(View view, Bundle savedInstanceState) {
+    public final void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 

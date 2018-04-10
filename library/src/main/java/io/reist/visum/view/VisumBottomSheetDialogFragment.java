@@ -61,32 +61,22 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
-
-    //region VisumClient implementation
-
     @Override
-    @CallSuper
-    public void onStartClient() {
+    public final void onStartClient() {
         helper.onCreate();
     }
 
     @NonNull
     @Override
-    @CallSuper
-    public ComponentCache getComponentCache() {
+    public final ComponentCache getComponentCache() {
         return helper.getComponentCache();
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    @CallSuper
-    public void onStopClient() {
+    public final void onStopClient() {
         helper.onDestroy(getActivity().isChangingConfigurations());
     }
-
-    //endregion
-
-
-    //region VisumView implementation
 
     @Override
     @CallSuper
@@ -102,11 +92,6 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
         presenterAttached = false;
     }
 
-    //endregion
-
-
-    //region Fragment implementation
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,12 +100,12 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(getLayoutRes(), container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!presenterAttached) {
             attachPresenter();
@@ -186,9 +171,6 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
         super.onActivityResult(requestCode, resultCode, data);
         attachPresenter();
     }
-
-    //endregion
-
 
     @LayoutRes
     protected abstract int getLayoutRes();

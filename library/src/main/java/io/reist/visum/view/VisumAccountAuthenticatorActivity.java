@@ -33,6 +33,7 @@ import io.reist.visum.presenter.VisumPresenter;
 public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter> extends VisumActivity<P> {
 
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
+
     private Bundle mResultBundle = null;
 
     @SuppressWarnings("unused")
@@ -63,7 +64,8 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
      * @param icicle the save instance data of this Activity, may be null
      */
     @Override
-    public void onCreate(Bundle icicle) {
+    protected void onCreate(Bundle icicle) {
+
         super.onCreate(icicle);
 
         mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
@@ -71,20 +73,25 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
         if (mAccountAuthenticatorResponse != null) {
             mAccountAuthenticatorResponse.onRequestContinued();
         }
+
     }
 
     /**
      * Sends the result or a Constants.ERROR_CODE_CANCELED error if a result isn't present.
      */
+    @Override
     public void finish() {
         if (mAccountAuthenticatorResponse != null) {
+
             // send the result bundle back if set, otherwise send an error.
             if (mResultBundle != null) {
                 mAccountAuthenticatorResponse.onResult(mResultBundle);
             } else {
                 mAccountAuthenticatorResponse.onError(AccountManager.ERROR_CODE_CANCELED, "canceled");
             }
+
             mAccountAuthenticatorResponse = null;
+
         }
         super.finish();
     }

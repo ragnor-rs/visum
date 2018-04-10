@@ -63,31 +63,21 @@ public abstract class VisumFragment<P extends VisumPresenter>
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
-    //region VisumClient implementation
-
     @Override
-    @CallSuper
-    public void onStartClient() {
+    public final void onStartClient() {
         helper.onCreate();
     }
 
     @NonNull
     @Override
-    @CallSuper
-    public ComponentCache getComponentCache() {
+    public final ComponentCache getComponentCache() {
         return helper.getComponentCache();
     }
 
     @Override
-    @CallSuper
-    public void onStopClient() {
+    public final void onStopClient() {
         helper.onDestroy(getActivity().isChangingConfigurations());
     }
-
-    //endregion
-
-
-    //region VisumView implementation
 
     @Override
     @CallSuper
@@ -103,11 +93,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
         presenterAttached = false;
     }
 
-    //endregion
-
-
-    //region Fragment implementation
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,16 +100,18 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         int customTheme = getCustomTheme();
         if (customTheme != 0) {
+
             // create ContextThemeWrapper from the original Activity Context with the custom theme
             final Context contextThemeWrapper = new ContextThemeWrapper(getActivity(), customTheme);
 
             // clone the inflater using the ContextThemeWrapper
             LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
             return localInflater.inflate(getLayoutRes(), container, false);
+
         } else {
             return inflater.inflate(getLayoutRes(), container, false);
         }
@@ -132,7 +119,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!presenterAttached) {
             attachPresenter();
@@ -197,17 +184,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         attachPresenter();
-    }
-
-    //endregion
-
-
-    /**
-     * @return a name used to identify this fragment in the back-stack
-     * @see VisumFragmentManager#replace(FragmentManager, Fragment, VisumFragment, int, boolean, boolean)
-     */
-    public String getName() {
-        return getClass().getName();
     }
 
     @LayoutRes

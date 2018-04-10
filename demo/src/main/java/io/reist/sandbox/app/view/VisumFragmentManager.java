@@ -114,6 +114,7 @@ public class VisumFragmentManager {
                                                   boolean popBackStackInclusive,
                                                   FragmentTransaction transaction
     ) {
+
         if (what != null && !popBackStackInclusive) {
             if (remove) {
                 transaction = transaction.remove(what);
@@ -122,7 +123,7 @@ public class VisumFragmentManager {
             }
         }
 
-        String fragmentName = with.getName();
+        String fragmentName = with.getClass().getName();
 
         if (with.isAdded()) {
             transaction = transaction.show(with);
@@ -131,6 +132,7 @@ public class VisumFragmentManager {
         }
 
         transaction.addToBackStack(fragmentName).commit();
+
     }
 
     @Nullable

@@ -54,8 +54,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
-    //region VisumClient implementation
-
     @Override
     public final void onStartClient() {
         helper.onCreate();
@@ -77,11 +75,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
         return this;
     }
 
-    //endregion
-
-
-    //region VisumView implementation
-
     @Override
     @CallSuper
     public void attachPresenter() {
@@ -96,26 +89,38 @@ public abstract class VisumActivity<P extends VisumPresenter>
         presenterAttached = false;
     }
 
-    //endregion
-
-
-    //region Activity implementation
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onStartClient();
         setContentView(getLayoutRes());
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         if (!presenterAttached) {
             attachPresenter();
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (presenterAttached) {
+            detachPresenter();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onStopClient();
+    }
+
+    /**
+     * The client code must call super implementation before accessing the presenter.
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -124,23 +129,8 @@ public abstract class VisumActivity<P extends VisumPresenter>
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        onStopClient();
-    }
-
     /**
-     * The client code must call this implementation via
-     * super.onActivityResult(requestCode, resultCode, data) before accessing a presenter.
+     * The client code must call super implementation before accessing the presenter.
      */
     @CallSuper
     @Override
@@ -150,9 +140,6 @@ public abstract class VisumActivity<P extends VisumPresenter>
             attachPresenter();
         }
     }
-
-    //endregion
-
 
     @LayoutRes
     protected abstract int getLayoutRes();

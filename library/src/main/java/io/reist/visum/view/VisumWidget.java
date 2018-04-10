@@ -59,8 +59,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         this(SingleViewPresenter.DEFAULT_VIEW_ID, context, attrs);
     }
 
-    //region VisumClient implementation
-
     @Override
     public final void onStartClient() {
         helper.onCreate();
@@ -76,11 +74,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         helper.onDestroy(false);
     }
 
-    //endregion
-
-
-    //region VisumView implementation
-
     @Override
     @CallSuper
     public void attachPresenter() {
@@ -93,11 +86,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         helper.detachPresenter();
     }
 
-    //endregion
-
-
-    //region View implementation
-
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -107,10 +95,6 @@ public abstract class VisumWidget<P extends VisumPresenter>
         attachPresenter();
     }
 
-    protected void inflate() {
-        inflate(getContext(), getLayoutRes(), this);
-    }
-
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -118,8 +102,9 @@ public abstract class VisumWidget<P extends VisumPresenter>
         onStopClient();
     }
 
-    //endregion
-
+    protected void inflate() {
+        inflate(getContext(), getLayoutRes(), this);
+    }
 
     @LayoutRes
     protected abstract int getLayoutRes();

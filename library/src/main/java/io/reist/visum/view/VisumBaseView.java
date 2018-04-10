@@ -29,7 +29,8 @@ import io.reist.visum.presenter.VisumPresenter;
  */
 @SuppressWarnings("unused")
 public abstract class VisumBaseView<P extends VisumPresenter>
-        extends VisumBaseClient implements VisumView<P> {
+        extends VisumBaseClient
+        implements VisumView<P> {
 
     private static final String TAG = VisumBaseView.class.getName();
 
@@ -44,9 +45,6 @@ public abstract class VisumBaseView<P extends VisumPresenter>
         this.helper = new VisumViewHelper<>(viewId, new VisumClientHelper<>(this));
     }
 
-
-    //region VisumView implementation
-
     @Override
     @CallSuper
     public void attachPresenter() {
@@ -60,8 +58,5 @@ public abstract class VisumBaseView<P extends VisumPresenter>
         helper.detachPresenter();
         onStopClient();
     }
-
-    //endregion
-
 
 }

@@ -1,7 +1,9 @@
 package io.reist.sandbox.food.view;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -41,12 +43,14 @@ public class RestaurantListFragment extends BaseFragment<RestaurantListPresenter
         super(R.layout.fragment_food);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public void attachPresenter() {
+    public void init(Context context, Bundle savedInstanceState) {
 
-        super.attachPresenter();
+        super.init(context, savedInstanceState);
 
         FragmentActivity activity = getActivity();
+
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(activity,
                     new String[] {

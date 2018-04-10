@@ -16,6 +16,8 @@
 
 package io.reist.sandbox.repos.view;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -62,9 +64,9 @@ public class RepoListFragment extends BaseFragment<RepoListPresenter> implements
     }
 
     @Override
-    public void attachPresenter() {
+    public void init(Context context, Bundle savedInstanceState) {
 
-        super.attachPresenter();
+        super.init(context, savedInstanceState);
 
         // setView this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

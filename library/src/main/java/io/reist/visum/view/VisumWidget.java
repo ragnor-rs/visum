@@ -17,25 +17,37 @@
 package io.reist.visum.view;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
+import io.reist.visum.model.ViewModel;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Extend your {@link FrameLayout}s with this class to take advantage of Visum MVP.
  *
+ * Prevents client code from overriding {@link #onDetachedFromWindow()}.
+ * This is to minimize bugs regarding view attachment. For proper initialization / cleanup, use
+ * {@link #attachPresenter()} and {@link #detachPresenter()}.
+ *
  * Created by Defuera on 29/01/16.
  */
 @SuppressWarnings("unused")
-public abstract class VisumWidget<P extends VisumPresenter>
+public abstract class VisumWidget<P extends VisumPresenter, VM extends ViewModel>
         extends FrameLayout
-        implements VisumView<P> {
+        implements VisumView<P>, ViewModelWidget<VM> {
+
+    private VM viewModel;
 
     private final VisumViewHelper<P> helper;
 
@@ -76,37 +88,79 @@ public abstract class VisumWidget<P extends VisumPresenter>
 
     @Override
     @CallSuper
-    public void attachPresenter() {
+    public final void attachPresenter() {
+        bindUiElements();
         helper.attachPresenter();
     }
 
     @Override
     @CallSuper
-    public void detachPresenter() {
+    public final void detachPresenter() {
         helper.detachPresenter();
+        unbindUiElements();
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    protected final void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (!isInEditMode()) {
             onStartClient();
         }
         attachPresenter();
+        bindUiElements();
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    protected final void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         detachPresenter();
         onStopClient();
+        unbindUiElements();
     }
 
-    protected void inflate() {
+    protected final void inflate() {
         inflate(getContext(), getLayoutRes(), this);
+        bindUiElements();
+    }
+
+    @Override
+    public final void addView(View child, int index, ViewGroup.LayoutParams params) {
+        if (!isInEditMode()) {
+            super.addView(child, index, params);
+        }
     }
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    @CallSuper
+    @Override
+    public void init(@Nullable AttributeSet attributeSet) {}
+
+    @Override
+    public final void rebindUiElements() {
+        unbindUiElements();
+        bindUiElements();
+    }
+
+    @Override
+    public void bindUiElements() {}
+
+    @Override
+    public void unbindUiElements() {}
+
+    protected abstract void bindViews(View view);
+
+    @Override
+    public final VM getViewModel() {
+        return viewModel;
+    }
+
+    @CallSuper
+    @Override
+    public void bindViewModel(@NonNull VM viewModel) {
+        this.viewModel = viewModel;
+        bindUiElements();
+    }
 
 }

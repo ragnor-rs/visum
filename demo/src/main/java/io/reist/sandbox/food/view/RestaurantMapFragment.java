@@ -1,6 +1,7 @@
 package io.reist.sandbox.food.view;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,17 +49,22 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
         return fragment;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
+    public void init(Context context, Bundle savedInstanceState) {
+
+        super.init(context, savedInstanceState);
 
         mapFragment = SupportMapFragment.newInstance();
+
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.map, mapFragment);
         fragmentTransaction.commit();
 
         getPresenter().initPresenter(getArguments().getString(ARG_RESTAURANT));
+
         moveMapToUser();
+
     }
 
     @Override

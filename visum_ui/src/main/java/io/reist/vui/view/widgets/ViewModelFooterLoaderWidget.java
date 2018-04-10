@@ -13,7 +13,8 @@ import com.m039.el_adapter.perpage.FooterLoaderWidget;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reist.vui.model.ViewModel;
+import io.reist.visum.view.ViewModelWidget;
+import io.reist.visum.model.ViewModel;
 
 /**
  * Created by Reist on 09.03.17.
@@ -64,23 +65,13 @@ public abstract class ViewModelFooterLoaderWidget<VM extends ViewModel>
     protected final void onAttachedToWindow() {
         super.onAttachedToWindow();
         bindUiElements();
-        onWidgetShow();
     }
 
     @Override
     protected final void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        onWidgetHide();
         unbindUiElements();
     }
-
-    @CallSuper
-    @Override
-    public void onWidgetShow() {}
-
-    @CallSuper
-    @Override
-    public void onWidgetHide() {}
 
     @CallSuper
     @Override

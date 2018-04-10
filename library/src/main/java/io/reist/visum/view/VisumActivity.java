@@ -31,12 +31,16 @@ import io.reist.visum.presenter.VisumPresenter;
 
 /**
  * Extend your activities with this class to take advantage of Visum MVP.
- * <p>
+ *
+ * Prevents client code from overriding standard Android lifecycle methods.
+ * This is to minimize bugs regarding view attachment. For proper initialization / cleanup, use
+ * {@link #init(Context, Bundle)}, {@link #attachPresenter()} and {@link #detachPresenter()}.
+ *
  * Created by Defuera on 29/01/16.
  */
 public abstract class VisumActivity<P extends VisumPresenter>
         extends AppCompatActivity
-        implements VisumView<P> {
+        implements VisumView<P>, CompositeView {
 
     private final VisumViewHelper<P> helper;
 
@@ -76,28 +80,32 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
-    @CallSuper
-    public void attachPresenter() {
-        helper.attachPresenter();
-        presenterAttached = true;
+    public final void attachPresenter() {
+        if (!isFinishing()) {
+            bindUiElements();
+            helper.attachPresenter();
+            presenterAttached = true;
+        }
     }
 
     @Override
-    @CallSuper
-    public void detachPresenter() {
+    public final void detachPresenter() {
         helper.detachPresenter();
         presenterAttached = false;
+        unbindUiElements();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onStartClient();
         setContentView(getLayoutRes());
+        bindUiElements();
+        init(getContext(), savedInstanceState);
     }
 
     @Override
-    protected void onResume() {
+    protected final void onResume() {
         super.onResume();
         if (!presenterAttached) {
             attachPresenter();
@@ -105,7 +113,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
-    protected void onPause() {
+    protected final void onPause() {
         super.onPause();
         if (presenterAttached) {
             detachPresenter();
@@ -113,7 +121,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
-    protected void onDestroy() {
+    protected final void onDestroy() {
         super.onDestroy();
         onStopClient();
     }
@@ -143,5 +151,21 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    @CallSuper
+    @Override
+    public void init(Context context, Bundle savedInstanceState) {}
+
+    @Override
+    public final void rebindUiElements() {
+        unbindUiElements();
+        bindUiElements();
+    }
+
+    @Override
+    public void bindUiElements() {}
+
+    @Override
+    public void unbindUiElements() {}
 
 }

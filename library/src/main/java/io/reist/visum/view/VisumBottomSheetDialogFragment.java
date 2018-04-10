@@ -16,6 +16,7 @@
 
 package io.reist.visum.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
@@ -23,6 +24,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,11 +40,15 @@ import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragm
 
 /**
  * Extend your bottom sheet dialog fragments with this class to take advantage of Visum MVP.
+ *
+ * Prevents client code from overriding standard Android lifecycle methods.
+ * This is to minimize bugs regarding view attachment. For proper initialization / cleanup, use
+ * {@link #init(Context, Bundle)}, {@link #attachPresenter()} and {@link #detachPresenter()}.
  */
 @SuppressWarnings("unused")
 public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
         extends BottomSheetDialogFragment
-        implements VisumView<P> {
+        implements VisumView<P>, CompositeView {
 
     private final VisumViewHelper<P> helper;
 
@@ -80,32 +86,40 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
 
     @Override
     @CallSuper
-    public void attachPresenter() {
-        helper.attachPresenter();
-        presenterAttached = true;
+    public final void attachPresenter() {
+        FragmentActivity activity = getActivity();
+        if (activity != null && !activity.isFinishing()) {
+            bindViews(getView());
+            helper.attachPresenter();
+            presenterAttached = true;
+        }
     }
 
     @Override
     @CallSuper
-    public void detachPresenter() {
+    public final void detachPresenter() {
         helper.detachPresenter();
         presenterAttached = false;
+        unbindUiElements();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onStartClient();
     }
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(getLayoutRes(), container, false);
+    public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(getLayoutRes(), container, false);
+        bindViews(view);
+        init(getContext(), savedInstanceState);
+        return view;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public final void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!presenterAttached) {
             attachPresenter();
@@ -113,7 +127,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
+    public final void onHiddenChanged(boolean hidden) {
 
         if (hidden && !presenterAttached || !hidden && presenterAttached) {
             return;
@@ -132,7 +146,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onResume() {
+    public final void onResume() {
         super.onResume();
         if (!presenterAttached) {
             attachPresenter();
@@ -140,7 +154,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onPause() {
+    public final void onPause() {
         super.onPause();
         if (presenterAttached) {
             detachPresenter();
@@ -148,7 +162,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onDestroyView() {
+    public final void onDestroyView() {
         super.onDestroyView();
         if (presenterAttached) {
             detachPresenter();
@@ -156,7 +170,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onDestroy() {
+    public final void onDestroy() {
         super.onDestroy();
         onStopClient();
     }
@@ -174,5 +188,25 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
 
     @LayoutRes
     protected abstract int getLayoutRes();
+
+    @CallSuper
+    @Override
+    public void init(Context context, Bundle savedInstanceState) {}
+
+    @Override
+    public final void rebindUiElements() {
+        unbindUiElements();
+        bindUiElements();
+    }
+
+    @Override
+    public final void bindUiElements() {
+        bindViews(getView());
+    }
+
+    @Override
+    public void unbindUiElements() {}
+
+    protected abstract void bindViews(View view);
 
 }

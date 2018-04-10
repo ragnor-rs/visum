@@ -16,6 +16,7 @@
 
 package io.reist.sandbox.users.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -66,9 +67,9 @@ public class UserReposFragment extends BaseFragment<UserReposPresenter> implemen
     }
 
     @Override
-    public void attachPresenter() {
+    public void init(Context context, Bundle savedInstanceState) {
 
-        super.attachPresenter();
+        super.init(context, savedInstanceState);
 
         // setView this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

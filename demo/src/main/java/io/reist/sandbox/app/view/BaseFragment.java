@@ -16,22 +16,16 @@
 
 package io.reist.sandbox.app.view;
 
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import io.reist.visum.presenter.VisumPresenter;
 import io.reist.visum.view.VisumFragment;
+import io.reist.vui.view.VisumCompositeFragment;
 
 /**
  * Created by defuera on 03/02/2016.
  */
-public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragment<P> {
+public abstract class BaseFragment<P extends VisumPresenter> extends VisumCompositeFragment<P> {
 
     private final int layoutResId;
 
@@ -56,14 +50,6 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragme
 
     public interface FragmentController {
         void showFragment(VisumFragment fragment, boolean remove);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, view);
-        return view;
     }
 
     @Override

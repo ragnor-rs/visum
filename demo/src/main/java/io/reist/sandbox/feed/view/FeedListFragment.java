@@ -16,6 +16,8 @@
 
 package io.reist.sandbox.feed.view;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,9 +65,9 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
     }
 
     @Override
-    public void attachPresenter() {
+    public void init(Context context, Bundle savedInstanceState) {
 
-        super.attachPresenter();
+        super.init(context, savedInstanceState);
 
         // setView this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -82,7 +84,7 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
                     ((TextView) view.findViewById(R.id.post_title)).setText(item.title);
                     ((TextView) view.findViewById(R.id.post_body)).setText(item.body);
 
-                    ImageView postImage = ((ImageView) view.findViewById(R.id.post_image));
+                    ImageView postImage = view.findViewById(R.id.post_image);
                     Dali.with(postImage)
                             .load(item.image)
                             .inCircle(true)
@@ -96,9 +98,9 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
 
         listAdapter
                 .addViewCreator(Comment.class, parent -> LayoutInflater.from(getActivity()).inflate(R.layout.item_comment, parent, false)).addViewBinder((view, item) -> {
-                    ((TextView) view.findViewById(R.id.comment_email)).setText(item.email);
-                    ((TextView) view.findViewById(R.id.comment_message)).setText(item.message);
-                });
+            ((TextView) view.findViewById(R.id.comment_email)).setText(item.email);
+            ((TextView) view.findViewById(R.id.comment_message)).setText(item.message);
+        });
 
         recyclerView.setAdapter(listAdapter);
 

@@ -1,4 +1,4 @@
-package io.reist.vui.model;
+package io.reist.visum.model;
 
 import java.io.Serializable;
 

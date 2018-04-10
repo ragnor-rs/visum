@@ -1,5 +1,6 @@
 package io.reist.sandbox.food.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -42,10 +43,14 @@ public class RestaurantInfoFragment extends BaseFragment<RestaurantInfoPresenter
         return fragment;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
+    public void init(Context context, Bundle savedInstanceState) {
+
+        super.init(context, savedInstanceState);
+
         getPresenter().setRestaurantId(getArguments().getString(ARG_RESTAURANT));
+
     }
 
     @Override

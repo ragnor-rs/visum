@@ -17,27 +17,22 @@
 package io.reist.visum.view;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import org.mockito.Mockito;
 
+import io.reist.visum.R;
 import io.reist.visum.presenter.TestPresenter;
 
 /**
  * Created by Reist on 16.06.16.
  */
-public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
+public abstract class BaseTestVisumFragment
+        extends VisumFragment<TestPresenter>
         implements VisumResultReceiver {
 
     private static final int REQUEST_CODE = 1;
-
-    public static final int CONTAINER_ID = 1;
 
     private final VisumResultReceiver dummy = Mockito.mock(VisumResultReceiver.class);
 
@@ -49,21 +44,12 @@ public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
 
     @Override
     protected int getLayoutRes() {
-        return 0;
+        return R.layout.test;
     }
 
     @Override
     public TestPresenter getPresenter() {
         return presenter;
-    }
-
-    @SuppressWarnings("ResourceType")
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.setId(CONTAINER_ID);
-        return frameLayout;
     }
 
     @Override
@@ -82,8 +68,7 @@ public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
     }
 
     @Override
-    public void onActivityResult() {
-    }
+    public void onActivityResult() {}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -92,8 +77,7 @@ public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
     }
 
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
+    protected void bindViews(View view) {
         dummy.attachPresenter();
     }
 

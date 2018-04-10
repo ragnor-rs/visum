@@ -24,6 +24,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -41,11 +42,15 @@ import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragm
 /**
  * A {@link Fragment}-based implementation of {@link VisumView}
  *
+ * Prevents client code from overriding standard Android lifecycle methods.
+ * This is to minimize bugs regarding view attachment. For proper initialization / cleanup, use
+ * {@link #init(Context, Bundle)}, {@link #attachPresenter()} and {@link #detachPresenter()}.
+ *
  * @param <P> - subclass of VisumPresenter
  */
 public abstract class VisumFragment<P extends VisumPresenter>
         extends Fragment
-        implements VisumView<P> {
+        implements VisumView<P>, CompositeView {
 
     private final VisumViewHelper<P> helper;
 
@@ -81,28 +86,36 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     @Override
     @CallSuper
-    public void attachPresenter() {
-        helper.attachPresenter();
-        presenterAttached = true;
+    public final void attachPresenter() {
+        FragmentActivity activity = getActivity();
+        if (activity != null && !activity.isFinishing()) {
+            bindViews(getView());
+            helper.attachPresenter();
+            presenterAttached = true;
+        }
     }
 
     @Override
     @CallSuper
-    public void detachPresenter() {
+    public final void detachPresenter() {
         helper.detachPresenter();
         presenterAttached = false;
+        unbindUiElements();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onStartClient();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public final View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view;
 
         int customTheme = getCustomTheme();
+
         if (customTheme != 0) {
 
             // create ContextThemeWrapper from the original Activity Context with the custom theme
@@ -110,16 +123,21 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
             // clone the inflater using the ContextThemeWrapper
             LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
-            return localInflater.inflate(getLayoutRes(), container, false);
+            view = localInflater.inflate(getLayoutRes(), container, false);
 
         } else {
-            return inflater.inflate(getLayoutRes(), container, false);
+            view = inflater.inflate(getLayoutRes(), container, false);
         }
+
+        bindViews(view);
+        init(getContext(), savedInstanceState);
+
+        return view;
 
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+    public final void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (!presenterAttached) {
             attachPresenter();
@@ -127,7 +145,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
+    public final void onHiddenChanged(boolean hidden) {
 
         if (hidden && !presenterAttached || !hidden && presenterAttached) {
             return;
@@ -146,7 +164,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onResume() {
+    public final void onResume() {
         super.onResume();
         if (!presenterAttached) {
             attachPresenter();
@@ -154,7 +172,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onPause() {
+    public final void onPause() {
         super.onPause();
         if (presenterAttached) {
             detachPresenter();
@@ -162,7 +180,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onDestroyView() {
+    public final void onDestroyView() {
         super.onDestroyView();
         if (presenterAttached) {
             detachPresenter();
@@ -170,7 +188,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onDestroy() {
+    public final void onDestroy() {
         super.onDestroy();
         onStopClient();
     }
@@ -193,5 +211,25 @@ public abstract class VisumFragment<P extends VisumPresenter>
     protected int getCustomTheme() {
         return 0;
     }
+
+    @CallSuper
+    @Override
+    public void init(Context context, Bundle savedInstanceState) {}
+
+    @Override
+    public final void rebindUiElements() {
+        unbindUiElements();
+        bindUiElements();
+    }
+
+    @Override
+    public final void bindUiElements() {
+        bindViews(getView());
+    }
+
+    @Override
+    public void unbindUiElements() {}
+
+    protected abstract void bindViews(View view);
 
 }

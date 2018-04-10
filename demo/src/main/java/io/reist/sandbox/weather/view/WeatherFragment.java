@@ -70,11 +70,6 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     }
 
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
-    }
-
-    @Override
     public void showSuccess() {
         Snackbar.make(this.getView(), "Success", Snackbar.LENGTH_SHORT).show();
     }

@@ -1,4 +1,4 @@
-package io.reist.vui.view;
+package io.reist.visum.view;
 
 /**
  * Created by Reist on 07/04/2017.

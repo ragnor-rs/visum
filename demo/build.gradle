@@ -68,6 +68,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation project(':library')
+    implementation project(':visum_ui')
 
     implementation 'com.android.support:multidex:1.0.3'
 

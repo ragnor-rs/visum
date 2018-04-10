@@ -16,7 +16,7 @@
 
 package io.reist.visum.view;
 
-import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -30,10 +30,12 @@ import io.reist.visum.presenter.TestPresenter;
 /**
  * Created by defuera on 22/06/2016.
  */
-public abstract class BaseTestVisumActivity extends VisumActivity<TestPresenter>
+public abstract class BaseTestVisumActivity
+        extends VisumActivity<TestPresenter>
         implements VisumConfigurableResultReceiver {
 
     public static final int CONTAINER_ID = 1;
+
     private static final int REQUEST_CODE = 1;
 
     private TestPresenter presenter;
@@ -69,11 +71,10 @@ public abstract class BaseTestVisumActivity extends VisumActivity<TestPresenter>
         setContentView(container);
     }
 
-    @SuppressLint("PrivateResource")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void init(Context context, Bundle savedInstanceState) {
         setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
-        super.onCreate(savedInstanceState);
+        super.init(context, savedInstanceState);
         changingConfigurations = false;
     }
 
@@ -98,18 +99,17 @@ public abstract class BaseTestVisumActivity extends VisumActivity<TestPresenter>
     }
 
     @Override
-    public void onActivityResult() {
-    }
+    public void onActivityResult() {}
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         dummy.onActivityResult();
     }
 
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
+    public void bindUiElements() {
+        super.bindUiElements();
         dummy.attachPresenter();
     }
 
@@ -117,6 +117,5 @@ public abstract class BaseTestVisumActivity extends VisumActivity<TestPresenter>
     public void inject(@NonNull Object component) {
         ((VisumViewTest.TestSubComponent) component).inject(this);
     }
-
 
 }

@@ -35,10 +35,10 @@ import org.robolectric.Shadows;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
 
+import io.reist.visum.R;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
-import rx.functions.Func0;
 import rx.functions.Func1;
 
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
@@ -71,17 +71,10 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
     }
 
     @Before
-    public void start() throws Exception {
+    public void start() {
         setUp();
         getComponentCache().register(
-                new Func0<Object>() {
-
-                    @Override
-                    public Object call() {
-                        return getComponent().testSubComponent();
-                    }
-
-                },
+                () -> getComponent().testSubComponent(),
                 TestVisumView.class,
                 BaseTestVisumFragment.class,
                 BaseTestVisumDialogFragment.class,
@@ -243,7 +236,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         // create a child fragment
         parentView.getChildFragmentManager()
                 .beginTransaction()
-                .add(TestVisumFragment.CONTAINER_ID, childView)
+                .add(R.id.test_container, childView)
                 .commit();
 
         // hide the parent fragment

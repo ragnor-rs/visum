@@ -18,13 +18,17 @@ package io.reist.visum.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.View;
 
+import io.reist.visum.model.ViewModel;
 import io.reist.visum.presenter.TestPresenter;
 
 /**
  * Created by Reist on 16.06.16.
  */
-public class TestVisumWidget extends VisumWidget<TestPresenter> implements VisumDynamicPresenterView {
+public class TestVisumWidget
+        extends VisumWidget<TestPresenter, ViewModel>
+        implements VisumDynamicPresenterView {
 
     private TestPresenter presenter;
 
@@ -38,6 +42,9 @@ public class TestVisumWidget extends VisumWidget<TestPresenter> implements Visum
     }
 
     @Override
+    protected void bindViews(View view) {}
+
+    @Override
     public TestPresenter getPresenter() {
         return presenter;
     }
@@ -46,9 +53,6 @@ public class TestVisumWidget extends VisumWidget<TestPresenter> implements Visum
     public void setPresenter(TestPresenter presenter) {
         this.presenter = presenter;
     }
-
-    @Override
-    protected void inflate() {}
 
     @Override
     public void inject(@NonNull Object component) {

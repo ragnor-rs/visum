@@ -19,6 +19,7 @@ package io.reist.visum.view;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import io.reist.visum.presenter.SingleViewPresenter;
@@ -64,9 +65,9 @@ public abstract class VisumAccountAuthenticatorActivity<P extends VisumPresenter
      * @param icicle the save instance data of this Activity, may be null
      */
     @Override
-    protected void onCreate(Bundle icicle) {
+    public void init(Context context, Bundle icicle) {
 
-        super.onCreate(icicle);
+        super.init(context, icicle);
 
         mAccountAuthenticatorResponse = getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
 

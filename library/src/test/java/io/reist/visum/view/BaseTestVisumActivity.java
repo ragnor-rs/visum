@@ -66,14 +66,17 @@ public abstract class BaseTestVisumActivity
     @SuppressWarnings("ResourceType")
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
+
+        setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
+
         FrameLayout container = new FrameLayout(this);
         container.setId(CONTAINER_ID);
         setContentView(container);
+
     }
 
     @Override
     public void init(Context context, Bundle savedInstanceState) {
-        setTheme(android.support.v7.appcompat.R.style.Theme_AppCompat);
         super.init(context, savedInstanceState);
         changingConfigurations = false;
     }
@@ -108,8 +111,8 @@ public abstract class BaseTestVisumActivity
     }
 
     @Override
-    public void bindUiElements() {
-        super.bindUiElements();
+    void internalAttachPresenter() {
+        super.internalAttachPresenter();
         dummy.attachPresenter();
     }
 

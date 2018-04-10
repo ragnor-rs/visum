@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import io.reist.visum.R;
 import io.reist.visum.model.ViewModel;
 import io.reist.visum.presenter.TestPresenter;
 
@@ -38,7 +39,7 @@ public class TestVisumWidget
 
     @Override
     protected int getLayoutRes() {
-        return 0;
+        return R.layout.test;
     }
 
     @Override

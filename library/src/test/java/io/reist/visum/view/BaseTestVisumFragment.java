@@ -77,7 +77,7 @@ public abstract class BaseTestVisumFragment
     }
 
     @Override
-    protected void bindViews(View view) {
+    void internalAttachPresenter() {
         dummy.attachPresenter();
     }
 

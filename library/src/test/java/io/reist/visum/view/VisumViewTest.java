@@ -43,7 +43,7 @@ import rx.functions.Func1;
 
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
-import static io.reist.visum.view.ViewAssert.assertPresenterAttachedBeforeOnActivityResult;
+import static io.reist.visum.view.ViewAssert.assertPresenterAttachedAfterOnActivityResult;
 import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 
 /**
@@ -277,7 +277,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 new Intent()
         );
         activityController.resume();
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // hide
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
@@ -288,16 +288,9 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         assertPresenterAttached(testPresenter, VIEW_ID, testView);
 
         // config change
-        Func1<FragmentContainerActivity, V> viewFinder = new Func1<FragmentContainerActivity, V>() {
-
-            @Override
-            public V call(FragmentContainerActivity testActivity) {
-                return (V) testActivity
-                        .getSupportFragmentManager()
-                        .findFragmentById(FragmentContainerActivity.CONTAINER_ID);
-            }
-
-        };
+        Func1<FragmentContainerActivity, V> viewFinder = testActivity -> (V) testActivity
+                .getSupportFragmentManager()
+                .findFragmentById(FragmentContainerActivity.CONTAINER_ID);
         fragmentContainerActivity = simulateConfigChange(activityController, FragmentContainerActivity.class, viewFinder).get();
         testView = viewFinder.call(fragmentContainerActivity);
 
@@ -327,17 +320,10 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         );
         activityController.resume();
 
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // config change
-        Func1<V, V> viewFinder = new Func1<V, V>() {
-
-            @Override
-            public V call(V v) {
-                return v;
-            }
-
-        };
+        Func1<V, V> viewFinder = v -> v;
         activityController = simulateConfigChange(activityController, activityClass, viewFinder);
         testView = viewFinder.call(activityController.get());
 

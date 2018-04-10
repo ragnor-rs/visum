@@ -77,7 +77,7 @@ public abstract class BaseTestVisumBottomSheetDialogFragment
     }
 
     @Override
-    protected void bindViews(View view) {
+    void internalAttachPresenter() {
         dummy.attachPresenter();
     }
 

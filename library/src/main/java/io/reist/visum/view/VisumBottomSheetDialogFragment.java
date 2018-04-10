@@ -93,7 +93,10 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
             helper.attachPresenter();
             presenterAttached = true;
         }
+        internalAttachPresenter();
     }
+
+    void internalAttachPresenter() {}
 
     @Override
     @CallSuper
@@ -207,6 +210,6 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public void unbindUiElements() {}
 
-    protected abstract void bindViews(View view);
+    protected void bindViews(View view) {}
 
 }

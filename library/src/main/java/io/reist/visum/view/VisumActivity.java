@@ -86,7 +86,10 @@ public abstract class VisumActivity<P extends VisumPresenter>
             helper.attachPresenter();
             presenterAttached = true;
         }
+        internalAttachPresenter();
     }
+
+    void internalAttachPresenter() {}
 
     @Override
     public final void detachPresenter() {

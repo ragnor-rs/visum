@@ -38,19 +38,16 @@ public class RestaurantListPresenter extends SingleViewPresenter<RestaurantListV
     }
 
     public void init() {
-        withView(
-                view -> {
-                    view.setRestaurantsListAdapter(restaurantsAdapter);
-                    restaurantsAdapter.setOnUserClickListener((view::showRestaurantInfo));
-                }
-        );
+        RestaurantListView view = view();
+        view.setRestaurantsListAdapter(restaurantsAdapter);
+        restaurantsAdapter.setOnUserClickListener(view::showRestaurantInfo);
         geopositionMonitor.getLocationFound().subscribe(this::findRestaurants);
     }
 
     private void setRestaurantList(List<RestaurantModel> restaurants) {
         // TODO: 02.03.2018 a bit weird, but makes view more passive
         restaurantsAdapter.setRestaurants(restaurants);
-        withView(RestaurantListView::hideLoader);
+        view().hideLoader();
     }
 
     private void findRestaurants(LatLng latLng) {

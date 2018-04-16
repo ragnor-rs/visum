@@ -109,7 +109,9 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onStartClient();
+        if (!getActivity().isChangingConfigurations()) {
+            onStartClient();
+        }
     }
 
     @Nullable
@@ -122,10 +124,16 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
+<<<<<<< HEAD
     public final void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+=======
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+>>>>>>> develop
         super.onViewCreated(view, savedInstanceState);
-        if (!presenterAttached) {
-            attachPresenter();
+        if (!getActivity().isChangingConfigurations()) {
+            if (!presenterAttached) {
+                attachPresenter();
+            }
         }
     }
 
@@ -149,6 +157,7 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
+<<<<<<< HEAD
     public final void onResume() {
         super.onResume();
         if (!presenterAttached) {
@@ -169,13 +178,27 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
         super.onDestroyView();
         if (presenterAttached) {
             detachPresenter();
+=======
+    public void onDestroyView() {
+        if (!getActivity().isChangingConfigurations()) {
+            if (presenterAttached) {
+                detachPresenter();
+            }
+>>>>>>> develop
         }
+        super.onDestroyView();
     }
 
     @Override
+<<<<<<< HEAD
     public final void onDestroy() {
+=======
+    public void onDestroy() {
+        if (!getActivity().isChangingConfigurations()) {
+            onStopClient();
+        }
+>>>>>>> develop
         super.onDestroy();
-        onStopClient();
     }
 
     /**
@@ -186,7 +209,9 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        attachPresenter();
+        if (!presenterAttached) {
+            attachPresenter();
+        }
     }
 
     @LayoutRes

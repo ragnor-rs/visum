@@ -47,7 +47,7 @@ public class ViewAssert {
         VisumResultReceiver dummy = view.getDummy();
 
         InOrder inOrder = Mockito.inOrder(dummy);
-        inOrder.verify(dummy, Mockito.times(2)).attachPresenter();
+        inOrder.verify(dummy, Mockito.times(1)).attachPresenter();
         inOrder.verify(dummy, Mockito.times(1)).onActivityResult();
 
     }

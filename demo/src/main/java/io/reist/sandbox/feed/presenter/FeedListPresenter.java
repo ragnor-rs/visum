@@ -59,27 +59,21 @@ public class FeedListPresenter extends SingleViewPresenter<FeedListView> {
 
         @Override
         public void onNext(SandboxResponse<List<Post>> response) {
+            FeedListView view = view();
             if (response.isSuccessful()) {
                 List<Post> result = response.getResult();
-                withView(
-                        view -> {
-                            view.displayData(result == null ? new ArrayList<>() : result);
-                            view.showLoader(false);
-                        }
-                );
+                view.displayData(result == null ? new ArrayList<>() : result);
+                view.showLoader(false);
             } else {
-                withView(view -> view.displayError(response.getError()));
+                view.displayError(response.getError());
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            withView(
-                    view -> {
-                        view.displayError(new SandboxError(e));
-                        view.showLoader(false);
-                    }
-            );
+            FeedListView view = view();
+            view.displayError(new SandboxError(e));
+            view.showLoader(false);
         }
 
         @Override

@@ -99,6 +99,7 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
+<<<<<<< HEAD
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         onStartClient();
@@ -112,21 +113,55 @@ public abstract class VisumActivity<P extends VisumPresenter>
         super.onResume();
         if (!presenterAttached) {
             attachPresenter();
+=======
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        if (!isChangingConfigurations()) {
+            onStartClient();
+            if (!presenterAttached) {
+                attachPresenter();
+            }
+>>>>>>> develop
         }
+
+        setContentView(getLayoutRes());
+
     }
 
     @Override
+<<<<<<< HEAD
     protected final void onPause() {
         super.onPause();
         if (presenterAttached) {
             detachPresenter();
+=======
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (!presenterAttached) {
+            attachPresenter();
         }
     }
 
     @Override
+    public void onDestroy() {
+
+        if (!isChangingConfigurations()) {
+            if (presenterAttached) {
+                detachPresenter();
+            }
+            onStopClient();
+>>>>>>> develop
+        }
+
+<<<<<<< HEAD
+    @Override
     protected final void onDestroy() {
+=======
+>>>>>>> develop
         super.onDestroy();
-        onStopClient();
+
     }
 
     /**

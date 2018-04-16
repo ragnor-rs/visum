@@ -162,7 +162,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .commit();
 
         // emulates a part of new activity start process
-        activityController.pause().stop();
+        activityController.pause().stop().destroy();
         assertPresenterDetached(testPresenter, CHILD_VIEW_ID, fragment);
 
     }

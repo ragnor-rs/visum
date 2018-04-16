@@ -62,30 +62,24 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
 
             @Override
             protected void onFail(SandboxError error) {
-                withView(
-                        view -> {
-                            view.showLoader(false);
-                            view.displayError(error);
-                        }
-                );
+                RepoListView view = view();
+                view.showLoader(false);
+                view.displayError(error);
             }
 
             @Override
             protected void onSuccess(List<Repo> result) {
                 mIsDataLoaded = true;
-                withView(
-                        view -> {
-                            view.showLoader(false);
-                            view.displayData(result); //cur need to check if view detached or crash can occure
-                        }
-                );
+                RepoListView view = view();
+                view.showLoader(false);
+                view.displayData(result); // need to check if view detached or crash can occur
             }
 
         });
     }
 
     public void createRepo() {
-        withView(v -> v.showLoader(true));
+        view().showLoader(true);
 
         Random rand = new Random();
         Repo object = new Repo();
@@ -107,23 +101,17 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
         @Override
         protected void onFail(SandboxError error) {
             Log.e(TAG, "Error saving data" + error.getMessage());
-            withView(
-                    view -> {
-                        view.displayError(error);
-                        view.showLoader(false);
-                    }
-            );
+            RepoListView view = view();
+            view.displayError(error);
+            view.showLoader(false);
         }
 
         @Override
         protected void onSuccess(Repo result) {
             Log.i(TAG, "success add repo subscriber");
-            withView(
-                    view -> {
-                        view.displaySuccess();
-                        view.showLoader(false);
-                    }
-            );
+            RepoListView view = view();
+            view.displaySuccess();
+            view.showLoader(false);
         }
 
     }

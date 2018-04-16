@@ -29,10 +29,8 @@ public class RestaurantMapPresenter extends VisumPresenter<RestaurantMapView> {
     public void initPresenter(String restaurantId) {
         this.restaurantId = restaurantId;
         restaurant = restaurantMonitor.getRestaurantById(restaurantId);
-        withView(
-                MAP_FRAGMENT,
-                v -> v.setRestaurantCoordinates(new LatLng(restaurant.getLat(), restaurant.getLon()), restaurant.getName())
-        );
+        RestaurantMapView v = view(MAP_FRAGMENT);
+        v.setRestaurantCoordinates(new LatLng(restaurant.getLat(), restaurant.getLon()), restaurant.getName());
     }
 
 }

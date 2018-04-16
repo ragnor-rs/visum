@@ -44,25 +44,19 @@ public class PresenterAssert {
     }
 
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {
-        Subscription subscription = presenter.subscribe(
-                viewId,
-                Single.just(true),
-                new Action1<Boolean>() {
-
-                    @Override
-                    public void call(Boolean aBoolean) {}
-
-                },
-                new Action1<Throwable>() {
-
-                    @Override
-                    public void call(Throwable throwable) {
+        try {
+            presenter.subscribe(
+                    viewId,
+                    Single.just(true),
+                    aBoolean -> {},
+                    throwable -> {
                         throw new RuntimeException(throwable);
                     }
-
-                }
-        );
-        Assert.assertEquals(expected, subscription != null);
+            );
+            Assert.assertTrue("subscribe() should work here", expected);
+        } catch (Exception e) {
+            Assert.assertFalse("subscribe() shouldn't work here", expected);
+        }
     }
 
     public static void assertGlobalSubscribe(TestPresenter presenter, boolean expected) {

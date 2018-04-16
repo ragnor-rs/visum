@@ -60,7 +60,7 @@ public abstract class BaseTestVisumBottomSheetDialogFragment extends VisumBottom
     @SuppressWarnings("ResourceType")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FrameLayout frameLayout = new FrameLayout(getContext());
         frameLayout.setId(CONTAINER_ID);
         return frameLayout;

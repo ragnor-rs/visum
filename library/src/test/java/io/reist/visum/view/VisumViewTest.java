@@ -43,7 +43,7 @@ import rx.functions.Func1;
 
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
-import static io.reist.visum.view.ViewAssert.assertPresenterAttachedBeforeOnActivityResult;
+import static io.reist.visum.view.ViewAssert.assertPresenterAttachedAfterOnActivityResult;
 import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 
 /**
@@ -169,7 +169,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .commit();
 
         // emulates a part of new activity start process
-        activityController.pause().stop();
+        activityController.pause().stop().destroy();
         assertPresenterDetached(testPresenter, CHILD_VIEW_ID, fragment);
 
     }
@@ -284,7 +284,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 new Intent()
         );
         activityController.resume();
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // hide
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
@@ -334,7 +334,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         );
         activityController.resume();
 
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // config change
         Func1<V, V> viewFinder = new Func1<V, V>() {

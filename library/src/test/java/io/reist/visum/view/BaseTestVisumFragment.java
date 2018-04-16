@@ -60,7 +60,7 @@ public abstract class BaseTestVisumFragment extends VisumFragment<TestPresenter>
     @SuppressWarnings("ResourceType")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FrameLayout frameLayout = new FrameLayout(getContext());
         frameLayout.setId(CONTAINER_ID);
         return frameLayout;

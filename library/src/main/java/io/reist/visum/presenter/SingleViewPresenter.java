@@ -48,8 +48,9 @@ public abstract class SingleViewPresenter<V extends VisumView> extends VisumPres
     @Override
     public final void onStart() {}
 
-    public final void withView(Action1<V> action1) {
-        withView(DEFAULT_VIEW_ID, action1);
+    @NonNull
+    public final V view() {
+        return view(DEFAULT_VIEW_ID);
     }
 
 

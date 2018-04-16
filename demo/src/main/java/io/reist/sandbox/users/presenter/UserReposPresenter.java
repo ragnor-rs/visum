@@ -19,7 +19,6 @@ package io.reist.sandbox.users.presenter;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -79,7 +78,7 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
 
         @Override
         public void onError(Throwable e) {
-            withView(v -> v.displayError(new SandboxError(e)));
+            view().displayError(new SandboxError(e));
         }
 
     }
@@ -89,30 +88,24 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
         @Override
         public void onNext(SandboxResponse<List<Repo>> response) {
             Log.i(TAG, "--- OBSERVED ON " + Thread.currentThread() + " ---");
+            UserReposView v = view();
             if (response.isSuccessful()) {
                 List<Repo> result = response.getResult();
                 Log.d(TAG, "successfully loaded " + result.size() + " items");
-                withView(
-                        v -> {
-                            v.displayData(result == null ? new ArrayList<>() : result);
-                            v.showLoader(false);
-                        }
-                );
+                v.displayData(result);
+                v.showLoader(false);
             } else {
                 Log.w(TAG, "network error occurred");
-                withView(v -> v.displayError(response.getError()));
+                v.displayError(response.getError());
             }
         }
 
         @Override
         public void onError(Throwable e) {
             Log.e(TAG, "Error fetching data", e);
-            withView(
-                    view -> {
-                        view.displayError(new SandboxError(e));
-                        view.showLoader(false);
-                    }
-            );
+            UserReposView view = view();
+            view.displayError(new SandboxError(e));
+            view.showLoader(false);
         }
 
         @Override

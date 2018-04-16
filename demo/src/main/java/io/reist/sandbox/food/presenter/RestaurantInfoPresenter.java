@@ -27,13 +27,9 @@ public class RestaurantInfoPresenter extends VisumPresenter<RestaurantInfoView> 
     public void setRestaurantId(String restaurantId) {
         this.restaurantId = restaurantId;
         restaurant = restaurantMonitor.getRestaurantById(restaurantId);
-        withView(
-                INFO_FRAGMENT,
-                view -> {
-                    view.setName(restaurant.getName());
-                    view.setRating(restaurant.getRating());
-                }
-        );
+        RestaurantInfoView view = view(INFO_FRAGMENT);
+        view.setName(restaurant.getName());
+        view.setRating(restaurant.getRating());
     }
 
 }

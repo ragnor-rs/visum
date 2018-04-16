@@ -66,18 +66,13 @@ public class UserListPresenter extends SingleViewPresenter<UserListView> {
 
         @Override
         public void onNext(SandboxResponse<List<User>> response) {
+            UserListView view = view();
             if (response.isSuccessful()) {
                 mIsDataLoaded = true;
-                withView(
-                        view -> {
-                            view.displayData(response.getResult());
-                            view.showLoader(false);
-                        }
-                );
+                view.displayData(response.getResult());
+                view.showLoader(false);
             } else {
-                withView(
-                        view -> view.displayError(response.getError())
-                );
+                view.displayError(response.getError());
             }
         }
 
@@ -86,9 +81,7 @@ public class UserListPresenter extends SingleViewPresenter<UserListView> {
 
         @Override
         public void onError(Throwable e) {
-            withView(
-                    view -> view.showLoader(false)
-            );
+            view().showLoader(false);
         }
 
     }

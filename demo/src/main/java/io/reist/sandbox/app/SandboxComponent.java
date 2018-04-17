@@ -19,6 +19,7 @@ package io.reist.sandbox.app;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import io.reist.sandbox.cryptocurrency.CryptoCurrencyComponent;
 import io.reist.sandbox.feed.FeedComponent;
 import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.repos.ReposComponent;
@@ -42,6 +43,8 @@ public interface SandboxComponent {
     WeatherComponent weatherComponent();
 
     FeedComponent feedComponent();
+
+    CryptoCurrencyComponent cryptoCurrencyComponent();
 
     RestaurantComponent restaurantComponent();
 

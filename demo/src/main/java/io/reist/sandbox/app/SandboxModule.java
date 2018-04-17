@@ -33,6 +33,9 @@ import io.reist.sandbox.app.model.Comment;
 import io.reist.sandbox.app.model.CommentStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.CommentStorIOSQLiteGetResolver;
 import io.reist.sandbox.app.model.CommentStorIOSQLitePutResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLiteGetResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.PostStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.Repo;
@@ -44,6 +47,8 @@ import io.reist.sandbox.app.model.UserStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.local.DbOpenHelper;
 import io.reist.sandbox.app.model.remote.NestedFieldNameAdapter;
 import io.reist.sandbox.app.model.remote.SandboxApi;
+import io.reist.sandbox.cryptocurrency.CryptoCurrencyModule;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
@@ -73,6 +78,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
         ResultModule.class,
         WeatherModule.class,
         FeedModule.class,
+        CryptoCurrencyModule.class,
         RestaurantModule.class
 })
 public class SandboxModule {
@@ -128,6 +134,14 @@ public class SandboxModule {
                                 .putResolver(new CommentStorIOSQLitePutResolver())
                                 .getResolver(new CommentStorIOSQLiteGetResolver())
                                 .deleteResolver(new CommentStorIOSQLiteDeleteResolver())
+                                .build()
+                )
+                .addTypeMapping(
+                        CryptoCurrencyItem.class,
+                        SQLiteTypeMapping.<CryptoCurrencyItem>builder()
+                                .putResolver(new CryptoCurrencyItemStorIOSQLitePutResolver())
+                                .getResolver(new CryptoCurrencyItemStorIOSQLiteGetResolver())
+                                .deleteResolver(new CryptoCurrencyItemStorIOSQLiteDeleteResolver())
                                 .build()
                 )
                 .addTypeMapping(

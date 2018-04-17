@@ -18,6 +18,7 @@ package io.reist.sandbox.app;
 
 import android.content.Context;
 
+import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyFragment;
 import io.reist.sandbox.feed.view.FeedDetailFragment;
 import io.reist.sandbox.feed.view.FeedListFragment;
 import io.reist.sandbox.food.view.RestaurantFragment;
@@ -81,6 +82,11 @@ public class SandboxComponentCache extends ComponentCache {
                 RestaurantFragment.class,
                 RestaurantMapFragment.class,
                 RestaurantInfoFragment.class
+        );
+
+        register(
+                sandboxComponent::cryptoCurrencyComponent,
+                CryptoCurrencyFragment.class
         );
 
     }

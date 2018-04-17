@@ -28,6 +28,10 @@
         android:icon="@drawable/ic_sun_cloud"
         android:title="@string/weather_nav_title" />
 
+    <item
+        android:id="@+id/nav_cryptocurrency"
+        android:icon="@drawable/ic_cryptocurrency"
+        android:title="@string/nav_title_cryptocurrency" />
 
     <item
         android:id="@+id/nav_restaurants"

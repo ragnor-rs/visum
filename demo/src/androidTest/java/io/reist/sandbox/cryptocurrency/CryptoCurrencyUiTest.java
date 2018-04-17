@@ -36,7 +36,7 @@ public class CryptoCurrencyUiTest extends ActivityInstrumentationTestCase<MainAc
     }
 
     @Test
-    public void testLike() throws Throwable {
+    public void testLike() throws InterruptedException {
 
         onView(isRoot()).perform(TestUtils.waitId(R.id.drawer_layout, TestUtils.ACTION_TIMEOUT));
 
@@ -44,16 +44,18 @@ public class CryptoCurrencyUiTest extends ActivityInstrumentationTestCase<MainAc
 
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_cryptocurrency));
 
-        onView(isRoot()).perform(TestUtils.waitId(R.id.cryptocurrency_recycler_view, TestUtils.ACTION_TIMEOUT));
+        onView(isRoot()).perform(TestUtils.waitId(R.id.item_cryptocurrency_label, TestUtils.ACTION_TIMEOUT));
 
-        assertNotEquals(hasPrice(R.id.cryptocurrency_recycler_view, 0), "");
+        Thread.sleep(60000);
+
+        assertNotEquals(hasPrice(R.id.cryptocurrency_recycler_view), "");
 
     }
 
-    private String hasPrice(@IdRes int recyclerViewId, int position) {
+    private String hasPrice(@IdRes int recyclerViewId) {
 
-        TextView price = (TextView) ((RecyclerView) mMainActivity.findViewById(recyclerViewId))
-                .findViewHolderForAdapterPosition(position)
+        TextView price = ((RecyclerView) mMainActivity.findViewById(recyclerViewId))
+                .findViewHolderForAdapterPosition(0)
                 .itemView
                 .findViewById(R.id.item_cryptocurrency_price);
 

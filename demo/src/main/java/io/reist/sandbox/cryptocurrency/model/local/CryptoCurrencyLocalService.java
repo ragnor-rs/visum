@@ -1,10 +1,11 @@
 package io.reist.sandbox.cryptocurrency.model.local;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.local.StorIoService;
 import io.reist.sandbox.cryptocurrency.model.CryptoCurrencyBaseService;
@@ -24,7 +25,7 @@ public class CryptoCurrencyLocalService extends StorIoService<CryptoCurrencyItem
                 .table(CryptoCurrencyItemTable.NAME)
                 .build())
             .prepare()
-            .createObservable()
+            .asRxObservable()
             .map(SandboxResponse::new);
     }
 

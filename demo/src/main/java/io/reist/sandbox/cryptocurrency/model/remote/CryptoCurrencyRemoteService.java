@@ -7,7 +7,7 @@ import java.util.Map;
 
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.cryptocurrency.model.CryptoCurrencyBaseService;
-import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyList;
 import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyPrice;
 import rx.Observable;

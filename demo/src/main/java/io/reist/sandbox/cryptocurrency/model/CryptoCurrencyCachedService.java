@@ -1,7 +1,7 @@
 package io.reist.sandbox.cryptocurrency.model;
 
 import io.reist.sandbox.app.model.CachedService;
-import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 
 public class CryptoCurrencyCachedService extends CachedService<CryptoCurrencyItem> implements CryptoCurrencyBaseService {
 

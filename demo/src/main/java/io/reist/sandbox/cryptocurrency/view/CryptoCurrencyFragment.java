@@ -1,5 +1,6 @@
 package io.reist.sandbox.cryptocurrency.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,7 +20,8 @@ import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
+import io.reist.sandbox.cryptocurrency.CryptoCurrencyComponent;
 import io.reist.sandbox.cryptocurrency.presenter.CryptoCurrencyPresenter;
 
 /**
@@ -64,7 +66,7 @@ public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPre
                 ((TextView) view.findViewById(R.id.item_cryptocurrency_label)).setText(item.label);
                 ((TextView) view.findViewById(R.id.item_cryptocurrency_price)).setText(item.price);
 
-                ImageView image = ((ImageView) view.findViewById(R.id.item_cryptocurrency_image));
+                ImageView image = view.findViewById(R.id.item_cryptocurrency_image);
 
                 Dali.with(image).load(item.image).inCircle(false).scaleMode(ScaleMode.CENTER_CROP).into(image, false);
 
@@ -99,6 +101,11 @@ public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPre
 
         Toast.makeText(this.getContext(), "Error", Toast.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((CryptoCurrencyComponent) component).inject(this);
     }
 
 }

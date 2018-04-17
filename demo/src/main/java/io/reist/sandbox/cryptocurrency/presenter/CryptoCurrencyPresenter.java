@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.cryptocurrency.model.CryptoCurrencyBaseService;
-import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyView;
 import io.reist.visum.presenter.SingleViewPresenter;
 import rx.Observer;

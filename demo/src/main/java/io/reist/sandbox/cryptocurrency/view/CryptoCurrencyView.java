@@ -2,7 +2,7 @@ package io.reist.sandbox.cryptocurrency.view;
 
 import java.util.List;
 
-import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItem;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.cryptocurrency.presenter.CryptoCurrencyPresenter;
 import io.reist.visum.view.VisumView;
 

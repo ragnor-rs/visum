@@ -1,7 +1,10 @@
-package io.reist.sandbox.cryptocurrency.model.local;
+package io.reist.sandbox.app.model;
 
-import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
-import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
+
+import com.pushtorefresh.storio2.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio2.sqlite.annotations.StorIOSQLiteType;
+
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemTable;
 
 /**
  * Created by Sergey on 02/11/2017.
@@ -18,8 +21,7 @@ public class CryptoCurrencyItem {
     @StorIOSQLiteColumn(name = CryptoCurrencyItemTable.Column.IMAGE)
     public String image;
 
-    public CryptoCurrencyItem() {
-    }
+    public CryptoCurrencyItem() {}
 
     public CryptoCurrencyItem(String label, String price, String image) {
         this.label = label;

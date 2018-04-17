@@ -115,13 +115,9 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-<<<<<<< HEAD
     public final View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view;
-=======
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
->>>>>>> develop
 
         int customTheme = getCustomTheme();
 
@@ -146,11 +142,7 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-<<<<<<< HEAD
     public final void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-=======
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
->>>>>>> develop
         super.onViewCreated(view, savedInstanceState);
         if (!getActivity().isChangingConfigurations()) {
             if (!presenterAttached) {
@@ -179,47 +171,30 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-<<<<<<< HEAD
     public final void onResume() {
         super.onResume();
-        if (!presenterAttached) {
-            attachPresenter();
-        }
     }
 
     @Override
     public final void onPause() {
         super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
-        }
     }
 
     @Override
     public final void onDestroyView() {
-        super.onDestroyView();
-        if (presenterAttached) {
-            detachPresenter();
-=======
-    public void onDestroyView() {
         if (!getActivity().isChangingConfigurations()) {
             if (presenterAttached) {
                 detachPresenter();
             }
->>>>>>> develop
         }
         super.onDestroyView();
     }
 
     @Override
-<<<<<<< HEAD
     public final void onDestroy() {
-=======
-    public void onDestroy() {
         if (!getActivity().isChangingConfigurations()) {
             onStopClient();
         }
->>>>>>> develop
         super.onDestroy();
     }
 
@@ -236,19 +211,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
         }
     }
 
-<<<<<<< HEAD
-=======
-    //endregion
-
-
-    /**
-     * @return a name used to identify this fragment in the back-stack
-     */
-    public String getName() {
-        return getClass().getName();
-    }
-
->>>>>>> develop
     @LayoutRes
     protected abstract int getLayoutRes();
 

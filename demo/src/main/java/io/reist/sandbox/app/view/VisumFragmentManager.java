@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.reist.visum.view;
+package io.reist.sandbox.app.view;
 
 import android.support.annotation.AnimRes;
 import android.support.annotation.IdRes;
@@ -22,6 +22,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import io.reist.visum.view.VisumFragment;
 
 /**
  * Use this class to manage your {@link VisumFragment}s.

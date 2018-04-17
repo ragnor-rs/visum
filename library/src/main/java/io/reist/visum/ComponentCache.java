@@ -18,6 +18,7 @@ package io.reist.visum;
 
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,15 +37,17 @@ public class ComponentCache {
     private Listener listener;
 
     @CallSuper
+    @Nullable
     public Object start(@NonNull VisumClient client) {
-        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
-        if (entry.component == null) {
+        ComponentEntry entry = findComponentEntryByClient(client);
+        if (entry == null) {
+            return null;
+        } else if (entry.component == null) {
             entry.component = entry.componentFactory.call();
             if (listener != null) {
                 listener.onComponentCreated(entry.component);
             }
-        }
-        if (entry.clients.contains(client)) {
+        } else if (entry.clients.contains(client)) {
             throw new IllegalStateException(client + " is already attached");
         }
         entry.clients.add(client);
@@ -52,27 +55,16 @@ public class ComponentCache {
     }
 
     public boolean isClientAttached(@NonNull VisumClient client) {
-        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
-        return entry.clients.contains(client);
+        ComponentEntry entry = findComponentEntryByClient(client);
+        return entry != null && entry.clients.contains(client);
     }
 
+    @Nullable
     protected final ComponentEntry findComponentEntryByClient(@NonNull VisumClient client) {
         return findComponentEntryByClientClass(client.getClass());
     }
 
-    /**
-     * @throws IllegalStateException    thrown if a type of the given client is not registered
-     *                                  via {@link #register(Func0, Class[])}
-     */
-    @NonNull
-    protected final ComponentEntry findComponentEntryByClientOrThrow(@NonNull VisumClient client) {
-        ComponentEntry entry = findComponentEntryByClient(client);
-        if (entry == null) {
-            throw new IllegalStateException(client.getClass() + " is not registered");
-        }
-        return entry;
-    }
-
+    @Nullable
     protected final ComponentEntry findComponentEntryByClientClass(@NonNull Class<? extends VisumClient> clazz) {
         for (ComponentEntry componentEntry : componentEntries) {
             for (Class<? extends VisumClient> clientClass : componentEntry.clientClasses) {
@@ -104,7 +96,10 @@ public class ComponentCache {
 
     @CallSuper
     public void stop(@NonNull VisumClient client, boolean retainComponent) {
-        ComponentEntry entry = findComponentEntryByClientOrThrow(client);
+        ComponentEntry entry = findComponentEntryByClient(client);
+        if (entry == null) {
+            return;
+        }
         List<VisumClient> clients = entry.clients;
         if (clients.remove(client)) {
             if (!retainComponent && clients.isEmpty()) {

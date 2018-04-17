@@ -16,6 +16,7 @@
 
 package io.reist.sandbox.feed.view;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.feed.FeedComponent;
 import io.reist.sandbox.feed.presenter.FeedListPresenter;
 
 /**
@@ -137,6 +139,11 @@ public class FeedListFragment extends BaseFragment<FeedListPresenter> implements
         }
         listAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((FeedComponent) component).inject(this);
     }
 
 }

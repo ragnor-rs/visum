@@ -31,6 +31,7 @@ import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.users.UsersComponent;
 import io.reist.sandbox.users.presenter.UserListAdapter;
 import io.reist.sandbox.users.presenter.UserListPresenter;
 
@@ -97,4 +98,10 @@ public class UserListFragment extends BaseFragment<UserListPresenter> implements
     public void showLoader(boolean show) {
         mLoaderView.showLoading(show);
     }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((UsersComponent) component).inject(this);
+    }
+
 }

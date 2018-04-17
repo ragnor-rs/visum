@@ -16,6 +16,7 @@
 
 package io.reist.sandbox.weather.view;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,7 @@ import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.weather.WeatherComponent;
 import io.reist.sandbox.weather.model.local.WeatherEntity;
 import io.reist.sandbox.weather.presenter.WeatherPresenter;
 
@@ -104,4 +106,10 @@ public class WeatherFragment extends BaseFragment<WeatherPresenter> implements W
     void onFindClick() {
         presenter.loadData(city.getText().toString().trim());
     }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((WeatherComponent) component).inject(this);
+    }
+
 }

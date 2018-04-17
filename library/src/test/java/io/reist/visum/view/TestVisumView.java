@@ -17,6 +17,7 @@
 package io.reist.visum.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import io.reist.visum.presenter.TestPresenter;
 
@@ -39,6 +40,11 @@ class TestVisumView extends VisumBaseView<TestPresenter> implements VisumDynamic
     @Override
     public void setPresenter(TestPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
     }
 
 }

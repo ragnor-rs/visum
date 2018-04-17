@@ -53,15 +53,16 @@ public abstract class VisumPresenter<V extends VisumView> {
         private int viewId;
         private CompositeSubscription subscriptions;
 
-        public ViewHolder(int id, V view) {
+        ViewHolder(int id, V view) {
             this.viewId = id;
             this.view = view;
             this.subscriptions = new CompositeSubscription();
         }
 
-        public boolean hasSubscriptions() {
+        boolean hasSubscriptions() {
             return subscriptions != null && subscriptions.hasSubscriptions();
         }
+
     }
 
     private final List<ViewHolder<V>> viewHolders = new ArrayList<>();
@@ -89,8 +90,8 @@ public abstract class VisumPresenter<V extends VisumView> {
     /**
      * Attaches the given view to this presenter. For the view,
      * {@link #onViewAttached(int, VisumView)} will be called and the view will be able to subscribe
-     * to {@link Observable}s and {@link Single}s via {@link #subscribe(int, Observable, Observer)},
-     * {@link #subscribe(int, Single, Action1)} and {@link #subscribe(int, Single, SingleSubscriber)}.
+     * to {@link Observable}s and {@link Single}s via {@link #subscribe(int, Observable, Observer)}
+     * and {@link #subscribe(int, Single, SingleSubscriber)}.
      *
      * If null is passed as a view then a view with the given id will be detached from the
      * presenter. Method {@link #onViewDetached(int, VisumView)} will be called. If there are no
@@ -183,16 +184,6 @@ public abstract class VisumPresenter<V extends VisumView> {
         return subscription;
     }
 
-
-    public final <T> Subscription subscribe(int viewId, Observable<T> observable, Action1<T> action) {
-        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(observable, action);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
     public final <T> Subscription subscribe(Observable<T> observable, @NonNull final ViewNotifier<V, T> viewNotifier) {
         Subscription subscription = startSubscription(observable, new Observer<T>() {
 
@@ -226,15 +217,6 @@ public abstract class VisumPresenter<V extends VisumView> {
     public final <T> Subscription subscribe(int viewId, Single<T> single, SingleSubscriber<T> subscriber) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(single, subscriber);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
-    public final <T> Subscription subscribe(int viewId, Single<T> single, Action1<T> action) {
-        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(single, action);
 
         viewHolder.subscriptions.add(subscription);
 
@@ -276,15 +258,6 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     //region Completable
 
-    public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete) {
-        ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
-        Subscription subscription = startSubscription(completable, onComplete);
-
-        viewHolder.subscriptions.add(subscription);
-
-        return subscription;
-    }
-
     public final Subscription subscribe(int viewId, Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         ViewHolder<V> viewHolder = findViewHolderByViewIdOrThrow(viewId);
         Subscription subscription = startSubscription(completable, onComplete, onError);
@@ -301,23 +274,13 @@ public abstract class VisumPresenter<V extends VisumView> {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
                 .subscribe(observer);
-    }
-
-    private <T> Subscription startSubscription(Observable<T> observable, Action1<T> onSuccess) {
-        return observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
-                .subscribe(onSuccess);
     }
 
     private <T> Subscription startSubscription(Observable<T> observable, Action1<T> onSuccess, Action1<Throwable> onError) {
         return observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .unsubscribeOn(Schedulers.io())
                 .subscribe(onSuccess, onError);
     }
 
@@ -328,13 +291,6 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(subscriber);
     }
 
-    private <T> Subscription startSubscription(Single<T> single, Action1<T> onSuccess) {
-        return single
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onSuccess);
-    }
-
     private <T> Subscription startSubscription(Single<T> single, Action1<T> onSuccess, Action1<Throwable> onError) {
         return single
                 .subscribeOn(Schedulers.io())
@@ -342,18 +298,22 @@ public abstract class VisumPresenter<V extends VisumView> {
                 .subscribe(onSuccess, onError);
     }
 
-    private Subscription startSubscription(Completable completable, Action0 onComplete) {
-        return completable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onComplete);
-    }
 
     private Subscription startSubscription(Completable completable, Action0 onComplete, Action1<? super Throwable> onError) {
         return completable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onComplete, onError);
+    }
+
+    public void unsubscribe(Subscription... subscriptions) {
+        for (Subscription subscription : subscriptions) {
+            if (subscription != null) {
+                if (!subscription.isUnsubscribed()) {
+                    subscription.unsubscribe();
+                }
+            }
+        }
     }
 
     protected void onViewAttached(int id, @NonNull V view) {}
@@ -374,19 +334,28 @@ public abstract class VisumPresenter<V extends VisumView> {
 
     private <T> void notifyCompleted(@NonNull ViewNotifier<V, T> viewNotifier) {
         for (ViewHolder<V> viewHolder : viewHolders) {
-            viewNotifier.notifyCompleted(viewHolder.view);
+            V view = viewHolder.view;
+            if (view != null) {
+                viewNotifier.notifyCompleted(view);
+            }
         }
     }
 
     private <T> void notifyResult(@NonNull ViewNotifier<V, T> viewNotifier, T t) {
         for (ViewHolder<V> viewHolder : viewHolders) {
-            viewNotifier.notifyResult(viewHolder.view, t);
+            V view = viewHolder.view;
+            if (view != null) {
+                viewNotifier.notifyResult(view, t);
+            }
         }
     }
 
     private <T> void notifyError(@NonNull ViewNotifier<V, T> viewNotifier, Throwable e) {
         for (ViewHolder<V> viewHolder : viewHolders) {
-            viewNotifier.notifyError(viewHolder.view, e);
+            V view = viewHolder.view;
+            if (view != null) {
+                viewNotifier.notifyError(viewHolder.view, e);
+            }
         }
     }
 

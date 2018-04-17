@@ -17,6 +17,7 @@
 package io.reist.sandbox.repos.view;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.repos.ReposComponent;
 import io.reist.sandbox.repos.presenter.RepoEditPresenter;
 import io.reist.visum.view.VisumFragment;
 
@@ -120,6 +122,11 @@ public class RepoEditFragment extends BaseFragment<RepoEditPresenter> implements
     @Override
     public void displayEditSuccess() {
         Toast.makeText(getActivity(), R.string.repo_saved, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((ReposComponent) component).inject(this);
     }
 
 }

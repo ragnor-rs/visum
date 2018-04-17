@@ -75,6 +75,7 @@ public class SandboxComponentCache extends ComponentCache {
                 sandboxComponent::feedComponent,
                 FeedListFragment.class, FeedDetailFragment.class
         );
+
         register(
                 sandboxComponent::restaurantComponent,
                 RestaurantListFragment.class,

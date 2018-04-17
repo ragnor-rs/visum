@@ -21,9 +21,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.SQLiteTypeMapping;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.impl.DefaultStorIOSQLite;
 
 import javax.inject.Singleton;
 
@@ -52,11 +52,11 @@ import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemStorIOSQLit
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
-import io.reist.sandbox.food.model.RestaurantEntity;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteDeleteResolver;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLiteGetResolver;
-import io.reist.sandbox.food.model.RestaurantEntityStorIOSQLitePutResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 import io.reist.sandbox.food.model.RestaurantModule;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteGetResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLitePutResolver;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -197,4 +197,8 @@ public class SandboxModule {
         return (SandboxApplication) context.getApplicationContext();
     }
 
+    @Provides
+    Context context(){
+        return context;
+    }
 }

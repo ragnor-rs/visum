@@ -18,9 +18,9 @@ package io.reist.sandbox.feed.model.local;
 
 import android.support.annotation.NonNull;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResolver;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.operations.put.PutResolver;
+import com.pushtorefresh.storio2.sqlite.operations.put.PutResult;
 
 import java.util.HashSet;
 import java.util.Set;

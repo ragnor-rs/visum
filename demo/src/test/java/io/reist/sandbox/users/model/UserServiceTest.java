@@ -16,15 +16,14 @@
 
 package io.reist.sandbox.users.model;
 
-import android.os.Build;
-
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxApplication;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.SandboxResponse;
@@ -48,7 +46,9 @@ import io.reist.sandbox.users.model.remote.RetrofitUserService;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -59,7 +59,7 @@ import static org.mockito.Mockito.when;
  * Created by m039 on 11/27/15.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
+@Config(shadows = ShadowMultiDex.class)
 public class UserServiceTest extends RobolectricTestCase {
 
     @Inject
@@ -78,7 +78,7 @@ public class UserServiceTest extends RobolectricTestCase {
                 .build();
 
         testComponent.inject(this);
-        assertThat(userService).isNotNull();
+        assertNotNull(userService);
     }
 
     @Singleton
@@ -121,8 +121,7 @@ public class UserServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult().isEmpty())
-                .isFalse();
+        assertFalse(testSubscriber.getOnNextEvents().get(0).getResult().isEmpty());
     }
 
     void testIfUserWithUserIdExist() {
@@ -131,8 +130,7 @@ public class UserServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult().id)
-                .isEqualTo(USER_ID);
+        assertEquals((Object) USER_ID, testSubscriber.getOnNextEvents().get(0).getResult().id);
     }
 
     void firstTestCase() {

@@ -3,6 +3,7 @@ package io.reist.sandbox.food.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.food.model.RestaurantComponent;
 import io.reist.sandbox.food.presenter.RestaurantMapPresenter;
 
 /**
@@ -25,6 +27,7 @@ import io.reist.sandbox.food.presenter.RestaurantMapPresenter;
 public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> implements RestaurantMapView {
 
     //    AIzaSyDO8ouJon5tENu5sGE5OwhSTUQXllnifmo
+
     @Inject
     RestaurantMapPresenter presenter;
 
@@ -50,12 +53,12 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
         super.attachPresenter();
 
         mapFragment = SupportMapFragment.newInstance();
-        FragmentTransaction fragmentTransaction =
-                getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.map, mapFragment);
         fragmentTransaction.commit();
 
         getPresenter().initPresenter(getArguments().getString(ARG_RESTAURANT));
+        moveMapToUser();
     }
 
     @Override
@@ -64,21 +67,28 @@ public class RestaurantMapFragment extends BaseFragment<RestaurantMapPresenter> 
     }
 
     @Override
-    public void setRestaurantCoordinates(double lat, double lon) {
+    public void setRestaurantCoordinates(LatLng latLng, String name) {
+        mapFragment.getMapAsync(map -> {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+            map.addMarker(new MarkerOptions().position(latLng).title(name));
+        });
+    }
 
-        mapFragment.getMapAsync(map ->
-                map.addMarker(new MarkerOptions()
-                        .position(new LatLng(lat, lon))
-                        .title("Marker")));
+    @SuppressWarnings({"MissingPermission"})
+    public void moveMapToUser() {
+        mapFragment.getMapAsync(map -> {
+            if (
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            ) {
+                map.setMyLocationEnabled(true);
+            }
+        });
     }
 
     @Override
-    public void moveMapToUser(LatLng latLng) {
-        mapFragment.getMapAsync(map -> {
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-        });
-//                map.setMyLocationEnabled(true));
-
+    public void inject(@NonNull Object component) {
+        ((RestaurantComponent) component).inject(this);
     }
 
 }

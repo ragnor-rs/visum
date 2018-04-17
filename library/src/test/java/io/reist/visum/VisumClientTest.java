@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.junit.After;
@@ -30,8 +31,8 @@ import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.android.controller.ServiceController;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ServiceController;
 
 import static io.reist.visum.ClientAssert.assertClientAttached;
 import static io.reist.visum.ClientAssert.assertClientDetached;
@@ -41,7 +42,6 @@ import static io.reist.visum.ClientAssert.assertClientDetached;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(
-        constants = BuildConfig.class,
         sdk = Build.VERSION_CODES.JELLY_BEAN,
         application = TestApplication.class
 )
@@ -107,6 +107,11 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
             super(context);
         }
 
+        @Override
+        public void inject(@NonNull Object component) {
+            ((TestComponent) component).inject(this);
+        }
+
     }
 
     public static class TestVisumAndroidService extends VisumAndroidService {
@@ -115,6 +120,11 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
         @Override
         public IBinder onBind(Intent intent) {
             return null;
+        }
+
+        @Override
+        public void inject(@NonNull Object component) {
+            ((TestComponent) component).inject(this);
         }
 
     }
@@ -127,6 +137,11 @@ public class VisumClientTest extends VisumImplTest<VisumClientTest.TestComponent
 
         @Override
         protected void onHandleIntent(Intent intent) {}
+
+        @Override
+        public void inject(@NonNull Object component) {
+            ((TestComponent) component).inject(this);
+        }
 
     }
 

@@ -1,17 +1,14 @@
 package io.reist.sandbox.food.model.local;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.SandboxService;
-import io.reist.sandbox.app.model.User;
 import io.reist.sandbox.app.model.local.StorIoService;
-import io.reist.sandbox.food.model.RestaurantEntity;
-import io.reist.sandbox.users.model.UserService;
-import io.reist.sandbox.users.model.local.UserTable;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
 import rx.Observable;
 
 /**

@@ -16,15 +16,14 @@
 
 package io.reist.sandbox.users.presenter;
 
-import android.os.Build;
-
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.User;
@@ -44,7 +42,8 @@ import io.reist.sandbox.users.model.UserService;
 import io.reist.sandbox.users.view.UserListView;
 import rx.Observable;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
@@ -52,7 +51,7 @@ import static org.mockito.Mockito.mock;
  * Created by m039 on 11/25/15.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
+@Config(shadows = ShadowMultiDex.class)
 public class UserListPresenterTest extends RobolectricTestCase {
 
     @Inject
@@ -101,13 +100,13 @@ public class UserListPresenterTest extends RobolectricTestCase {
 
     @Test
     public void testPresenter() throws InterruptedException {
-        assertThat(mUserListPresenter).isNotNull();
+        assertNotNull(mUserListPresenter);
 
         mUserListPresenter.setView(mock(UserListView.class));
 
         Thread.sleep(1000);
 
-        assertThat(mUserListPresenter.isDataLoaded()).isTrue();
+        assertTrue(mUserListPresenter.isDataLoaded());
     }
 
 }

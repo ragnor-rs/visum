@@ -1,7 +1,5 @@
 package io.reist.sandbox.food.presenter;
 
-import android.support.annotation.NonNull;
-
 import javax.inject.Inject;
 
 import io.reist.sandbox.food.model.RestaurantModel;
@@ -16,25 +14,22 @@ import io.reist.visum.presenter.VisumPresenter;
 public class RestaurantInfoPresenter extends VisumPresenter<RestaurantInfoView> {
 
     public static final int INFO_FRAGMENT = 20001;
+
     private RestaurantMonitor restaurantMonitor;
     private String restaurantId;
     private RestaurantModel restaurant;
 
     @Inject
-    public RestaurantInfoPresenter(RestaurantMonitor _restaurantMonitor) {
-        restaurantMonitor = _restaurantMonitor;
+    public RestaurantInfoPresenter(RestaurantMonitor restaurantMonitor) {
+        this.restaurantMonitor = restaurantMonitor;
     }
 
-    @Override
-    protected void onViewAttached(int id, @NonNull RestaurantInfoView view) {
-        super.onViewAttached(id, view);
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
+        restaurant = restaurantMonitor.getRestaurantById(restaurantId);
+        RestaurantInfoView view = view(INFO_FRAGMENT);
+        view.setName(restaurant.getName());
+        view.setRating(restaurant.getRating());
     }
 
-    public void setRestaurantId(String _restaurantId) {
-        restaurantId = _restaurantId;
-        restaurant=restaurantMonitor.getRestaurantById(restaurantId);
-        view(INFO_FRAGMENT).setName(restaurant.getName());
-        view(INFO_FRAGMENT).setDistance(restaurant.getDistance());
-        view(INFO_FRAGMENT).setRating(restaurant.getRating());
-    }
 }

@@ -19,10 +19,10 @@ package io.reist.sandbox.repos.model.local;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.get.GetResolver;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-import com.pushtorefresh.storio.sqlite.queries.RawQuery;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.operations.get.GetResolver;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.queries.RawQuery;
 
 import io.reist.sandbox.app.model.Repo;
 import io.reist.sandbox.app.model.RepoStorIOSQLiteGetResolver;
@@ -42,12 +42,10 @@ public class RepoGetResolver extends GetResolver<Repo> {
 
     @NonNull
     @Override
-    public Repo mapFromCursor(@NonNull Cursor cursor) {
-        Repo repo = defaultGetResolver.mapFromCursor(cursor);
+    public Repo mapFromCursor(@NonNull StorIOSQLite storIOSQLite, @NonNull Cursor cursor) {
+        Repo repo = defaultGetResolver.mapFromCursor(storIOSQLite, cursor);
 
         long userId = cursor.getLong(cursor.getColumnIndex(RepoTable.Column.USER_ID));
-
-        final StorIOSQLite storIOSQLite = storIOSQLiteFromPerformGet.get();
 
         User owner = storIOSQLite
                 .get()
@@ -72,14 +70,14 @@ public class RepoGetResolver extends GetResolver<Repo> {
     @Override
     public Cursor performGet(@NonNull StorIOSQLite storIOSQLite, @NonNull RawQuery rawQuery) {
         storIOSQLiteFromPerformGet.set(storIOSQLite);
-        return storIOSQLite.internal().rawQuery(rawQuery);
+        return storIOSQLite.lowLevel().rawQuery(rawQuery);
     }
 
     @NonNull
     @Override
     public Cursor performGet(@NonNull StorIOSQLite storIOSQLite, @NonNull Query query) {
         storIOSQLiteFromPerformGet.set(storIOSQLite);
-        return storIOSQLite.internal().query(query);
+        return storIOSQLite.lowLevel().query(query);
     }
 
 }

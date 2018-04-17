@@ -1,12 +1,12 @@
 package io.reist.sandbox.food.presenter;
 
-import android.support.annotation.NonNull;
+import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reist.sandbox.food.model.GeopositionMonitor;
 import io.reist.sandbox.food.model.RestaurantModel;
 import io.reist.sandbox.food.model.RestaurantMonitor;
 import io.reist.sandbox.food.view.RestaurantListView;
@@ -20,37 +20,38 @@ import rx.schedulers.Schedulers;
 
 public class RestaurantListPresenter extends SingleViewPresenter<RestaurantListView> {
 
-
     private RestaurantMonitor restaurantMonitor;
+    private GeopositionMonitor geopositionMonitor;
     private RestaurantsAdapter restaurantsAdapter = new RestaurantsAdapter();
 
     @Inject
-    public RestaurantListPresenter(RestaurantMonitor _restaurantMonitor) {
-        restaurantMonitor = _restaurantMonitor;
+    public RestaurantListPresenter(RestaurantMonitor restaurantMonitor, GeopositionMonitor geopositionMonitor) {
+
+        this.restaurantMonitor = restaurantMonitor;
+        this.geopositionMonitor = geopositionMonitor;
+
         restaurantMonitor.getRestaurantsFound()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((restaurants) -> {
-                    setRestaurantList(restaurants);
-                });
+                .subscribe(this::setRestaurantList);
+
     }
 
-    @Override
-    protected void onViewAttached(@NonNull RestaurantListView view) {
-        super.onViewAttached(view);
-        // TODO: 02.03.2018 think if adapter is kind of presenter or smthng like a complicated view
+    public void init() {
+        RestaurantListView view = view();
         view.setRestaurantsListAdapter(restaurantsAdapter);
-        restaurantsAdapter.setOnUserClickListener((restaurant -> {view().showRestaurantInfo(restaurant);}));
-        initiateUpdate();
+        restaurantsAdapter.setOnUserClickListener(view::showRestaurantInfo);
+        geopositionMonitor.getLocationFound().subscribe(this::findRestaurants);
     }
 
     private void setRestaurantList(List<RestaurantModel> restaurants) {
-        // TODO: 02.03.2018 wierd, but makes view more passive
+        // TODO: 02.03.2018 a bit weird, but makes view more passive
         restaurantsAdapter.setRestaurants(restaurants);
         view().hideLoader();
     }
 
-    private void initiateUpdate() {
-        restaurantMonitor.update();
+    private void findRestaurants(LatLng latLng) {
+        restaurantMonitor.findRestaurants(latLng);
     }
+
 }

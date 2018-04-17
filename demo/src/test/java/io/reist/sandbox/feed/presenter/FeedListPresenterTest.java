@@ -16,19 +16,17 @@
 
 package io.reist.sandbox.feed.presenter;
 
-import android.os.Build;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
@@ -36,7 +34,7 @@ import io.reist.sandbox.core.RobolectricTestCase;
 import io.reist.sandbox.feed.model.FeedServiceTest;
 import io.reist.sandbox.feed.view.FeedListView;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -47,7 +45,7 @@ import static org.mockito.Mockito.verify;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
+@Config(shadows = ShadowMultiDex.class)
 public class FeedListPresenterTest extends RobolectricTestCase {
 
     @Inject
@@ -70,8 +68,8 @@ public class FeedListPresenterTest extends RobolectricTestCase {
     }
 
     @Test
-    public void testPresenter() throws InterruptedException {
-        assertThat(feedListPresenter).isNotNull();
+    public void testPresenter() {
+        assertNotNull(feedListPresenter);
 
         FeedListView feedListView = mock(FeedListView.class);
         feedListPresenter.setView(feedListView);

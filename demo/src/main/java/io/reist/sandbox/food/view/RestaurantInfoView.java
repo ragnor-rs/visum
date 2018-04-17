@@ -11,8 +11,6 @@ import io.reist.visum.view.VisumView;
 public interface RestaurantInfoView extends VisumView<RestaurantInfoPresenter> {
     void setName(String name);
 
-    void setDistance(String distance);
-
     void setRating(String rating);
 
 }

@@ -32,10 +32,9 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
 
-import io.reist.visum.BuildConfig;
 import io.reist.visum.TestApplication;
 import io.reist.visum.VisumImplTest;
 import io.reist.visum.presenter.TestPresenter;
@@ -44,7 +43,7 @@ import rx.functions.Func1;
 
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterAttached;
 import static io.reist.visum.presenter.PresenterAssert.assertPresenterDetached;
-import static io.reist.visum.view.ViewAssert.assertPresenterAttachedBeforeOnActivityResult;
+import static io.reist.visum.view.ViewAssert.assertPresenterAttachedAfterOnActivityResult;
 import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
 
 /**
@@ -52,8 +51,7 @@ import static io.reist.visum.view.ViewAssert.assertPresenterReattached;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(
-        constants = BuildConfig.class,
-        sdk = Build.VERSION_CODES.LOLLIPOP,
+        sdk = Build.VERSION_CODES.JELLY_BEAN,
         application = TestApplication.class
 )
 public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
@@ -171,7 +169,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 .commit();
 
         // emulates a part of new activity start process
-        activityController.pause().stop();
+        activityController.pause().stop().destroy();
         assertPresenterDetached(testPresenter, CHILD_VIEW_ID, fragment);
 
     }
@@ -286,7 +284,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
                 new Intent()
         );
         activityController.resume();
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // hide
         fragmentContainerActivity.getSupportFragmentManager().beginTransaction().hide(testView).commit();
@@ -336,7 +334,7 @@ public class VisumViewTest extends VisumImplTest<VisumViewTest.TestComponent> {
         );
         activityController.resume();
 
-        assertPresenterAttachedBeforeOnActivityResult(testView);
+        assertPresenterAttachedAfterOnActivityResult(testView);
 
         // config change
         Func1<V, V> viewFinder = new Func1<V, V>() {

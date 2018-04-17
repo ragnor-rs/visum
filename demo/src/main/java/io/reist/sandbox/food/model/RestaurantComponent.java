@@ -12,8 +12,8 @@ import io.reist.sandbox.food.view.RestaurantMapFragment;
 
 @Subcomponent
 public interface RestaurantComponent {
-    void  inject (RestaurantListFragment restaurantListFragment);
-    void  inject (RestaurantFragment restaurantFragment);
-    void  inject (RestaurantMapFragment restaurantMapFragment);
-    void  inject (RestaurantInfoFragment restaurantInfoFragment);
+    void inject(RestaurantListFragment restaurantListFragment);
+    void inject(RestaurantFragment restaurantFragment);
+    void inject(RestaurantMapFragment restaurantMapFragment);
+    void inject(RestaurantInfoFragment restaurantInfoFragment);
 }

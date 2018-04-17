@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.widget.FrameLayout;
 
 import org.mockito.Mockito;
@@ -110,6 +111,11 @@ public abstract class BaseTestVisumAccountAuthenticatorActivity extends VisumAcc
     public void attachPresenter() {
         super.attachPresenter();
         dummy.attachPresenter();
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
     }
 
 }

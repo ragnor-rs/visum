@@ -16,10 +16,13 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.NonNull;
+
 import org.junit.Assert;
 
 import io.reist.visum.view.VisumView;
 import rx.Single;
+import rx.Subscription;
 import rx.functions.Action1;
 
 /**
@@ -42,15 +45,17 @@ public class PresenterAssert {
 
     public static void assertViewSubscribe(int viewId, TestPresenter presenter, boolean expected) {
         try {
-            presenter.subscribe(viewId, Single.just(true), new Action1<Boolean>() {
-
-                @Override
-                public void call(Boolean aBoolean) {}
-
-            });
-            Assert.assertTrue("subscribe(view) shouldn't work here", expected);
+            presenter.subscribe(
+                    viewId,
+                    Single.just(true),
+                    aBoolean -> {},
+                    throwable -> {
+                        throw new RuntimeException(throwable);
+                    }
+            );
+            Assert.assertTrue("subscribe() should work here", expected);
         } catch (Exception e) {
-            Assert.assertFalse("subscribe(view) should work here", expected);
+            Assert.assertFalse("subscribe() shouldn't work here", expected);
         }
     }
 
@@ -59,13 +64,15 @@ public class PresenterAssert {
             presenter.subscribe(Single.just(true), new ViewNotifier<VisumView, Boolean>() {
 
                 @Override
-                public void notifyCompleted(VisumView visumView) {}
+                public void notifyCompleted(@NonNull VisumView visumView) {}
 
                 @Override
-                public void notifyResult(VisumView view, Boolean aBoolean) {}
+                public void notifyResult(@NonNull VisumView view, Boolean aBoolean) {}
 
                 @Override
-                public void notifyError(VisumView view, Throwable e) {}
+                public void notifyError(@NonNull VisumView view, @NonNull Throwable e) {
+                    throw new RuntimeException(e);
+                }
 
             });
             Assert.assertTrue("subscribe() should work here", expected);

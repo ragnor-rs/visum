@@ -19,6 +19,7 @@ package io.reist.sandbox.app.model.local;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyItemTable;
 import io.reist.sandbox.feed.model.local.CommentTable;
 import io.reist.sandbox.feed.model.local.PostTable;
 import io.reist.sandbox.food.model.local.RestaurantsTable;
@@ -36,6 +37,7 @@ public class DbOpenHelper extends BaseDbHelper {
         addTable(UserTable.class);
         addTable(PostTable.class);
         addTable(CommentTable.class);
+        addTable(CryptoCurrencyItemTable.class);
         addTable(RestaurantsTable.class);
     }
 

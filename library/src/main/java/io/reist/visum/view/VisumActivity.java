@@ -106,14 +106,14 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
         super.onCreate(savedInstanceState);
 
+        setContentView(getLayoutRes());
+
         if (!isChangingConfigurations()) {
             onStartClient();
             if (!presenterAttached) {
                 attachPresenter();
             }
         }
-
-        setContentView(getLayoutRes());
 
     }
 

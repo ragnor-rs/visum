@@ -17,17 +17,21 @@
 package io.reist.sandbox.app.view;
 
 import android.support.annotation.LayoutRes;
+import android.view.View;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reist.visum.presenter.VisumPresenter;
 import io.reist.visum.view.VisumFragment;
-import io.reist.vui.view.VisumCompositeFragment;
 
 /**
  * Created by defuera on 03/02/2016.
  */
-public abstract class BaseFragment<P extends VisumPresenter> extends VisumCompositeFragment<P> {
+public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragment<P> {
 
     private final int layoutResId;
+
+    private Unbinder unbinder;
 
     public BaseFragment(@LayoutRes int layoutResId) {
         super();
@@ -55,6 +59,16 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumCompos
     @Override
     protected int getLayoutRes() {
         return layoutResId;
+    }
+
+    @Override
+    public void unbindUiElements() {
+        unbinder.unbind();
+    }
+
+    @Override
+    protected void bindViews(View view) {
+        unbinder = ButterKnife.bind(this, view);
     }
 
 }

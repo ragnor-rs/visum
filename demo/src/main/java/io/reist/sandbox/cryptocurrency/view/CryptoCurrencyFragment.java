@@ -1,5 +1,7 @@
 package io.reist.sandbox.cryptocurrency.view;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +20,9 @@ import butterknife.BindView;
 import io.reist.dali.Dali;
 import io.reist.dali.ScaleMode;
 import io.reist.sandbox.R;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
-import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.cryptocurrency.CryptoCurrencyComponent;
 import io.reist.sandbox.cryptocurrency.presenter.CryptoCurrencyPresenter;
 
@@ -50,8 +52,9 @@ public final class CryptoCurrencyFragment extends BaseFragment<CryptoCurrencyPre
     }
 
     @Override
-    public void attachPresenter() {
-        super.attachPresenter();
+    public void init(Context context, Bundle savedInstanceState) {
+
+        super.init(context, savedInstanceState);
 
         recycler.setHasFixedSize(true);
 

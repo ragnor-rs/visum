@@ -23,7 +23,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +31,6 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
-
-import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
-import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
 
 /**
  * Extend your bottom sheet dialog fragments with this class to take advantage of Visum MVP.
@@ -129,25 +125,6 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
                 attachPresenter();
             }
         }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-
-        if (hidden && !presenterAttached || !hidden && presenterAttached) {
-            return;
-        }
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-
-        if (hidden) {
-            detachPresenter();
-            detachPresenterInChildFragments(childFragmentManager);
-        } else {
-            attachPresenter();
-            attachPresenterInChildFragments(childFragmentManager);
-        }
-
     }
 
     @Override

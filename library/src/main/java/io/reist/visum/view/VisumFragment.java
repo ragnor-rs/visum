@@ -24,7 +24,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +33,6 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
-
-import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
-import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
 
 /**
  * A {@link Fragment}-based implementation of {@link VisumView}
@@ -141,25 +137,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
                 attachPresenter();
             }
         }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-
-        if (hidden && !presenterAttached || !hidden && presenterAttached) {
-            return;
-        }
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-
-        if (hidden) {
-            detachPresenter();
-            detachPresenterInChildFragments(childFragmentManager);
-        } else {
-            attachPresenter();
-            attachPresenterInChildFragments(childFragmentManager);
-        }
-
     }
 
     @Override

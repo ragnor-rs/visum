@@ -35,4 +35,20 @@ public abstract class VisumTaskService extends GcmTaskService implements VisumCl
 
     //endregion
 
+    //region Service implementation
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        onStartClient();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        onStopClient();
+    }
+
+    //endregion
+
 }

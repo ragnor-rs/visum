@@ -35,9 +35,6 @@ import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
 
-import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
-import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
-
 /**
  * Extend your bottom sheet dialog fragments with this class to take advantage of Visum MVP.
  *
@@ -131,25 +128,6 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
                 attachPresenter();
             }
         }
-    }
-
-    @Override
-    public final void onHiddenChanged(boolean hidden) {
-
-        if (hidden && !presenterAttached || !hidden && presenterAttached) {
-            return;
-        }
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-
-        if (hidden) {
-            detachPresenter();
-            detachPresenterInChildFragments(childFragmentManager);
-        } else {
-            attachPresenter();
-            attachPresenterInChildFragments(childFragmentManager);
-        }
-
     }
 
     @Override

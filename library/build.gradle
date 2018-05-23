@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 
 }
@@ -21,6 +21,7 @@ buildscript {
 repositories {
     jcenter()
     mavenCentral()
+    google()
 }
 
 apply plugin: 'com.android.library'
@@ -67,6 +68,7 @@ android {
 
 def supportVersion = '27.1.1'
 def robolectricVersion = "3.8"
+def playServicesVersion = '12.0.1'
 
 dependencies {
 
@@ -75,6 +77,8 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportVersion"
     implementation "com.android.support:design:$supportVersion"
     implementation "com.android.support:support-annotations:$supportVersion"
+
+    implementation "com.google.android.gms:play-services-gcm:$playServicesVersion"
 
     implementation 'io.reactivex:rxjava:1.3.8'
     implementation 'io.reactivex:rxandroid:1.2.1'

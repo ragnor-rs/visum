@@ -16,7 +16,7 @@
 
 package io.reist.sandbox.app;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import io.reist.visum.ComponentCache;
 import io.reist.visum.ComponentCacheProvider;
@@ -24,7 +24,7 @@ import io.reist.visum.ComponentCacheProvider;
 /**
  * Created by Reist on 10/16/15.
  */
-public class SandboxApplication extends Application implements ComponentCacheProvider {
+public class SandboxApplication extends MultiDexApplication implements ComponentCacheProvider {
 
     private ComponentCache componentCache;
 

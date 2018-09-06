@@ -62,10 +62,7 @@ public class FeedListPresenter extends SingleViewPresenter<FeedListView> {
             FeedListView view = view();
             if (response.isSuccessful()) {
                 List<Post> result = response.getResult();
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
-                view.displayData(result);
+                view.displayData(result == null ? new ArrayList<>() : result);
                 view.showLoader(false);
             } else {
                 view.displayError(response.getError());
@@ -80,8 +77,7 @@ public class FeedListPresenter extends SingleViewPresenter<FeedListView> {
         }
 
         @Override
-        public void onCompleted() {
-        }
+        public void onCompleted() {}
 
     }
 

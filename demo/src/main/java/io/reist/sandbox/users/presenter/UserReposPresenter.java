@@ -19,7 +19,6 @@ package io.reist.sandbox.users.presenter;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -79,8 +78,7 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
 
         @Override
         public void onError(Throwable e) {
-            UserReposView view = view();
-            view.displayError(new SandboxError(e));
+            view().displayError(new SandboxError(e));
         }
 
     }
@@ -90,18 +88,15 @@ public class UserReposPresenter extends SingleViewPresenter<UserReposView> {
         @Override
         public void onNext(SandboxResponse<List<Repo>> response) {
             Log.i(TAG, "--- OBSERVED ON " + Thread.currentThread() + " ---");
-            UserReposView view = view();
+            UserReposView v = view();
             if (response.isSuccessful()) {
                 List<Repo> result = response.getResult();
-                if (result == null) {
-                    result = new ArrayList<>();
-                }
                 Log.d(TAG, "successfully loaded " + result.size() + " items");
-                view.displayData(result);
-                view.showLoader(false);
+                v.displayData(result);
+                v.showLoader(false);
             } else {
                 Log.w(TAG, "network error occurred");
-                view.displayError(response.getError());
+                v.displayError(response.getError());
             }
         }
 

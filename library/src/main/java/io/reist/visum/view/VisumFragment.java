@@ -24,7 +24,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +33,6 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
-
-import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
-import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
 
 /**
  * A {@link Fragment}-based implementation of {@link VisumView}
@@ -111,11 +107,13 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onStartClient();
+        if (!getActivity().isChangingConfigurations()) {
+            onStartClient();
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         int customTheme = getCustomTheme();
         if (customTheme != 0) {
@@ -132,60 +130,31 @@ public abstract class VisumFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!presenterAttached) {
-            attachPresenter();
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-
-        if (hidden && !presenterAttached || !hidden && presenterAttached) {
-            return;
-        }
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-
-        if (hidden) {
-            detachPresenter();
-            detachPresenterInChildFragments(childFragmentManager);
-        } else {
-            attachPresenter();
-            attachPresenterInChildFragments(childFragmentManager);
-        }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!presenterAttached) {
-            attachPresenter();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
+        if (!getActivity().isChangingConfigurations()) {
+            if (!presenterAttached) {
+                attachPresenter();
+            }
         }
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-        if (presenterAttached) {
-            detachPresenter();
+        if (!getActivity().isChangingConfigurations()) {
+            if (presenterAttached) {
+                detachPresenter();
+            }
         }
+        super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
+        if (!getActivity().isChangingConfigurations()) {
+            onStopClient();
+        }
         super.onDestroy();
-        onStopClient();
     }
 
     /**
@@ -196,7 +165,9 @@ public abstract class VisumFragment<P extends VisumPresenter>
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        attachPresenter();
+        if (!presenterAttached) {
+            attachPresenter();
+        }
     }
 
     //endregion
@@ -204,7 +175,6 @@ public abstract class VisumFragment<P extends VisumPresenter>
 
     /**
      * @return a name used to identify this fragment in the back-stack
-     * @see VisumFragmentManager#replace(FragmentManager, Fragment, VisumFragment, int, boolean, boolean)
      */
     public String getName() {
         return getClass().getName();

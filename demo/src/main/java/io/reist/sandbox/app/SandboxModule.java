@@ -21,9 +21,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.SQLiteTypeMapping;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.impl.DefaultStorIOSQLite;
 
 import javax.inject.Singleton;
 
@@ -33,6 +33,9 @@ import io.reist.sandbox.app.model.Comment;
 import io.reist.sandbox.app.model.CommentStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.CommentStorIOSQLiteGetResolver;
 import io.reist.sandbox.app.model.CommentStorIOSQLitePutResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLiteGetResolver;
+import io.reist.sandbox.app.model.CryptoCurrencyItemStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.PostStorIOSQLiteDeleteResolver;
 import io.reist.sandbox.app.model.Repo;
@@ -44,9 +47,16 @@ import io.reist.sandbox.app.model.UserStorIOSQLitePutResolver;
 import io.reist.sandbox.app.model.local.DbOpenHelper;
 import io.reist.sandbox.app.model.remote.NestedFieldNameAdapter;
 import io.reist.sandbox.app.model.remote.SandboxApi;
+import io.reist.sandbox.cryptocurrency.CryptoCurrencyModule;
+import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.feed.FeedModule;
 import io.reist.sandbox.feed.model.local.PostGetResolver;
 import io.reist.sandbox.feed.model.local.PostPutResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntity;
+import io.reist.sandbox.food.model.RestaurantModule;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteDeleteResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLiteGetResolver;
+import io.reist.sandbox.food.model.entity.RestaurantEntityStorIOSQLitePutResolver;
 import io.reist.sandbox.repos.ReposModule;
 import io.reist.sandbox.repos.model.local.RepoGetResolver;
 import io.reist.sandbox.repos.model.local.RepoPutResolver;
@@ -67,7 +77,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
         TimeModule.class,
         ResultModule.class,
         WeatherModule.class,
-        FeedModule.class
+        FeedModule.class,
+        CryptoCurrencyModule.class,
+        RestaurantModule.class
 })
 public class SandboxModule {
 
@@ -124,6 +136,22 @@ public class SandboxModule {
                                 .deleteResolver(new CommentStorIOSQLiteDeleteResolver())
                                 .build()
                 )
+                .addTypeMapping(
+                        CryptoCurrencyItem.class,
+                        SQLiteTypeMapping.<CryptoCurrencyItem>builder()
+                                .putResolver(new CryptoCurrencyItemStorIOSQLitePutResolver())
+                                .getResolver(new CryptoCurrencyItemStorIOSQLiteGetResolver())
+                                .deleteResolver(new CryptoCurrencyItemStorIOSQLiteDeleteResolver())
+                                .build()
+                )
+                .addTypeMapping(
+                        RestaurantEntity.class,
+                        SQLiteTypeMapping.<RestaurantEntity>builder()
+                                .putResolver(new RestaurantEntityStorIOSQLitePutResolver())
+                                .getResolver(new RestaurantEntityStorIOSQLiteGetResolver())
+                                .deleteResolver(new RestaurantEntityStorIOSQLiteDeleteResolver())
+                                .build()
+                )
                 .build();
 
     }
@@ -169,4 +197,8 @@ public class SandboxModule {
         return (SandboxApplication) context.getApplicationContext();
     }
 
+    @Provides
+    Context context(){
+        return context;
+    }
 }

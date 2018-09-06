@@ -17,6 +17,7 @@
 package io.reist.sandbox.time.view;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
 import io.reist.sandbox.app.view.BaseFragment;
+import io.reist.sandbox.time.TimeComponent;
 import io.reist.sandbox.time.presenter.TimePresenter;
 
 /**
@@ -66,6 +68,11 @@ public class TimeFragment extends BaseFragment<TimePresenter> implements TimeVie
     @OnClick(R.id.hide_time_btn)
     void onHideTimeClicked() {
         presenter.onHideTimeClicked();
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((TimeComponent) component).inject(this);
     }
 
 }

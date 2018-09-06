@@ -17,6 +17,7 @@
 package io.reist.visum.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import io.reist.visum.presenter.TestPresenter;
 
@@ -47,7 +48,11 @@ public class TestVisumWidget extends VisumWidget<TestPresenter> implements Visum
     }
 
     @Override
-    protected void inflate() {
+    protected void inflate() {}
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((VisumViewTest.TestSubComponent) component).inject(this);
     }
 
 }

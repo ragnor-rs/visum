@@ -31,14 +31,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import io.reist.sandbox.R;
+import io.reist.sandbox.cryptocurrency.view.CryptoCurrencyFragment;
 import io.reist.sandbox.feed.view.FeedListFragment;
+import io.reist.sandbox.food.view.RestaurantListFragment;
 import io.reist.sandbox.repos.view.RepoListFragment;
 import io.reist.sandbox.result.view.ResultActivity;
 import io.reist.sandbox.time.view.TimeFragment;
 import io.reist.sandbox.users.view.UserListFragment;
 import io.reist.sandbox.weather.view.WeatherFragment;
 import io.reist.visum.view.VisumFragment;
-import io.reist.visum.view.VisumFragmentManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -136,6 +137,12 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_weather:
                 showFragment(new WeatherFragment(), true, true);
+                break;
+            case R.id.nav_cryptocurrency:
+                showFragment(new CryptoCurrencyFragment(), true, true);
+                break;
+            case R.id.nav_restaurants:
+                showFragment(new RestaurantListFragment(), true, true);
                 break;
         }
 

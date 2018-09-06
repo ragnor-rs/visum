@@ -1,19 +1,8 @@
 buildscript {
-
     repositories {
         jcenter()
         mavenCentral()
     }
-
-    dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
-        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
-        classpath "com.fernandocejas.frodo:frodo-plugin:0.8.3"
-    }
-
-    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
-
 }
 
 repositories {
@@ -24,9 +13,6 @@ repositories {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'com.fernandocejas.frodo'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
 
@@ -36,7 +22,7 @@ android {
     }
 
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
 
@@ -50,13 +36,6 @@ android {
 
     }
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -66,71 +45,83 @@ android {
         exclude "asm-license.txt"
     }
 
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 }
 
-def supportVersion = '27.0.2'
-def retrofitVersion = '2.3.0'
-def storioVersion = '1.13.0'
-def daggerVersion = '2.10'
-def butterknifeVersion = '8.6.0'
-def supportTestVersion = '0.5'
-def espressoVersion = '2.2.2'
+def supportVersion = '27.1.1'
+def retrofitVersion = '2.4.0'
+def storioVersion = '2.1.0'
+def daggerVersion = '2.15'
+def butterknifeVersion = '8.8.1'
+def supportTestVersion = '1.0.1'
+def espressoVersion = '3.0.1'
+def playServicesVersion = '12.0.1'
+def robolectricVersion = "3.8"
 
 dependencies {
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':library')
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     // support libraries
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:support-annotations:$supportVersion"
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:support-annotations:$supportVersion"
 
     // IoC
-    compile "com.google.dagger:dagger:$daggerVersion"
-    apt "com.google.dagger:dagger-compiler:$daggerVersion"
-    provided 'javax.annotation:jsr250-api:1.0'
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
 
     // Network layer
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
 
     // Database layer
-    compile "com.pushtorefresh.storio:sqlite:$storioVersion"
-    compile "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
-    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
+    implementation "com.pushtorefresh.storio2:sqlite:$storioVersion"
+    implementation "com.pushtorefresh.storio2:sqlite-annotations:$storioVersion"
+    annotationProcessor "com.pushtorefresh.storio2:sqlite-annotations-processor:$storioVersion"
 
     // UI
-    compile "com.jakewharton:butterknife:$butterknifeVersion"
-    apt ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor ("com.jakewharton:butterknife-compiler:$butterknifeVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile 'com.github.ragnor-rs:dali:b00c9ea6ea6d125aba1a3d1783b3869394b7b4ea'
-    compile 'com.github.ragnor-rs:el-adapter:55c27dabc53fcccde128732b2c05efe81b6b9432'
+    implementation 'com.github.ragnor-rs:dali:57660bf09f77c5fb3b3fcdfec7409618b9f1708f'
+    implementation 'com.github.ragnor-rs:el-adapter:63428bb46c6b06b9cd10e204014c591c3f3cb7d9'
 
-    compile project(':library')
+    // map
+    implementation 'com.google.android.gms:play-services-maps:' + playServicesVersion
+    implementation 'com.google.android.gms:play-services-location:' + playServicesVersion
+
+    // rx
+    implementation 'io.reactivex:rxjava:1.3.8'
+    implementation 'io.reactivex:rxandroid:1.2.1'
 
     // junit tests
-
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.3.2"
-    testCompile "org.mockito:mockito-core:2.8.9"
-    testCompile 'org.assertj:assertj-core:3.8.0'
-
-    testApt "com.google.dagger:dagger-compiler:$daggerVersion"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.18.0"
+    testImplementation "org.robolectric:robolectric:" + robolectricVersion
+    testImplementation "org.robolectric:shadows-multidex:" + robolectricVersion
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // android tests
-
-    androidTestCompile "com.android.support:support-annotations:$supportVersion"
-
-    androidTestCompile ("com.android.support.test:runner:$supportTestVersion") {
+    androidTestImplementation "com.android.support:support-annotations:$supportVersion"
+    androidTestImplementation ("com.android.support.test:runner:$supportTestVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-
-    androidTestCompile "com.android.support.test:rules:$supportTestVersion"
-    androidTestCompile "com.android.support.test.espresso:espresso-core:$espressoVersion"
-
-    androidTestCompile ("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
+    androidTestImplementation "com.android.support.test:rules:$supportTestVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation ("com.android.support.test.espresso:espresso-contrib:$espressoVersion") {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude group: 'com.android.support', module: 'recyclerview-v7'

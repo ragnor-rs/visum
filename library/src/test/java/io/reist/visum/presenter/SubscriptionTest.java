@@ -101,14 +101,7 @@ public class SubscriptionTest extends VisumTest<BaseTestView> {
         };
 
         setUp(
-                new Func0<Object>() {
-
-                    @Override
-                    public Object call() {
-                        return new TestComponent();
-                    }
-
-                },
+                TestComponent::new,
                 BaseTestView.class
         );
 

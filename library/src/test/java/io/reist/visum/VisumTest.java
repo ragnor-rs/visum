@@ -16,7 +16,11 @@
 
 package io.reist.visum;
 
+import rx.Scheduler;
+import rx.android.plugins.RxAndroidPlugins;
+import rx.android.plugins.RxAndroidSchedulersHook;
 import rx.functions.Func0;
+import rx.schedulers.Schedulers;
 
 import static io.reist.visum.ClientAssert.assertClientClassesRegistered;
 import static org.junit.Assert.assertEquals;
@@ -97,5 +101,16 @@ public abstract class VisumTest<C extends VisumClient> implements ComponentCache
 
     @Override
     public void onComponentCreated(Object component) {}
+
+    static {
+        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
+
+            @Override
+            public Scheduler getMainThreadScheduler() {
+                return Schedulers.immediate();
+            }
+
+        });
+    }
 
 }

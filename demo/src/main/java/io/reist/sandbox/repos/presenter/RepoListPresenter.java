@@ -72,14 +72,15 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
                 mIsDataLoaded = true;
                 RepoListView view = view();
                 view.showLoader(false);
-                view.displayData(result); //cur need to check if view detached or crash can occure
+                view.displayData(result); // need to check if view detached or crash can occur
             }
+
         });
     }
 
     public void createRepo() {
-        RepoListView view = view();
-        view.showLoader(true);
+        view().showLoader(true);
+
         Random rand = new Random();
         Repo object = new Repo();
 

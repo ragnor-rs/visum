@@ -23,7 +23,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +31,6 @@ import io.reist.visum.ComponentCache;
 import io.reist.visum.VisumClientHelper;
 import io.reist.visum.presenter.SingleViewPresenter;
 import io.reist.visum.presenter.VisumPresenter;
-
-import static io.reist.visum.view.VisumFragmentUtils.attachPresenterInChildFragments;
-import static io.reist.visum.view.VisumFragmentUtils.detachPresenterInChildFragments;
 
 /**
  * Extend your bottom sheet dialog fragments with this class to take advantage of Visum MVP.
@@ -110,7 +106,9 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onStartClient();
+        if (!getActivity().isChangingConfigurations()) {
+            onStartClient();
+        }
     }
 
     @Nullable
@@ -120,60 +118,31 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!presenterAttached) {
-            attachPresenter();
-        }
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-
-        if (hidden && !presenterAttached || !hidden && presenterAttached) {
-            return;
-        }
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-
-        if (hidden) {
-            detachPresenter();
-            detachPresenterInChildFragments(childFragmentManager);
-        } else {
-            attachPresenter();
-            attachPresenterInChildFragments(childFragmentManager);
-        }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!presenterAttached) {
-            attachPresenter();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
+        if (!getActivity().isChangingConfigurations()) {
+            if (!presenterAttached) {
+                attachPresenter();
+            }
         }
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
-        if (presenterAttached) {
-            detachPresenter();
+        if (!getActivity().isChangingConfigurations()) {
+            if (presenterAttached) {
+                detachPresenter();
+            }
         }
+        super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
+        if (!getActivity().isChangingConfigurations()) {
+            onStopClient();
+        }
         super.onDestroy();
-        onStopClient();
     }
 
     /**
@@ -184,7 +153,9 @@ public abstract class VisumBottomSheetDialogFragment<P extends VisumPresenter>
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        attachPresenter();
+        if (!presenterAttached) {
+            attachPresenter();
+        }
     }
 
     //endregion

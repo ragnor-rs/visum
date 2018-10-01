@@ -16,10 +16,9 @@
 
 package io.reist.sandbox.repos.model.local;
 
-import com.fernandocejas.frodo.annotation.RxLogObservable;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.DeleteQuery;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
@@ -35,17 +34,15 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
         super(storIoSqLite);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> list() {
         return preparedGetBuilder(Repo.class)
                 .withQuery(Query.builder().table(RepoTable.NAME).build())
                 .prepare()
-                .createObservable()
+                .asRxObservable()
                 .map(SandboxResponse::new);
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<Repo>> byId(Long id) {
         return unique(Repo.class, RepoTable.NAME, id)
@@ -64,11 +61,10 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
                                 .build()
                 )
                 .prepare() // BTW: it will use transaction!
-                .createObservable()
+                .asRxObservable()
                 .map(t -> new SandboxResponse<>(t.numberOfRowsDeleted()));
     }
 
-    @RxLogObservable
     @Override
     public Observable<SandboxResponse<List<Repo>>> findReposByUserId(Long userId) {
         return preparedGetBuilder(Repo.class)
@@ -81,7 +77,7 @@ public class StorIoRepoService extends StorIoService<Repo> implements RepoServic
                                 .orderBy(RepoTable.Column.ID)
                                 .build())
                 .prepare()
-                .createObservable()
+                .asRxObservable()
                 .map(SandboxResponse::new);
     }
 

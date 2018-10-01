@@ -21,7 +21,11 @@ import android.support.annotation.NonNull;
 
 import org.robolectric.RuntimeEnvironment;
 
+import rx.Scheduler;
+import rx.android.plugins.RxAndroidPlugins;
+import rx.android.plugins.RxAndroidSchedulersHook;
 import rx.functions.Func0;
+import rx.schedulers.Schedulers;
 
 /**
  * A test for components (IoC-containers) of the given type. Unlike {@link VisumTest}, this test
@@ -84,5 +88,16 @@ public abstract class VisumImplTest<C> implements ComponentCache.Listener {
 
     @Override
     public void onComponentCreated(Object component) {}
+
+    static {
+        RxAndroidPlugins.getInstance().registerSchedulersHook(new RxAndroidSchedulersHook() {
+
+            @Override
+            public Scheduler getMainThreadScheduler() {
+                return Schedulers.immediate();
+            }
+
+        });
+    }
 
 }

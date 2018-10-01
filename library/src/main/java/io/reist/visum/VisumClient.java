@@ -45,8 +45,6 @@ import android.support.annotation.NonNull;
  * A corresponding component must be public and declare a public 'inject' method which accepts this
  * client as a parameter.
  *
- * @see VisumClientHelper#INJECT_METHOD_NAME
- *
  * Created by defuera on 02/02/2016.
  */
 public interface VisumClient {
@@ -76,5 +74,7 @@ public interface VisumClient {
      */
     @NonNull
     Context getContext();
+
+    void inject(@NonNull Object component);
 
 }

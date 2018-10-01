@@ -1,3 +1,6 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 buildscript {
 
     repositories {
@@ -6,10 +9,11 @@ buildscript {
         maven {
             url "https://maven.google.com"
         }
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.2'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 
 }
@@ -17,6 +21,7 @@ buildscript {
 repositories {
     jcenter()
     mavenCentral()
+    google()
 }
 
 apply plugin: 'com.android.library'
@@ -25,12 +30,12 @@ apply plugin: 'com.github.dcendents.android-maven'
 android {
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     compileSdkVersion 27
-    buildToolsVersion "27.0.3"
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
 
@@ -53,32 +58,35 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
     }
 
 }
 
-def supportVersion = '27.0.2'
-def robolectricVersion = '3.3.2'
-
-def playServices = '10.2.1'
+def supportVersion = '27.1.1'
+def robolectricVersion = "3.8"
+def playServicesVersion = '12.0.1'
 
 dependencies {
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:design:$supportVersion"
-    compile "com.android.support:support-annotations:$supportVersion"
-    compile "com.google.android.gms:play-services-gcm:$playServices"
-    compile 'io.reactivex:rxjava:1.3.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
+    implementation "com.android.support:appcompat-v7:$supportVersion"
+    implementation "com.android.support:design:$supportVersion"
+    implementation "com.android.support:support-annotations:$supportVersion"
 
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:2.8.9"
-    testCompile 'org.assertj:assertj-core:3.8.0'
-    testCompile "org.robolectric:robolectric:$robolectricVersion"
-    testCompile "org.robolectric:shadows-support-v4:$robolectricVersion"
+    implementation "com.google.android.gms:play-services-gcm:$playServicesVersion"
+
+    implementation 'io.reactivex:rxjava:1.3.8'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.18.0"
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-support-v4:3.3.2"
 
 }
 
@@ -94,9 +102,10 @@ artifacts {
 
 tasks.withType(Test) {
     testLogging {
-        exceptionFormat "full"
-        events "passed", "failed"
-        showStandardStreams true
+        events TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT
+        exceptionFormat TestExceptionFormat.FULL
+        showCauses true
+        showExceptions true
+        showStackTraces true
     }
 }
-

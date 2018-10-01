@@ -16,6 +16,9 @@
 
 package io.reist.visum.presenter;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import io.reist.visum.view.VisumView;
 import rx.Observable;
 import rx.Observer;
@@ -43,18 +46,18 @@ public interface ViewNotifier<V extends VisumView, T> {
      * Updates the given view on completion.
      * Called on {@link Observer#onCompleted()} for every attached view.
      */
-    void notifyCompleted(V v);
+    void notifyCompleted(@NonNull V view);
 
     /**
      * Updates the given view when an item is emitted.
      * Called on {@link Observer#onNext(Object)} for every attached view.
      */
-    void notifyResult(V view, T t);
+    void notifyResult(@NonNull V view, @Nullable T t);
 
     /**
      * Updates the given view on error.
      * Called on {@link Observer#onError(Throwable)} for every attached view.
      */
-    void notifyError(V view, Throwable e);
+    void notifyError(@NonNull V view, @NonNull Throwable e);
 
 }

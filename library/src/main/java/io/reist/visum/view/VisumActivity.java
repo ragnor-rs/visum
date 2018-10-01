@@ -103,17 +103,18 @@ public abstract class VisumActivity<P extends VisumPresenter>
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        onStartClient();
-        setContentView(getLayoutRes());
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!presenterAttached) {
-            attachPresenter();
+        super.onCreate(savedInstanceState);
+
+        setContentView(getLayoutRes());
+
+        if (!isChangingConfigurations()) {
+            onStartClient();
+            if (!presenterAttached) {
+                attachPresenter();
+            }
         }
+
     }
 
     @Override
@@ -125,17 +126,17 @@ public abstract class VisumActivity<P extends VisumPresenter>
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (presenterAttached) {
-            detachPresenter();
-        }
-    }
-
-    @Override
     public void onDestroy() {
+
+        if (!isChangingConfigurations()) {
+            if (presenterAttached) {
+                detachPresenter();
+            }
+            onStopClient();
+        }
+
         super.onDestroy();
-        onStopClient();
+
     }
 
     /**

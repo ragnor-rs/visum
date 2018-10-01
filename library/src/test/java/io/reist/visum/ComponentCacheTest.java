@@ -26,11 +26,11 @@ import rx.functions.Func0;
 import static io.reist.visum.ClientAssert.assertClientStarted;
 import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRemoved;
 import static io.reist.visum.ClientAssert.assertClientStoppedAndComponentRetained;
-import static org.assertj.core.api.Assertions.shouldHaveThrown;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 /**
  * Created by Reist on 26.05.16.
@@ -91,13 +91,13 @@ public class ComponentCacheTest extends VisumTest<BaseTestClient> {
         assertEquals(
                 "Can't find a ComponentEntry for the client of a registered type",
                 getComponentEntry(),
-                getComponentCache().findComponentEntryByClientOrThrow(getClient())
+                getComponentCache().findComponentEntryByClient(getClient())
         );
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testFindComponentFail() {
-        getComponentCache().findComponentEntryByClientOrThrow(clientTwo);
+        assertNull(getComponentCache().findComponentEntryByClient(clientTwo));
     }
 
     @Test

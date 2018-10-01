@@ -84,14 +84,12 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             protected void onFail(SandboxError error) {
-                RepoEditView view = view();
-                view.displayError(error);
+                view().displayError(error);
             }
 
             @Override
             protected void onSuccess(Repo result) {
-                RepoEditView view = view();
-                view.displayEditSuccess();
+                view().displayEditSuccess();
             }
 
         });
@@ -108,8 +106,7 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             public void onNext(SandboxResponse<Integer> response) {
-                RepoEditView view = view();
-                view.back();
+                view().back();
             }
 
         });

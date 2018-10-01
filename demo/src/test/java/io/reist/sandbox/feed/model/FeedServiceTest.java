@@ -16,9 +16,7 @@
 
 package io.reist.sandbox.feed.model;
 
-import android.os.Build;
-
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxApplication;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Post;
@@ -49,7 +47,10 @@ import io.reist.sandbox.feed.model.remote.RetrofitFeedService;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -58,7 +59,7 @@ import static org.mockito.Mockito.spy;
  * Created by 4xes on 9/11/16.
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
+@Config(shadows = ShadowMultiDex.class)
 public class FeedServiceTest extends RobolectricTestCase {
 
     @Inject
@@ -76,7 +77,7 @@ public class FeedServiceTest extends RobolectricTestCase {
                 .build();
 
         testComponent.inject(this);
-        assertThat(feedService).isNotNull();
+        assertNotNull(feedService);
     }
 
     @Singleton
@@ -121,9 +122,8 @@ public class FeedServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnErrorEvents().isEmpty())
-                .isTrue();
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult().id).isEqualTo(POST_ID);
+        assertTrue(testSubscriber.getOnErrorEvents().isEmpty());
+        assertEquals((Object) POST_ID, (Object) testSubscriber.getOnNextEvents().get(0).getResult().id);
     }
 
     @Test
@@ -133,9 +133,8 @@ public class FeedServiceTest extends RobolectricTestCase {
 
         testSubscriber.awaitTerminalEventAndUnsubscribeOnTimeout(500, TimeUnit.MILLISECONDS);
 
-        assertThat(testSubscriber.getOnErrorEvents().isEmpty())
-                .isTrue();
-        assertThat(testSubscriber.getOnNextEvents().get(0).getResult()).isNotEmpty();
+        assertTrue(testSubscriber.getOnErrorEvents().isEmpty());
+        assertFalse(testSubscriber.getOnNextEvents().get(0).getResult().isEmpty());
     }
 
 

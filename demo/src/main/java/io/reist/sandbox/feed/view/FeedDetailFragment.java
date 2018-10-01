@@ -17,6 +17,7 @@
 package io.reist.sandbox.feed.view;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxError;
 import io.reist.sandbox.app.view.BaseFragment;
 import io.reist.sandbox.app.view.widget.LoaderView;
+import io.reist.sandbox.feed.FeedComponent;
 import io.reist.sandbox.feed.presenter.FeedDetailPresenter;
 import io.reist.visum.view.VisumFragment;
 
@@ -107,6 +109,11 @@ public class FeedDetailFragment extends BaseFragment<FeedDetailPresenter> implem
     @Override
     public long getPostId() {
         return getArguments().getLong(EXTRA_POST_ID);
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((FeedComponent) component).inject(this);
     }
 
 }

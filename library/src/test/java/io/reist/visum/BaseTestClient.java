@@ -52,4 +52,7 @@ public abstract class BaseTestClient implements VisumClient {
         return null;
     }
 
+    @Override
+    public void inject(@NonNull Object component) {}
+
 }

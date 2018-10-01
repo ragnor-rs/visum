@@ -74,7 +74,6 @@ public class UserListPresenter extends SingleViewPresenter<UserListView> {
             } else {
                 view.displayError(response.getError());
             }
-
         }
 
         @Override
@@ -82,8 +81,7 @@ public class UserListPresenter extends SingleViewPresenter<UserListView> {
 
         @Override
         public void onError(Throwable e) {
-            UserListView view = view();
-            view.showLoader(false);
+            view().showLoader(false);
         }
 
     }

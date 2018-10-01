@@ -16,13 +16,12 @@
 
 package io.reist.sandbox.repos.model;
 
-import android.os.Build;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.multidex.ShadowMultiDex;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +29,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import io.reist.sandbox.BuildConfig;
 import io.reist.sandbox.app.SandboxComponent;
 import io.reist.sandbox.app.SandboxModule;
 import io.reist.sandbox.app.model.Repo;
@@ -42,7 +40,8 @@ import io.reist.sandbox.repos.ReposModule;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -55,7 +54,7 @@ import static org.mockito.Mockito.when;
  *
  */
 @RunWith(org.robolectric.RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.M)
+@Config(shadows = ShadowMultiDex.class)
 public class RepoServiceTest extends RobolectricTestCase {
 
     @Inject
@@ -122,13 +121,14 @@ public class RepoServiceTest extends RobolectricTestCase {
 
         subscriber.awaitTerminalEventAndUnsubscribeOnTimeout(1000, TimeUnit.MILLISECONDS);
 
-        assertThat(subscriber.getOnErrorEvents())
-                .isEmpty();
+        assertTrue(subscriber.getOnErrorEvents().isEmpty());
 
         Repo repo = subscriber.getOnNextEvents().get(0).getResult();
 
-        assertThat(repo.id).isEqualTo(REPO_ID);
-        assertThat(repo.likedByMe).isEqualTo(like);
+        assert repo != null;
+        assertEquals(REPO_ID, (Object) repo.id);
+
+        assertEquals(like, repo.likedByMe);
     }
 
     private static final long REPO_ID = 12345L;

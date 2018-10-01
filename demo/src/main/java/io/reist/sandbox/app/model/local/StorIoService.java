@@ -18,10 +18,10 @@ package io.reist.sandbox.app.model.local;
 
 import android.support.annotation.NonNull;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetListOfObjects;
-import com.pushtorefresh.storio.sqlite.operations.put.PreparedPut;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.operations.get.PreparedGetListOfObjects;
+import com.pushtorefresh.storio2.sqlite.operations.put.PreparedPut;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public abstract class StorIoService<T> implements SandboxService<T> {
                                 .build()
                 )
                 .prepare()
-                .createObservable()
+                .asRxObservable()
                 .map(list -> list == null || list.isEmpty() ?
                         null :
                         list.get(0));

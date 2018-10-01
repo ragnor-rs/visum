@@ -16,8 +16,8 @@
 
 package io.reist.sandbox.feed.model.local;
 
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio2.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio2.sqlite.queries.Query;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class StorIoPostService extends StorIoService<Post> implements FeedServic
                         .orderBy(PostTable.Column.ID)
                         .build())
                 .prepare()
-                .createObservable()
+                .asRxObservable()
                 .map(SandboxResponse::new);
     }
 

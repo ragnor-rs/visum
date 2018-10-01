@@ -18,12 +18,14 @@ package io.reist.sandbox.result.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reist.sandbox.R;
+import io.reist.sandbox.result.ResultComponent;
 import io.reist.sandbox.result.presenter.ResultPresenter;
 import io.reist.visum.view.VisumActivity;
 
@@ -68,6 +70,11 @@ public class ResultActivity extends VisumActivity<ResultPresenter> implements Re
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void inject(@NonNull Object component) {
+        ((ResultComponent) component).inject(this);
     }
 
 }

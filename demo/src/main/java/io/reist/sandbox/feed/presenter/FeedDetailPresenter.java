@@ -64,6 +64,7 @@ public class FeedDetailPresenter extends SingleViewPresenter<FeedDetailView> {
             view.displayLoader(false);
             view.displayData(result);
         }
+
     }
 
 }

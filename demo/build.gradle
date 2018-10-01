@@ -131,7 +131,6 @@ dependencies {
 }
 
 task warmUpHeroku(type: Exec) {
-    println "Warming up Heroku..."
     commandLine 'curl', 'http://safe-reaches-4393.herokuapp.com'
 }
 

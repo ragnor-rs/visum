@@ -46,17 +46,17 @@ public class ComponentCache {
             return null;
         }
 
-        if (entry == null) {
-            return null;
-        } else if (entry.component == null) {
+        if (entry.component == null) {
             entry.component = entry.componentFactory.call();
             if (listener != null) {
                 listener.onComponentCreated(entry.component);
             }
         }
-       else if (!entry.clients.contains(client)) {
 
-        entry.clients.add(client);}
+        if (!entry.clients.contains(client)) {
+            entry.clients.add(client);
+        }
+
         return entry.component;
 
     }
@@ -103,9 +103,13 @@ public class ComponentCache {
 
     @CallSuper
     public void stop(@NonNull VisumClient client, boolean retainComponent) {
-        ComponentEntry entry = findComponentEntryByClient(client);if (entry == null) {
+
+        ComponentEntry entry = findComponentEntryByClient(client);
+
+        if (entry == null) {
             return;
         }
+
         List<VisumClient> clients = entry.clients;
 
         if (!clients.remove(client)) {

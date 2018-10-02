@@ -42,7 +42,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -93,9 +92,6 @@ public class ReposUiTest extends ActivityInstrumentationTestCase<MainActivity> {
                 .perform(typeText(generatedRepoName));
 
         onView(withId(R.id.save)).perform(closeSoftKeyboard(), click());
-
-        onView(withContentDescription(android.support.v7.appcompat.R.string.abc_action_bar_up_description))
-                .perform(click());
 
         onView(isRoot())
                 .perform(TestUtils.wait(withText(generatedRepoName), TestUtils.ACTION_TIMEOUT));

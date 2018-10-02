@@ -24,7 +24,6 @@ import io.reist.sandbox.app.model.remote.RetrofitService;
 import io.reist.sandbox.app.model.remote.SandboxApi;
 import io.reist.sandbox.repos.model.RepoService;
 import rx.Observable;
-import rx.functions.Action1;
 
 public class RetrofitRepoService extends RetrofitService<Repo> implements RepoService {
 
@@ -49,7 +48,8 @@ public class RetrofitRepoService extends RetrofitService<Repo> implements RepoSe
 
     @Override
     public Observable<SandboxResponse<Repo>> save(Repo repo) {
-        return sandboxApi.save(repo).doOnNext(r -> notifyDataChanged(repo));
+        notifyDataChanged(repo);
+        return sandboxApi.save(repo);
     }
 
     @Override

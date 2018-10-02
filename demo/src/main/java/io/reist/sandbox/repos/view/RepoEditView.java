@@ -32,10 +32,8 @@ public interface RepoEditView extends VisumView<RepoEditPresenter> {
 
     void displayLoader(boolean show);
 
-    void back();
+    void goBack();
 
     long getRepoId();
-
-    void displayEditSuccess();
 
 }

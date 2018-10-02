@@ -21,7 +21,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -110,18 +109,13 @@ public class RepoEditFragment extends BaseFragment<RepoEditPresenter> implements
     }
 
     @Override
-    public void back() {
+    public void goBack() {
         getFragmentManager().popBackStackImmediate();
     }
 
     @Override
     public long getRepoId() {
         return getArguments().getLong(EXTRA_REPO_ID);
-    }
-
-    @Override
-    public void displayEditSuccess() {
-        Toast.makeText(getActivity(), R.string.repo_saved, Toast.LENGTH_SHORT).show();
     }
 
     @Override

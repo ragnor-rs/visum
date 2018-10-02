@@ -28,6 +28,7 @@ import java.util.List;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.app.model.SandboxService;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by Reist on 10/23/15.
@@ -97,6 +98,16 @@ public abstract class StorIoService<T> implements SandboxService<T> {
     @Override
     public Observable<SandboxResponse<T>> save(T t) {
         return Observable.just(saveSync(t));
+    }
+
+    @Override
+    public void addListener(Action1<T> dataListener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeListener(Action1<T> dataListener) {
+        throw new UnsupportedOperationException();
     }
 
 }

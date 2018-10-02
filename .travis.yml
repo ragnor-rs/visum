@@ -20,7 +20,6 @@ script:
 #    - emulator -avd test -no-skin -no-audio -no-window &
 #    - android-wait-for-emulator
 #    - adb shell input keyevent 82 &
-#    - curl http://safe-reaches-4393.herokuapp.com > /dev/null
     - export GRADLE_OPTS="-Xmx1536m -Xms768m -Xss32m"
 #    - ./gradlew clean build demo:connectedCheck
     - ./gradlew clean build

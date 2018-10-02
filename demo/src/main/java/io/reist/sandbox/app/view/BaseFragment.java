@@ -56,6 +56,7 @@ public abstract class BaseFragment<P extends VisumPresenter> extends VisumFragme
 
     public interface FragmentController {
         void showFragment(VisumFragment fragment, boolean remove);
+        void goBack();
     }
 
     @Nullable

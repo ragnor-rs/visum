@@ -16,7 +16,11 @@
 
 package io.reist.sandbox.app.model.remote;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import io.reist.sandbox.app.model.SandboxService;
+import rx.functions.Action1;
 
 /**
  * Created by Reist on 11/2/15.
@@ -25,8 +29,26 @@ public abstract class RetrofitService<T> implements SandboxService<T> {
 
     protected final SandboxApi sandboxApi;
 
+    private final List<Action1<T>> listeners = new CopyOnWriteArrayList<>();
+
     public RetrofitService(SandboxApi sandboxApi) {
         this.sandboxApi = sandboxApi;
+    }
+
+    protected final void notifyDataChanged(T entity) {
+        for (Action1<T> listener : listeners) {
+            listener.call(entity);
+        }
+    }
+
+    @Override
+    public void addListener(Action1<T> dataListener) {
+        listeners.add(dataListener);
+    }
+
+    @Override
+    public void removeListener(Action1<T> dataListener) {
+        listeners.remove(dataListener);
     }
 
 }

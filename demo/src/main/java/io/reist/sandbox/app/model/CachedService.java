@@ -19,6 +19,7 @@ package io.reist.sandbox.app.model;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -166,6 +167,16 @@ public abstract class CachedService<T> implements SandboxService<T> {
                     .onErrorResumeNext(t -> Observable.just(new SandboxResponse<>(new SandboxError(t))));
         }
 
+    }
+
+    @Override
+    public void addListener(Action1<T> dataListener) {
+        remote.addListener(dataListener);
+    }
+
+    @Override
+    public void removeListener(Action1<T> dataListener) {
+        remote.removeListener(dataListener);
     }
 
 }

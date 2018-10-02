@@ -24,6 +24,7 @@ import io.reist.sandbox.app.model.Post;
 import io.reist.sandbox.app.model.SandboxResponse;
 import io.reist.sandbox.feed.model.FeedService;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by 4xes on 4/11/16.
@@ -49,26 +50,37 @@ public class RetrofitFeedService implements FeedService {
 
     @Override
     public Observable<SandboxResponse<List<Post>>> save(List<Post> list) {
-        throw new UnsupportedOperationException("you cannot save make api calls");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Observable<SandboxResponse<Post>> save(Post post) {
-        throw new UnsupportedOperationException("you cannot save make api calls");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Observable<SandboxResponse<Integer>> delete(Long id) {
-        throw new UnsupportedOperationException("you cannot delete by id");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public SandboxResponse<List<Post>> saveSync(List<Post> list) {
-        throw new UnsupportedOperationException("you cannot save make api calls synchronously");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public SandboxResponse<Post> saveSync(Post post) {
-        throw new UnsupportedOperationException("you cannot save make api calls synchronously");
+        throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void addListener(Action1<Post> dataListener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeListener(Action1<Post> dataListener) {
+        throw new UnsupportedOperationException();
+    }
+
 }

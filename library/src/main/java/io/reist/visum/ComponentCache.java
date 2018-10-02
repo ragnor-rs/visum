@@ -39,19 +39,26 @@ public class ComponentCache {
     @CallSuper
     @Nullable
     public Object start(@NonNull VisumClient client) {
+
         ComponentEntry entry = findComponentEntryByClient(client);
+
         if (entry == null) {
             return null;
-        } else if (entry.component == null) {
+        }
+
+        if (entry.component == null) {
             entry.component = entry.componentFactory.call();
             if (listener != null) {
                 listener.onComponentCreated(entry.component);
             }
-        } else if (entry.clients.contains(client)) {
-            throw new IllegalStateException(client + " is already attached");
         }
-        entry.clients.add(client);
+
+        if (!entry.clients.contains(client)) {
+            entry.clients.add(client);
+        }
+
         return entry.component;
+
     }
 
     public boolean isClientAttached(@NonNull VisumClient client) {
@@ -96,22 +103,29 @@ public class ComponentCache {
 
     @CallSuper
     public void stop(@NonNull VisumClient client, boolean retainComponent) {
+
         ComponentEntry entry = findComponentEntryByClient(client);
+
         if (entry == null) {
             return;
         }
+
         List<VisumClient> clients = entry.clients;
-        if (clients.remove(client)) {
-            if (!retainComponent && clients.isEmpty()) {
-                Object component = entry.component;
-                entry.component = null;
-                if (listener != null) {
-                    listener.onComponentDestroyed(component);
-                }
-            }
-        } else {
-            throw new IllegalStateException(client + " is already detached");
+
+        if (!clients.remove(client)) {
+            return;
         }
+
+        if (retainComponent || !clients.isEmpty()) {
+            return;
+        }
+
+        Object component = entry.component;
+        entry.component = null;
+        if (listener != null) {
+            listener.onComponentDestroyed(component);
+        }
+
     }
 
     protected void setListener(Listener listener) {

@@ -48,6 +48,7 @@ public class RetrofitRepoService extends RetrofitService<Repo> implements RepoSe
 
     @Override
     public Observable<SandboxResponse<Repo>> save(Repo repo) {
+        notifyDataChanged(repo);
         return sandboxApi.save(repo);
     }
 

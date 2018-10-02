@@ -125,21 +125,11 @@ public class ComponentCacheTest extends VisumTest<BaseTestClient> {
         Object component = componentCache.start(client);
         assertClientStarted(componentCache, client);
 
-        try {
-            componentCache.start(client);
-            fail("IllegalStateException not thrown");
-        } catch (IllegalStateException ignored) {}
-
         assertEquals("Invalid type of the created component", TestComponentOne.class, component.getClass());
         assertEquals("Internal reference to the component doesn't match the returned one", component, getComponentEntry().component);
 
         componentCache.stop(client, false);
         assertClientStoppedAndComponentRemoved(componentCache, client);
-
-        try {
-            componentCache.stop(client, false);
-            fail("IllegalStateException not thrown");
-        } catch (IllegalStateException ignored) {}
 
     }
 

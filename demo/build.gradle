@@ -129,3 +129,14 @@ dependencies {
     }
 
 }
+
+task warmUpHeroku(type: Exec) {
+    commandLine 'curl', 'http://safe-reaches-4393.herokuapp.com'
+}
+
+tasks.whenTaskAdded { task ->
+    def arg = task.name
+    if (arg.contains("connected") && arg.contains("Test")) {
+        task.dependsOn(warmUpHeroku)
+    }
+}

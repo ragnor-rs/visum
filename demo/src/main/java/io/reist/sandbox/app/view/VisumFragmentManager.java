@@ -36,8 +36,8 @@ public class VisumFragmentManager {
 
     /**
      * @param fragment - fragment to display
-     * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a back stack.
-     *                 false to stay in a back stack
+     * @param remove   - boolean, stays for whether current fragment should be thrown away or stay in a goBack stack.
+     *                 false to stay in a goBack stack
      * @param resId    - id of view group to put fragment to
      */
     @SuppressWarnings("unused")

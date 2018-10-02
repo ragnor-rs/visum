@@ -76,6 +76,9 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
     }
 
     public void saveRepo(String name, String author, String url) {
+
+        view().displayLoader(true);
+
         repo.name = name;
         repo.owner.name = author;
         repo.url = url;
@@ -84,15 +87,18 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             protected void onFail(SandboxError error) {
+                view().displayLoader(false);
                 view().displayError(error);
             }
 
             @Override
             protected void onSuccess(Repo result) {
-                view().displayEditSuccess();
+                view().displayLoader(false);
+                view().goBack();
             }
 
         });
+
     }
 
     public void deleteRepo() {
@@ -106,7 +112,7 @@ public class RepoEditPresenter extends SingleViewPresenter<RepoEditView> {
 
             @Override
             public void onNext(SandboxResponse<Integer> response) {
-                view().back();
+                view().goBack();
             }
 
         });

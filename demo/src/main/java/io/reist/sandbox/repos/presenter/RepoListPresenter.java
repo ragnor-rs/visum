@@ -32,6 +32,7 @@ import io.reist.sandbox.app.presenter.ResponseObserver;
 import io.reist.sandbox.repos.model.RepoService;
 import io.reist.sandbox.repos.view.RepoListView;
 import io.reist.visum.presenter.SingleViewPresenter;
+import rx.functions.Action1;
 
 @Singleton
 public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
@@ -41,6 +42,8 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
     private final RepoService repoService;
     private boolean mIsDataLoaded = false;
 
+    private final Action1<Repo> dataListener = r -> view().onRepoUpdated(r);
+
     @Inject
     public RepoListPresenter(RepoService repoService) {
         this.repoService = repoService;
@@ -48,9 +51,15 @@ public class RepoListPresenter extends SingleViewPresenter<RepoListView> {
 
     @Override
     protected void onViewAttached(@NonNull RepoListView view) {
+        repoService.addListener(dataListener);
         mIsDataLoaded = false;
         view.showLoader(true);
         loadData();
+    }
+
+    @Override
+    protected void onViewDetached(@NonNull RepoListView view) {
+        repoService.removeListener(dataListener);
     }
 
     public boolean isDataLoaded() {

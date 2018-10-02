@@ -19,6 +19,7 @@ package io.reist.sandbox.app.model;
 import java.util.List;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by Reist on 12/2/15.
@@ -38,5 +39,9 @@ public interface SandboxService<T> {
     SandboxResponse<List<T>> saveSync(List<T> list);
 
     SandboxResponse<T> saveSync(T t);
+
+    void addListener(Action1<T> dataListener);
+
+    void removeListener(Action1<T> dataListener);
 
 }

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,7 +39,7 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
     private ItemClickListener itemClickListener;
 
     public RepoListAdapter(List<Repo> repos) {
-        this.repos = repos;
+        this.repos = new ArrayList<>(repos);
     }
 
     @Override
@@ -65,6 +66,24 @@ public class RepoListAdapter extends RecyclerView.Adapter<RepoListAdapter.ViewHo
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public int getIndexById(long id) {
+        for (int i = 0; i < repos.size(); i++) {
+            Repo repo = repos.get(i);
+            if (repo.id == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void onItemUpdated(Repo r) {
+        int index = getIndexById(r.id);
+        if (index != -1) {
+            repos.set(index, r);
+            notifyItemChanged(index);
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -36,4 +36,6 @@ public interface RepoListView extends VisumView<RepoListPresenter> {
 
     void displaySuccess();
 
+    void onRepoUpdated(Repo r);
+
 }

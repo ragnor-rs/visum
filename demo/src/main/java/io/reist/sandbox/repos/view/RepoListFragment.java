@@ -119,6 +119,11 @@ public class RepoListFragment extends BaseFragment<RepoListPresenter> implements
     }
 
     @Override
+    public void onRepoUpdated(Repo r) {
+        adapter.onItemUpdated(r);
+    }
+
+    @Override
     public void inject(@NonNull Object component) {
         ((ReposComponent) component).inject(this);
     }

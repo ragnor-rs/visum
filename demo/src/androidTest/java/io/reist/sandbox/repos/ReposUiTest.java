@@ -66,7 +66,7 @@ public class ReposUiTest extends ActivityInstrumentationTestCase<MainActivity> {
     }
 
     @Test
-    public void testRepo() throws InterruptedException {
+    public void testRepo() {
 
         onView(withId(R.id.drawer_layout))
                 .perform(DrawerActions.open());

@@ -11,6 +11,7 @@ import io.reist.sandbox.app.model.CryptoCurrencyItem;
 import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyList;
 import io.reist.sandbox.cryptocurrency.model.local.CryptoCurrencyPrice;
 import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by Sergey on 03/11/2017.
@@ -66,32 +67,42 @@ public final class CryptoCurrencyRemoteService implements CryptoCurrencyBaseServ
 
     @Override
     public Observable<SandboxResponse<CryptoCurrencyItem>> byId(Long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Observable<SandboxResponse<List<CryptoCurrencyItem>>> save(List<CryptoCurrencyItem> list) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Observable<SandboxResponse<CryptoCurrencyItem>> save(CryptoCurrencyItem cryptoCurrencyItem) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Observable<SandboxResponse<Integer>> delete(Long id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public SandboxResponse<List<CryptoCurrencyItem>> saveSync(List<CryptoCurrencyItem> list) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public SandboxResponse<CryptoCurrencyItem> saveSync(CryptoCurrencyItem cryptoCurrencyItem) {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void addListener(Action1<CryptoCurrencyItem> dataListener) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void removeListener(Action1<CryptoCurrencyItem> dataListener) {
+        throw new UnsupportedOperationException();
     }
 
 }

@@ -34,7 +34,7 @@ Add the dependency
 
 ```groovy
 dependencies {
-    implementation 'com.github.ragnor-rs:visum:bb0bc22489'
+    implementation 'com.github.ragnor-rs:visum:383c28f2b1c2602f3d15dc97156c744826b793ba'
 }
 ```
 
